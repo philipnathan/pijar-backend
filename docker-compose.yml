@@ -1,0 +1,34 @@
+services:
+    db:
+        image: mysql:latest
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+        ports:
+            - "${DB_PORT}:3306"
+        volumes:
+            - mysql_volume_bp:/var/lib/mysql
+        networks:
+            - docker_network
+
+    backend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        ports:
+            - "8080:8080"
+        depends_on:
+            - db
+        env_file:
+            - .env
+        networks:
+            - docker_network
+
+volumes:
+    mysql_volume_bp:
+networks:
+    docker_network:
+        driver: bridge
