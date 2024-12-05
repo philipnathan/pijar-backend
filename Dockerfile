@@ -10,17 +10,14 @@ RUN apk add --no-cache git curl
 # Install command for air
 RUN go install github.com/air-verse/air@latest
 
-# Copy go.mod dan go.sum
-COPY go.* ./
+# # Copy go.mod dan go.sum
+# COPY go.* ./
 
-# Download dependency
-RUN go mod download
+# # Download dependency
+# RUN go mod download
 
-# Copy semua file ke dalam container
-COPY . .
-
-# Buat directory tmp
-RUN mkdir -p tmp
+# # Copy semua file ke dalam container
+# COPY . .
 
 # Ekspor port aplikasi (misalnya 8080)
 EXPOSE 8080

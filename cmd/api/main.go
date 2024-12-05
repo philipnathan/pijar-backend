@@ -1,10 +1,23 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/philipnathan/pijar-backend/database"
 )
 
 func main() {
+	db, err := database.ConnectToDatabase()
+
+	if err != nil {
+		fmt.Println("Failed to connect to database:", err)
+	}
+	defer db.Close()
+
+	fmt.Println("Connected to database!")
+
 	r := gin.Default()
 
 	r.GET("/ping", func(c *gin.Context) {
@@ -13,5 +26,7 @@ func main() {
 		})
 	})
 
-	r.Run() // listen and serve on 0.0.0.0:8080
+	if err := r.Run(":8080"); err != nil {
+		fmt.Println("Failed to start server:", err)
+	}
 }
