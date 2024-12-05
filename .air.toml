@@ -3,7 +3,7 @@ root = "."
 # Config file for Air
 [build]
     # Command to build the app
-    cmd = "go build -o ./tmp/main ./cmd/api/main.go"
+    cmd = "go mod download && go build -o ./tmp/main ./cmd/api/main.go"
     # Binary to watch
     bin = "./tmp/main"
     # Working directory
@@ -14,6 +14,9 @@ root = "."
     exclude_dir = ["vendor", "tmp"]
     # Command to run after build
     run_after_build = "chmod +x ./tmp/main"
+
+    poll = true
+    poll_interval = 1
 
 [log]
     level = "debug"
