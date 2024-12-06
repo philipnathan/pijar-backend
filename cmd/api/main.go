@@ -5,10 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/philipnathan/pijar-backend/database"
+	"github.com/philipnathan/pijar-backend/internal/routes"
 )
 
 func main() {
-	_, err := database.ConnectToDatabase()
+	db, err := database.ConnectToDatabase()
 
 	if err != nil {
 		fmt.Println("Failed to connect to database:", err)
@@ -16,13 +17,11 @@ func main() {
 
 	fmt.Println("Connected to database!")
 
+	database.MigrateDatabase(db)
+
 	r := gin.Default()
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	routes.UserRoute(r, db)
 
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server:", err)
