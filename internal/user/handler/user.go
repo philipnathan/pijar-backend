@@ -1,12 +1,12 @@
-package handlers
+package handler
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/philipnathan/pijar-backend/custom_error"
-	"github.com/philipnathan/pijar-backend/internal/models"
-	"github.com/philipnathan/pijar-backend/internal/services"
+	"github.com/philipnathan/pijar-backend/internal/user/custom_error"
+	"github.com/philipnathan/pijar-backend/internal/user/model"
+	"github.com/philipnathan/pijar-backend/internal/user/service"
 )
 
 type userResponse struct {
@@ -20,18 +20,18 @@ type userResponse struct {
 }
 
 type UserHandler struct {
-	service *services.UserService
+	service service.UserServiceInterface
 }
 
 
-func NewUserHandler(service *services.UserService) *UserHandler {
+func NewUserHandler(service service.UserServiceInterface) *UserHandler {
 	return &UserHandler{
 		service: service,
 	}
 }
 
 func (h *UserHandler) RegisterUser(c *gin.Context) {
-	var user models.User
+	var user model.User
 
 	if err := c.BindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

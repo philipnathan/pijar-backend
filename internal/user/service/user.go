@@ -1,25 +1,31 @@
-package services
+package service
 
 import (
-	"github.com/philipnathan/pijar-backend/custom_error"
-	"github.com/philipnathan/pijar-backend/internal/models"
-	"github.com/philipnathan/pijar-backend/internal/repositories"
+	"github.com/philipnathan/pijar-backend/internal/user/custom_error"
+	"github.com/philipnathan/pijar-backend/internal/user/model"
+	"github.com/philipnathan/pijar-backend/internal/user/repository"
 	"github.com/philipnathan/pijar-backend/utils"
 	"gorm.io/gorm"
 )
 
+type UserServiceInterface interface {
+	RegisterUserService(user *model.User) error
+	LoginUserService(email, password string) (string, string, error)
+	GetUserDetails(userID uint) (*model.User, error)
+}
+
 type UserService struct {
-	repo repositories.UserRepository
+	repo repository.UserRepositoryInterface
 }
 
 
-func NewUserService(repo repositories.UserRepository) *UserService {
+func NewUserService(repo repository.UserRepositoryInterface) UserServiceInterface {
 	return &UserService{
 		repo: repo,
 	}
 }
 
-func (s *UserService) RegisterUserService(user *models.User) (error) {
+func (s *UserService) RegisterUserService(user *model.User) (error) {
 	var err error
 
 	if exist, err := s.isUserExist(user); err != nil  {
@@ -40,7 +46,7 @@ func (s *UserService) RegisterUserService(user *models.User) (error) {
 	return nil
 }
 
-func (s *UserService) isUserExist(user *models.User) (bool, error) {
+func (s *UserService) isUserExist(user *model.User) (bool, error) {
 	if exist, err := s.repo.FindUserByEmail(user.Email); err == nil || exist != nil {
 		return true, custom_error.ErrEmailExist
 	}
@@ -77,7 +83,7 @@ func (s *UserService) LoginUserService(email, password string) (string, string, 
 	return access_token, refresh_token,nil
 }
 
-func (s *UserService) GetUserDetails(userID uint) (*models.User, error) {
+func (s *UserService) GetUserDetails(userID uint) (*model.User, error) {
 	user, err := s.repo.FindByUserId(userID)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
