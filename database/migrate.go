@@ -3,12 +3,12 @@ package database
 import (
 	"fmt"
 
-	"github.com/philipnathan/pijar-backend/internal/models"
+	"github.com/philipnathan/pijar-backend/internal/user/model"
 	"gorm.io/gorm"
 )
 
 func MigrateDatabase(db *gorm.DB) {
-	err := db.AutoMigrate(&models.User{})
+	err := db.AutoMigrate(&model.User{})
 
 	if err != nil {
 		panic(err)

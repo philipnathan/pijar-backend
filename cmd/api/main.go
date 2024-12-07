@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/philipnathan/pijar-backend/database"
-	"github.com/philipnathan/pijar-backend/internal/routes"
+	routes "github.com/philipnathan/pijar-backend/internal/user/route"
 )
 
 func main() {
