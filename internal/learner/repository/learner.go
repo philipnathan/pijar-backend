@@ -8,7 +8,6 @@ import (
 type LearnerRepositoryInterface interface {
 	GetLearnerInterest(userID uint) ([]model.LearnerInterest, error)
 	AddLearnerInterests(userID uint, interests []uint) error
-	DeleteLearnerInterests(userID uint, interests []uint) error
 }
 
 type LearnerRepository struct {
@@ -22,13 +21,13 @@ func NewLearnerRepository(db *gorm.DB) LearnerRepositoryInterface {
 }
 
 func (r *LearnerRepository) GetLearnerInterest(userID uint) ([]model.LearnerInterest, error) {
-	var learnerInterests []model.LearnerInterest
+	var learnerInterest []model.LearnerInterest
 
-	if err := r.db.Preload("Category").Where("user_id = ?", userID).Find(&learnerInterests).Error; err != nil {
+	err := r.db.Where("user_id = ?", userID).Find(&learnerInterest).Error
+	if err != nil {
 		return nil, err
 	}
-
-	return learnerInterests, nil
+	return learnerInterest, nil
 }
 
 func (r *LearnerRepository) AddLearnerInterests(userID uint, interests []uint) error {
@@ -39,20 +38,6 @@ func (r *LearnerRepository) AddLearnerInterests(userID uint, interests []uint) e
 	}
 
 	err := r.db.CreateInBatches(learnerInterests, 100).Error
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (r *LearnerRepository) DeleteLearnerInterests(userID uint, interests []uint) error {
-	var learnerInterests []model.LearnerInterest
-	for _, interestID := range interests {
-		learnerInterests = append(learnerInterests, model.LearnerInterest{UserID: userID, CategoryID: interestID})
-	}
-
-	err := r.db.Where("user_id = ? AND category_id IN ?", userID, interests).Delete(&model.LearnerInterest{}).Error
 	if err != nil {
 		return err
 	}
