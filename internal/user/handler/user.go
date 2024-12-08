@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
+	dto "github.com/philipnathan/pijar-backend/internal/user/dto"
 	model "github.com/philipnathan/pijar-backend/internal/user/model"
 	service "github.com/philipnathan/pijar-backend/internal/user/service"
 )
@@ -53,10 +54,10 @@ func (h *UserHandler) RegisterUser(c *gin.Context) {
 	if err != nil {
 		switch err {
 		case custom_error.ErrEmailExist, custom_error.ErrPhoneNumberExist:
-			c.JSON(http.StatusBadRequest, custom_error.Error{Error: err.Error()})
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		default:
-			c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 	}
@@ -89,18 +90,15 @@ func (h *UserHandler) LoginUser(c *gin.Context) {
 	if err != nil {
 		switch err {
 		case custom_error.ErrLogin:
-			c.JSON(http.StatusUnauthorized, custom_error.Error{Error: err.Error()})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 			return
 		default:
-			c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 	}
 
-	c.JSON(http.StatusOK, dto.LoginUserResponseDto{
-		Message:      "user logged in successfully",
-		AccessToken:  access_token,
-		RefreshToken: refresh_token})
+	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "access_token": access_token, "refresh_token": refresh_token})
 }
 
 // @Summary	Get user details
@@ -133,26 +131,12 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 		return
 	}
 
-	var formattedBirthDate string
-	if user.BirthDate != nil {
-		formattedBirthDate = user.BirthDate.Format("2006-01-02")
-	} else {
-		formattedBirthDate = ""
-	}
-
-	var formattedPhoneNumber string
-	if user.PhoneNumber != nil {
-		formattedPhoneNumber = *user.PhoneNumber
-	} else {
-		formattedPhoneNumber = ""
-	}
-
-	userResponse := dto.GetUserResponseDto{
+	userResponse := userResponse{
 		ID:          user.ID,
 		Email:       user.Email,
 		Fullname:    user.Fullname,
-		BirthDate:   formattedBirthDate,
-		PhoneNumber: formattedPhoneNumber,
+		BirthDate:   user.BirthDate.Format("2006-01-02"),
+		PhoneNumber: *user.PhoneNumber,
 		IsMentor:    user.IsMentor,
 		ImageURL:    user.ImageURL,
 	}

@@ -5,6 +5,7 @@ import (
 	"reflect"
 
 	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
+	dto "github.com/philipnathan/pijar-backend/internal/user/dto"
 	model "github.com/philipnathan/pijar-backend/internal/user/model"
 	repository "github.com/philipnathan/pijar-backend/internal/user/repository"
 	"github.com/philipnathan/pijar-backend/utils"
