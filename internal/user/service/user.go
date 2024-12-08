@@ -12,6 +12,8 @@ type UserServiceInterface interface {
 	RegisterUserService(user *model.User) error
 	LoginUserService(email, password string) (string, string, error)
 	GetUserDetails(userID uint) (*model.User, error)
+	DeleteUserService(userID uint) error
+	UpdateUserPasswordService(userID uint, oldPassword, newPassword string) error
 }
 
 type UserService struct {
@@ -93,4 +95,37 @@ func (s *UserService) GetUserDetails(userID uint) (*model.User, error) {
 	}
 
 	return user, nil
+}
+
+func(s *UserService) DeleteUserService(userID uint) error {
+	return s.repo.DeleteUserById(userID)
+}
+
+func(s *UserService) UpdateUserPasswordService(userID uint, oldPassword, newPassword string) error {
+
+	user, err := s.repo.FindByUserId(userID)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return custom_error.ErrUserNotFound
+		}
+		return err
+	}
+
+	if err := utils.ComparePassword(user.Password, oldPassword); err != nil {
+		return custom_error.ErrWrongPassword
+	}
+	if oldPassword == newPassword {
+		return custom_error.ErrSamePassword
+	}
+
+	user.Password, err = utils.HashPassword(newPassword)
+	if err != nil {
+		return err
+	}
+
+	if err := s.repo.UpdateUserPassword(user); err != nil {
+		return err
+	}
+
+	return nil
 }

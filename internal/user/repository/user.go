@@ -11,6 +11,8 @@ type UserRepositoryInterface interface {
 	FindUserByEmail(email string) (*model.User, error)
 	FindByPhoneNumber(phoneNumber string) (*model.User, error)
 	FindByUserId(id uint) (*model.User, error)
+	DeleteUserById(id uint) error
+	UpdateUserPassword(user *model.User) error
 }
 
 type userRepository struct {
@@ -56,4 +58,12 @@ func (r *userRepository) FindByUserId(id uint) (*model.User, error) {
 		}
 	}
 	return &user, nil
+}
+
+func (r *userRepository) DeleteUserById(id uint) error {
+	return r.db.Where("id = ?", id).Delete(&model.User{}).Error
+}
+
+func (r *userRepository) UpdateUserPassword(user *model.User) error {
+	return r.db.Save(user).Error
 }
