@@ -1,0 +1,62 @@
+basePath: /api/v1
+definitions:
+  user.Error:
+    properties:
+      error:
+        example: user not found
+        type: string
+    type: object
+  user.RegisterUserDto:
+    properties:
+      email:
+        example: test@example.com
+        type: string
+      fullname:
+        example: John Doe
+        type: string
+      password:
+        example: password123
+        type: string
+    type: object
+  user.RegisterUserResponseDto:
+    properties:
+      message:
+        example: user registered successfully
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a Pijar API
+  title: Pijar API
+  version: "1.0"
+paths:
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      description: Register new user
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.RegisterUserDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.RegisterUserResponseDto'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/user.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/user.Error'
+      summary: Register new user
+      tags:
+      - User
+swagger: "2.0"

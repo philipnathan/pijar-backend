@@ -30,6 +30,17 @@ func NewUserHandler(service service.UserServiceInterface) *UserHandler {
 	}
 }
 
+// @Summary	Register new user
+// @Schemes
+// @Description	Register new user
+// @Tags			User
+// @Accept			json
+// @Product		json
+// @Param			user	body		RegisterUserDto	true	"User"
+// @Success		200		{object}	RegisterUserResponseDto
+// @Failure		400		{object}	Error	"Invalid request body"
+// @Failure		500		{object}	Error	"Internal server error"
+// @Router			/users/register [post]
 func (h *UserHandler) RegisterUser(c *gin.Context) {
 	var user dto.RegisterUserDto
 
@@ -43,10 +54,10 @@ func (h *UserHandler) RegisterUser(c *gin.Context) {
 	if err != nil {
 		switch err {
 		case custom_error.ErrEmailExist, custom_error.ErrPhoneNumberExist:
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, custom_error.Error{Error: err.Error()})
 			return
 		default:
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
 			return
 		}
 	}
