@@ -18,7 +18,7 @@ type User struct {
 	Password string `gorm:"type:text;not null" json:"password"`
 	Fullname string `gorm:"type:varchar(100);not null" json:"fullname"`
 	BirthDate CustomTime `gorm:"type:DATE;not null" json:"birthdate"`
-	PhoneNumber string `gorm:"type:varchar(13);not null" json:"phonenumber"`
+	PhoneNumber string `gorm:"type:varchar(13);not null;unique" json:"phonenumber"`
 	IsMentor *bool `gorm:"type:bool;not null;default:false"`
 	ImageURL *string `gorm:"type:text" json:"imageurl"`
 }
