@@ -2,12 +2,13 @@ package user
 
 import (
 	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
+	dto "github.com/philipnathan/pijar-backend/internal/user/dto"
 	model "github.com/philipnathan/pijar-backend/internal/user/model"
 	"gorm.io/gorm"
 )
 
 type UserRepositoryInterface interface {
-	CreateUser(user *model.User) error
+	CreateUser(userDto *dto.RegisterUserDto) error
 	FindUserByEmail(email string) (*model.User, error)
 	FindByPhoneNumber(phoneNumber string) (*model.User, error)
 	FindByUserId(id uint) (*model.User, error)
@@ -26,7 +27,12 @@ func NewUserRepository(db *gorm.DB) UserRepositoryInterface {
 	}
 }
 
-func (r *userRepository) CreateUser(user *model.User) (error) {
+func (r *userRepository) CreateUser(userDto *dto.RegisterUserDto) error {
+	user := &model.User{
+		Email:    userDto.Email,
+		Password: userDto.Password,
+		Fullname: userDto.Fullname,
+	}
 	return r.db.Create(user).Error
 }
 

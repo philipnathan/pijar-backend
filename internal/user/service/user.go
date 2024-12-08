@@ -5,6 +5,7 @@ import (
 	"reflect"
 
 	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
+	dto "github.com/philipnathan/pijar-backend/internal/user/dto"
 	model "github.com/philipnathan/pijar-backend/internal/user/model"
 	repository "github.com/philipnathan/pijar-backend/internal/user/repository"
 	"github.com/philipnathan/pijar-backend/utils"
@@ -12,7 +13,7 @@ import (
 )
 
 type UserServiceInterface interface {
-	RegisterUserService(user *model.User) error
+	RegisterUserService(user *dto.RegisterUserDto) error
 	LoginUserService(email, password string) (string, string, error)
 	GetUserDetails(userID uint) (*model.User, error)
 	DeleteUserService(userID uint) error
@@ -24,20 +25,20 @@ type UserService struct {
 	repo repository.UserRepositoryInterface
 }
 
-
 func NewUserService(repo repository.UserRepositoryInterface) UserServiceInterface {
 	return &UserService{
 		repo: repo,
 	}
 }
 
-func (s *UserService) RegisterUserService(user *model.User) (error) {
+func (s *UserService) RegisterUserService(user *dto.RegisterUserDto) error {
 	var err error
 
-	if exist, err := s.isUserExist(user); err != nil  {
-		return err } else if exist {
-			return err
-		}
+	if exist, err := s.isUserExist(user); err != nil {
+		return err
+	} else if exist {
+		return err
+	}
 
 	user.Password, err = utils.HashPassword(user.Password)
 	if err != nil {
@@ -52,13 +53,9 @@ func (s *UserService) RegisterUserService(user *model.User) (error) {
 	return nil
 }
 
-func (s *UserService) isUserExist(user *model.User) (bool, error) {
+func (s *UserService) isUserExist(user *dto.RegisterUserDto) (bool, error) {
 	if exist, err := s.repo.FindUserByEmail(user.Email); err == nil || exist != nil {
 		return true, custom_error.ErrEmailExist
-	}
-
-	if  exist, err := s.repo.FindByPhoneNumber(user.PhoneNumber); err == nil || exist != nil {
-		return true, custom_error.ErrPhoneNumberExist
 	}
 
 	return false, nil
@@ -84,9 +81,7 @@ func (s *UserService) LoginUserService(email, password string) (string, string, 
 		return "", "", err
 	}
 
-
-
-	return access_token, refresh_token,nil
+	return access_token, refresh_token, nil
 }
 
 func (s *UserService) GetUserDetails(userID uint) (*model.User, error) {
@@ -101,11 +96,11 @@ func (s *UserService) GetUserDetails(userID uint) (*model.User, error) {
 	return user, nil
 }
 
-func(s *UserService) DeleteUserService(userID uint) error {
+func (s *UserService) DeleteUserService(userID uint) error {
 	return s.repo.DeleteUserById(userID)
 }
 
-func(s *UserService) UpdateUserPasswordService(userID uint, oldPassword, newPassword string) error {
+func (s *UserService) UpdateUserPasswordService(userID uint, oldPassword, newPassword string) error {
 
 	user, err := s.repo.FindByUserId(userID)
 	if err != nil {

@@ -5,24 +5,24 @@ import (
 
 	"github.com/gin-gonic/gin"
 	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
+	dto "github.com/philipnathan/pijar-backend/internal/user/dto"
 	model "github.com/philipnathan/pijar-backend/internal/user/model"
 	service "github.com/philipnathan/pijar-backend/internal/user/service"
 )
 
 type userResponse struct {
-	ID        uint   `json:"id"`
-	Email     string `json:"email"`
-	Fullname string `json:"fullname"`
-	BirthDate string `json:"birth_date"`
-	PhoneNumber string `json:"phone_number"`
-	IsMentor *bool `json:"is_mentor"`
-	ImageURL *string `json:"image_url"`
+	ID          uint    `json:"id"`
+	Email       string  `json:"email"`
+	Fullname    string  `json:"fullname"`
+	BirthDate   string  `json:"birth_date"`
+	PhoneNumber string  `json:"phone_number"`
+	IsMentor    *bool   `json:"is_mentor"`
+	ImageURL    *string `json:"image_url"`
 }
 
 type UserHandler struct {
 	service service.UserServiceInterface
 }
-
 
 func NewUserHandler(service service.UserServiceInterface) *UserHandler {
 	return &UserHandler{
@@ -31,7 +31,7 @@ func NewUserHandler(service service.UserServiceInterface) *UserHandler {
 }
 
 func (h *UserHandler) RegisterUser(c *gin.Context) {
-	var user model.User
+	var user dto.RegisterUserDto
 
 	if err := c.BindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -42,12 +42,12 @@ func (h *UserHandler) RegisterUser(c *gin.Context) {
 
 	if err != nil {
 		switch err {
-			case custom_error.ErrEmailExist, custom_error.ErrPhoneNumberExist:
-				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-				return
-			default:
-				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-				return
+		case custom_error.ErrEmailExist, custom_error.ErrPhoneNumberExist:
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
 		}
 	}
 
@@ -70,16 +70,16 @@ func (h *UserHandler) LoginUser(c *gin.Context) {
 	access_token, refresh_token, err := h.service.LoginUserService(input.Email, input.Password)
 	if err != nil {
 		switch err {
-			case custom_error.ErrLogin:
-				c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-				return
-			default:
-				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-				return
+		case custom_error.ErrLogin:
+			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+			return
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message":"Login successful", "access_token": access_token, "refresh_token": refresh_token})
+	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "access_token": access_token, "refresh_token": refresh_token})
 }
 
 func (h *UserHandler) GetUser(c *gin.Context) {
@@ -102,13 +102,13 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 	}
 
 	userResponse := userResponse{
-		ID:        user.ID,
-		Email:     user.Email,
-		Fullname: user.Fullname,
-		BirthDate: user.BirthDate.Format("2006-01-02"),
-		PhoneNumber: user.PhoneNumber,
-		IsMentor: user.IsMentor,
-		ImageURL: user.ImageURL,
+		ID:          user.ID,
+		Email:       user.Email,
+		Fullname:    user.Fullname,
+		BirthDate:   user.BirthDate.Format("2006-01-02"),
+		PhoneNumber: *user.PhoneNumber,
+		IsMentor:    user.IsMentor,
+		ImageURL:    user.ImageURL,
 	}
 
 	c.JSON(http.StatusOK, userResponse)
@@ -182,10 +182,10 @@ func (h *UserHandler) UpdateUserDetailsHandler(c *gin.Context) {
 	}
 
 	var input struct {
-		Fullname string `json:"fullname"`
-		BirthDate model.CustomTime `json:"birth_date"`
-		PhoneNumber string `json:"phone_number"`
-		ImageURL string `json:"image_url"`
+		Fullname    string           `json:"fullname"`
+		BirthDate   model.CustomTime `json:"birth_date"`
+		PhoneNumber string           `json:"phone_number"`
+		ImageURL    string           `json:"image_url"`
 	}
 
 	if err := c.BindJSON(&input); err != nil {
