@@ -1,6 +1,9 @@
 package service
 
 import (
+	"fmt"
+	"reflect"
+
 	"github.com/philipnathan/pijar-backend/internal/user/custom_error"
 	"github.com/philipnathan/pijar-backend/internal/user/model"
 	"github.com/philipnathan/pijar-backend/internal/user/repository"
@@ -14,6 +17,7 @@ type UserServiceInterface interface {
 	GetUserDetails(userID uint) (*model.User, error)
 	DeleteUserService(userID uint) error
 	UpdateUserPasswordService(userID uint, oldPassword, newPassword string) error
+	UpdateUserDetailsService(userID uint, input interface{}) error
 }
 
 type UserService struct {
@@ -124,6 +128,55 @@ func(s *UserService) UpdateUserPasswordService(userID uint, oldPassword, newPass
 	}
 
 	if err := s.repo.UpdateUserPassword(user); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *UserService) UpdateUserDetailsService(userID uint, input interface{}) error {
+	var user, err = s.repo.FindByUserId(userID)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return custom_error.ErrUserNotFound
+		}
+		return err
+	}
+
+	if user == nil {
+		return custom_error.ErrUserNotFound
+	}
+
+	// Pastikan input adalah struct, bukan pointer
+	v := reflect.ValueOf(input)
+	if v.Kind() != reflect.Struct {
+		return fmt.Errorf("input must be a struct")
+	}
+
+	// Loop untuk memeriksa field dalam input
+	for i := 0; i < v.NumField(); i++ {
+		field := v.Field(i)
+
+		// Skip jika field kosong (zero value)
+		if field.IsZero() {
+			continue
+		}
+
+		// Ambil field pada user berdasarkan nama
+		userField := reflect.ValueOf(user).Elem().FieldByName(v.Type().Field(i).Name)
+
+		// Jika field valid dan dapat di-set
+		if userField.IsValid() && userField.CanSet() {
+			// Set nilai field pada user
+			if userField.Type() == field.Type() {
+				userField.Set(field)
+			} else {
+				fmt.Printf("Type mismatch for field: %s\n", v.Type().Field(i).Name)
+			}
+		}
+	}
+
+	if err := s.repo.SaveUser(user); err != nil {
 		return err
 	}
 
