@@ -9,4 +9,6 @@ var (
 	ErrEmailExist = errors.New("email already exist")
 	ErrLogin = errors.New("invalid email or password")
 	ErrToken = errors.New("invalid token")
+	ErrWrongPassword = errors.New("wrong password")
+	ErrSamePassword = errors.New("new password cannot be the same as old password")
 )
