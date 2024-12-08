@@ -2,9 +2,9 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/philipnathan/pijar-backend/internal/user/handler"
-	"github.com/philipnathan/pijar-backend/internal/user/repository"
-	"github.com/philipnathan/pijar-backend/internal/user/service"
+	handler "github.com/philipnathan/pijar-backend/internal/user/handler"
+	repository "github.com/philipnathan/pijar-backend/internal/user/repository"
+	service "github.com/philipnathan/pijar-backend/internal/user/service"
 	"github.com/philipnathan/pijar-backend/middleware"
 	"gorm.io/gorm"
 )

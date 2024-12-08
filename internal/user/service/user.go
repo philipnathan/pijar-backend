@@ -1,12 +1,12 @@
-package service
+package user
 
 import (
 	"fmt"
 	"reflect"
 
 	"github.com/philipnathan/pijar-backend/internal/user/custom_error"
-	"github.com/philipnathan/pijar-backend/internal/user/model"
-	"github.com/philipnathan/pijar-backend/internal/user/repository"
+	model "github.com/philipnathan/pijar-backend/internal/user/model"
+	repository "github.com/philipnathan/pijar-backend/internal/user/repository"
 	"github.com/philipnathan/pijar-backend/utils"
 	"gorm.io/gorm"
 )
