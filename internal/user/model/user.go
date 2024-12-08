@@ -5,6 +5,7 @@ import (
 	"errors"
 	"time"
 
+	learner "github.com/philipnathan/pijar-backend/internal/learner/model"
 	"gorm.io/gorm"
 )
 
@@ -14,13 +15,14 @@ type CustomTime struct {
 
 type User struct {
 	gorm.Model
-	Email       string     `gorm:"type:varchar(50);uniqueIndex;not null" json:"email"`
-	Password    string     `gorm:"type:text;not null" json:"password"`
-	Fullname    string     `gorm:"type:varchar(100);not null" json:"fullname"`
-	BirthDate   CustomTime `gorm:"type:DATE;not null" json:"birthdate"`
-	PhoneNumber string     `gorm:"type:varchar(13);not null;unique" json:"phonenumber"`
-	IsMentor    *bool      `gorm:"type:bool;not null;default:false"`
-	ImageURL    *string    `gorm:"type:text" json:"imageurl"`
+	Email       string              `gorm:"type:varchar(50);uniqueIndex;not null" json:"email"`
+	Password    string              `gorm:"type:text;not null" json:"password"`
+	Fullname    string              `gorm:"type:varchar(100);not null" json:"fullname"`
+	BirthDate   CustomTime          `gorm:"type:DATE;not null" json:"birthdate"`
+	PhoneNumber string              `gorm:"type:varchar(13);not null;unique" json:"phonenumber"`
+	IsMentor    *bool               `gorm:"type:bool;not null;default:false"`
+	ImageURL    *string             `gorm:"type:text" json:"imageurl"`
+	LearnerBio  *learner.LearnerBio `gorm:"foreignKey:UserID;references:ID" json:"learner_bio"`
 }
 
 func (t *CustomTime) UnmarshalJSON(b []byte) (err error) {
