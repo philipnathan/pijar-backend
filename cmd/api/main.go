@@ -5,7 +5,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/philipnathan/pijar-backend/database"
-	routes "github.com/philipnathan/pijar-backend/internal/user/route"
+	categoryRoute "github.com/philipnathan/pijar-backend/internal/category/route"
+	seed "github.com/philipnathan/pijar-backend/internal/seed"
+	userRoute "github.com/philipnathan/pijar-backend/internal/user/route"
 )
 
 func main() {
@@ -21,7 +23,14 @@ func main() {
 
 	r := gin.Default()
 
-	routes.UserRoute(r, db)
+	if err := seed.SeedDatabase(db); err != nil {
+		fmt.Println("Failed to seed database:", err)
+	} else {
+		fmt.Println("Database seeded successfully")
+	}
+
+	userRoute.UserRoute(r, db)
+	categoryRoute.CategoryRoute(r, db)
 
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server:", err)
