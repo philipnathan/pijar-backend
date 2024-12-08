@@ -1,12 +1,8 @@
 package user
 
 import (
-<<<<<<< HEAD
 	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
 	dto "github.com/philipnathan/pijar-backend/internal/user/dto"
-=======
-	"github.com/philipnathan/pijar-backend/internal/user/custom_error"
->>>>>>> 68a972b (fix: change package name)
 	model "github.com/philipnathan/pijar-backend/internal/user/model"
 	"gorm.io/gorm"
 )
