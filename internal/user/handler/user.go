@@ -9,6 +9,16 @@ import (
 	service "github.com/philipnathan/pijar-backend/internal/user/service"
 )
 
+type userResponse struct {
+	ID          uint    `json:"id"`
+	Email       string  `json:"email"`
+	Fullname    string  `json:"fullname"`
+	BirthDate   string  `json:"birth_date"`
+	PhoneNumber string  `json:"phone_number"`
+	IsMentor    *bool   `json:"is_mentor"`
+	ImageURL    *string `json:"image_url"`
+}
+
 type UserHandler struct {
 	service service.UserServiceInterface
 }
@@ -202,4 +212,38 @@ func (h *UserHandler) UpdateUserPasswordHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Password updated successfully"})
+}
+
+func (h *UserHandler) UpdateUserDetailsHandler(c *gin.Context) {
+	userID, exist := c.Get("user_id")
+	if !exist {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	id, ok := userID.(float64)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	var input struct {
+		Fullname    string           `json:"fullname"`
+		BirthDate   model.CustomTime `json:"birth_date"`
+		PhoneNumber string           `json:"phone_number"`
+		ImageURL    string           `json:"image_url"`
+	}
+
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := h.service.UpdateUserDetailsService(uint(id), input)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "User details updated successfully"})
 }
