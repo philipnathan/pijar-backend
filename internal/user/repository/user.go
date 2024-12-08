@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/philipnathan/pijar-backend/internal/user/custom_error"
+	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
 	model "github.com/philipnathan/pijar-backend/internal/user/model"
 	"gorm.io/gorm"
 )

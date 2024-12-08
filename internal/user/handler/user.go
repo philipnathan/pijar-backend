@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/philipnathan/pijar-backend/internal/user/custom_error"
+	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
 	model "github.com/philipnathan/pijar-backend/internal/user/model"
 	service "github.com/philipnathan/pijar-backend/internal/user/service"
 )
