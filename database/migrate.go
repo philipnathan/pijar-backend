@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"github.com/philipnathan/pijar-backend/internal/user/model"
+	model "github.com/philipnathan/pijar-backend/internal/user/model"
 	"gorm.io/gorm"
 )
 

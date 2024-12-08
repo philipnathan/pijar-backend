@@ -1,12 +1,12 @@
-package handler
+package user
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/philipnathan/pijar-backend/internal/user/custom_error"
-	"github.com/philipnathan/pijar-backend/internal/user/model"
-	"github.com/philipnathan/pijar-backend/internal/user/service"
+	model "github.com/philipnathan/pijar-backend/internal/user/model"
+	service "github.com/philipnathan/pijar-backend/internal/user/service"
 )
 
 type userResponse struct {

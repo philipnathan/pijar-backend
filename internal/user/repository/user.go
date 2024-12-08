@@ -1,8 +1,8 @@
-package repository
+package user
 
 import (
 	"github.com/philipnathan/pijar-backend/internal/user/custom_error"
-	"github.com/philipnathan/pijar-backend/internal/user/model"
+	model "github.com/philipnathan/pijar-backend/internal/user/model"
 	"gorm.io/gorm"
 )
 
