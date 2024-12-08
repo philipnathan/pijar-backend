@@ -150,116 +150,56 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 	c.JSON(http.StatusOK, userResponse)
 }
 
-// @Summary	Delete user
-// @Schemes
-// @Description	Delete user
-// @Tags			User
-// @Security		Bearer
-// @Produce		json
-// @Success		200	{object}	DeleteUserResponseDto
-// @Failure		401	{object}	Error	"Unauthorized"
-// @Failure		500	{object}	Error	"Internal server error"
-// @Router			/users/me [delete]
 func (h *UserHandler) DeleteUserHandler(c *gin.Context) {
 	userID, exist := c.Get("user_id")
 	if !exist {
-		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
 
 	id, ok := userID.(float64)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
 
 	err := h.service.DeleteUserService(uint(id))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, dto.DeleteUserResponseDto{Message: "user deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 }
 
-// @Summary	Update user password
-// @Schemes
-// @Description	Update user password
-// @Tags			User
-// @Accept			json
-// @Produce		json
-// @Security		Bearer
-// @Param			password	body		ChangePasswordDto	true	"User"
-// @Success		200			{object}	ChangePasswordResponseDto
-// @Failure		400			{object}	Error	"Invalid request body"
-// @Failure		500			{object}	Error	"Internal server error"
-// @Router			/users/me/password [patch]
 func (h *UserHandler) UpdateUserPasswordHandler(c *gin.Context) {
 	userID, exist := c.Get("user_id")
 	if !exist {
-		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
 
 	id, ok := userID.(float64)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
 
-	var input dto.ChangePasswordDto
+	var input struct {
+		OldPassword string `json:"old_password"`
+		NewPassword string `json:"new_password"`
+	}
 
 	if err := c.BindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, custom_error.Error{Error: err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	err := h.service.UpdateUserPasswordService(uint(id), input.OldPassword, input.NewPassword)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, dto.ChangePasswordResponseDto{Message: "password changed successfully"})
-}
-
-// @Summary	Update user details
-// @Schemes
-// @Description	Update user details
-// @Tags			User
-// @Accept			json
-// @Produce		json
-// @Security		Bearer
-// @Param			user	body		UpdateUserDetailsDto	true	"User"
-// @Success		200		{object}	UpdateUserDetailsResponseDto
-// @Failure		400		{object}	Error	"Invalid request body"
-// @Failure		500		{object}	Error	"Internal server error"
-// @Router			/users/me/details [patch]
-func (h *UserHandler) UpdateUserDetailsHandler(c *gin.Context) {
-	userID, exist := c.Get("user_id")
-	if !exist {
-		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
-		return
-	}
-
-	id, ok := userID.(float64)
-	if !ok {
-		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
-		return
-	}
-
-	var input dto.UpdateUserDetailsDto
-
-	if err := c.BindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, custom_error.Error{Error: err.Error()})
-		return
-	}
-
-	err := h.service.UpdateUserDetailsService(uint(id), input)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, dto.UpdateUserDetailsResponseDto{Message: "user details updated successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "Password updated successfully"})
 }
