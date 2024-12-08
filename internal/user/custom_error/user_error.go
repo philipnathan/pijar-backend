@@ -12,3 +12,7 @@ var (
 	ErrWrongPassword    = errors.New("wrong password")
 	ErrSamePassword     = errors.New("new password cannot be the same as old password")
 )
+
+type Error struct {
+	Error string `json:"error" example:"user not found"`
+}
