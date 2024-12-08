@@ -14,20 +14,20 @@ type CustomTime struct {
 }
 
 type User struct {
-	gorm.Model
-	Email string `gorm:"type:varchar(50);uniqueIndex;not null" json:"email"`
-	Password string `gorm:"type:text;not null" json:"password"`
-	Fullname string `gorm:"type:varchar(100);not null" json:"fullname"`
-	BirthDate CustomTime `gorm:"type:DATE;not null" json:"birthdate"`
-	PhoneNumber string `gorm:"type:varchar(13);not null;unique" json:"phonenumber"`
-	IsMentor *bool `gorm:"type:bool;not null;default:false"`
-	ImageURL *string `gorm:"type:text" json:"imageurl"`
-	LearnerBio *learner.LearnerBio `gorm:"foreignKey:UserID;references:ID" json:"learner_bio"`
+	gorm.Model  `json:"-"`
+	Email       string              `gorm:"type:varchar(50);uniqueIndex;not null" json:"email"`
+	Password    string              `gorm:"type:text;not null" json:"password"`
+	Fullname    string              `gorm:"type:varchar(100);not null" json:"fullname"`
+	BirthDate   *CustomTime         `gorm:"type:DATE" json:"birth_date"`
+	PhoneNumber *string             `gorm:"type:varchar(13);unique" json:"phonenumber"`
+	IsMentor    *bool               `gorm:"type:bool;default:false" json:"is_mentor"`
+	ImageURL    *string             `gorm:"type:text" json:"image_url"`
+	LearnerBio  *learner.LearnerBio `gorm:"foreignKey:UserID;references:ID" json:"learner_bio"`
 }
 
 func (t *CustomTime) UnmarshalJSON(b []byte) (err error) {
 	str := string(b)
-	str = str[1:len(str)-1]
+	str = str[1 : len(str)-1]
 
 	date, err := time.Parse("2006-01-02", str)
 
