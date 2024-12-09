@@ -15,6 +15,69 @@ definitions:
         example: category not found
         type: string
     type: object
+  learner.AddLearnerInterestsDto:
+    properties:
+      category_id:
+        example:
+        - 1
+        - 2
+        - 3
+        items:
+          type: integer
+        type: array
+    required:
+    - category_id
+    type: object
+  learner.AddLearnerInterestsResponseDto:
+    properties:
+      message:
+        example: interests added successfully
+        type: string
+    type: object
+  learner.DeleteLearnerInterestsDto:
+    properties:
+      category_id:
+        example:
+        - 1
+        - 2
+        - 3
+        items:
+          type: integer
+        type: array
+    required:
+    - category_id
+    type: object
+  learner.DeleteLearnerInterestsResponseDto:
+    properties:
+      message:
+        example: interests deleted successfully
+        type: string
+    type: object
+  learner.Error:
+    properties:
+      error:
+        example: interest not found
+        type: string
+    type: object
+  learner.GetLearnerInterestResponseDto:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/learner.InterestOnlyDto'
+        type: array
+      message:
+        example: interests retrieved successfully
+        type: string
+    type: object
+  learner.InterestOnlyDto:
+    properties:
+      category_id:
+        example: 1
+        type: integer
+      category_name:
+        example: Development
+        type: string
+    type: object
   user.ChangePasswordDto:
     properties:
       new_password:
@@ -162,6 +225,91 @@ paths:
       summary: Get all categories
       tags:
       - Category
+  /learners/interests:
+    delete:
+      consumes:
+      - application/json
+      description: Delete learner interests
+      parameters:
+      - description: User
+        in: body
+        name: interest
+        required: true
+        schema:
+          $ref: '#/definitions/learner.DeleteLearnerInterestsDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/learner.DeleteLearnerInterestsResponseDto'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/learner.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/learner.Error'
+      security:
+      - Bearer: []
+      summary: Delete learner interests
+      tags:
+      - Learner
+    get:
+      description: Get learner interests
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/learner.GetLearnerInterestResponseDto'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/learner.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/learner.Error'
+      security:
+      - Bearer: []
+      summary: Get learner interests
+      tags:
+      - Learner
+    post:
+      consumes:
+      - application/json
+      description: Add learner interests
+      parameters:
+      - description: User
+        in: body
+        name: interest
+        required: true
+        schema:
+          $ref: '#/definitions/learner.AddLearnerInterestsDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/learner.AddLearnerInterestsResponseDto'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/learner.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/learner.Error'
+      security:
+      - Bearer: []
+      summary: Add learner interests
+      tags:
+      - Learner
   /users/login:
     post:
       consumes:
