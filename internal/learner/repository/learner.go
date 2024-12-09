@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type LearnerRepositoryInterface interface{
+type LearnerRepositoryInterface interface {
 	GetLearnerInterest(userID uint) ([]model.LearnerInterest, error)
 	AddLearnerInterests(userID uint, interests []uint) error
 }
@@ -21,13 +21,13 @@ func NewLearnerRepository(db *gorm.DB) LearnerRepositoryInterface {
 }
 
 func (r *LearnerRepository) GetLearnerInterest(userID uint) ([]model.LearnerInterest, error) {
-	var learnerInterest []model.LearnerInterest
+	var learnerInterests []model.LearnerInterest
 
-	err := r.db.Where("user_id = ?", userID).Find(&learnerInterest).Error
-	if err != nil {
+	if err := r.db.Preload("Category").Where("user_id = ?", userID).Find(&learnerInterests).Error; err != nil {
 		return nil, err
 	}
-	return learnerInterest, nil
+
+	return learnerInterests, nil
 }
 
 func (r *LearnerRepository) AddLearnerInterests(userID uint, interests []uint) error {

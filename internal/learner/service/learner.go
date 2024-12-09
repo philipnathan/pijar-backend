@@ -5,8 +5,9 @@ import (
 	repo "github.com/philipnathan/pijar-backend/internal/learner/repository"
 )
 
-type LearnerServiceInterface interface{
+type LearnerServiceInterface interface {
 	GetLearnerInterests(userID uint) ([]model.LearnerInterest, error)
+	AddLearnerInterests(userID uint, interests []uint) error
 }
 
 type LearnerService struct {
