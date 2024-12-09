@@ -6,19 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
 	dto "github.com/philipnathan/pijar-backend/internal/user/dto"
-	model "github.com/philipnathan/pijar-backend/internal/user/model"
 	service "github.com/philipnathan/pijar-backend/internal/user/service"
 )
-
-type userResponse struct {
-	ID          uint    `json:"id"`
-	Email       string  `json:"email"`
-	Fullname    string  `json:"fullname"`
-	BirthDate   string  `json:"birth_date"`
-	PhoneNumber string  `json:"phone_number"`
-	IsMentor    *bool   `json:"is_mentor"`
-	ImageURL    *string `json:"image_url"`
-}
 
 type UserHandler struct {
 	service service.UserServiceInterface
@@ -35,7 +24,7 @@ func NewUserHandler(service service.UserServiceInterface) *UserHandler {
 // @Description	Register new user
 // @Tags			User
 // @Accept			json
-// @Product		json
+// @Produce		json
 // @Param			user	body		RegisterUserDto	true	"User"
 // @Success		200		{object}	RegisterUserResponseDto
 // @Failure		400		{object}	Error	"Invalid request body"
@@ -90,15 +79,18 @@ func (h *UserHandler) LoginUser(c *gin.Context) {
 	if err != nil {
 		switch err {
 		case custom_error.ErrLogin:
-			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+			c.JSON(http.StatusUnauthorized, custom_error.Error{Error: err.Error()})
 			return
 		default:
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
 			return
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "access_token": access_token, "refresh_token": refresh_token})
+	c.JSON(http.StatusOK, dto.LoginUserResponseDto{
+		Message:      "user logged in successfully",
+		AccessToken:  access_token,
+		RefreshToken: refresh_token})
 }
 
 // @Summary	Get user details
@@ -131,12 +123,26 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 		return
 	}
 
-	userResponse := userResponse{
+	var formattedBirthDate string
+	if user.BirthDate != nil {
+		formattedBirthDate = user.BirthDate.Format("2006-01-02")
+	} else {
+		formattedBirthDate = ""
+	}
+
+	var formattedPhoneNumber string
+	if user.PhoneNumber != nil {
+		formattedPhoneNumber = *user.PhoneNumber
+	} else {
+		formattedPhoneNumber = ""
+	}
+
+	userResponse := dto.GetUserResponseDto{
 		ID:          user.ID,
 		Email:       user.Email,
 		Fullname:    user.Fullname,
-		BirthDate:   user.BirthDate.Format("2006-01-02"),
-		PhoneNumber: *user.PhoneNumber,
+		BirthDate:   formattedBirthDate,
+		PhoneNumber: formattedPhoneNumber,
 		IsMentor:    user.IsMentor,
 		ImageURL:    user.ImageURL,
 	}
@@ -144,90 +150,116 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 	c.JSON(http.StatusOK, userResponse)
 }
 
+// @Summary	Delete user
+// @Schemes
+// @Description	Delete user
+// @Tags			User
+// @Security		Bearer
+// @Produce		json
+// @Success		200	{object}	DeleteUserResponseDto
+// @Failure		401	{object}	Error	"Unauthorized"
+// @Failure		500	{object}	Error	"Internal server error"
+// @Router			/users/me [delete]
 func (h *UserHandler) DeleteUserHandler(c *gin.Context) {
 	userID, exist := c.Get("user_id")
 	if !exist {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
 		return
 	}
 
 	id, ok := userID.(float64)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
 		return
 	}
 
 	err := h.service.DeleteUserService(uint(id))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
+	c.JSON(http.StatusOK, dto.DeleteUserResponseDto{Message: "user deleted successfully"})
 }
 
+// @Summary	Update user password
+// @Schemes
+// @Description	Update user password
+// @Tags			User
+// @Accept			json
+// @Produce		json
+// @Security		Bearer
+// @Param			password	body		ChangePasswordDto	true	"User"
+// @Success		200			{object}	ChangePasswordResponseDto
+// @Failure		400			{object}	Error	"Invalid request body"
+// @Failure		500			{object}	Error	"Internal server error"
+// @Router			/users/me/password [patch]
 func (h *UserHandler) UpdateUserPasswordHandler(c *gin.Context) {
 	userID, exist := c.Get("user_id")
 	if !exist {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
 		return
 	}
 
 	id, ok := userID.(float64)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
 		return
 	}
 
-	var input struct {
-		OldPassword string `json:"old_password"`
-		NewPassword string `json:"new_password"`
-	}
+	var input dto.ChangePasswordDto
 
 	if err := c.BindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, custom_error.Error{Error: err.Error()})
 		return
 	}
 
 	err := h.service.UpdateUserPasswordService(uint(id), input.OldPassword, input.NewPassword)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Password updated successfully"})
+	c.JSON(http.StatusOK, dto.ChangePasswordResponseDto{Message: "password changed successfully"})
 }
 
+// @Summary	Update user details
+// @Schemes
+// @Description	Update user details
+// @Tags			User
+// @Accept			json
+// @Produce		json
+// @Security		Bearer
+// @Param			user	body		UpdateUserDetailsDto	true	"User"
+// @Success		200		{object}	UpdateUserDetailsResponseDto
+// @Failure		400		{object}	Error	"Invalid request body"
+// @Failure		500		{object}	Error	"Internal server error"
+// @Router			/users/me/details [patch]
 func (h *UserHandler) UpdateUserDetailsHandler(c *gin.Context) {
 	userID, exist := c.Get("user_id")
 	if !exist {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
 		return
 	}
 
 	id, ok := userID.(float64)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
 		return
 	}
 
-	var input struct {
-		Fullname    string           `json:"fullname"`
-		BirthDate   model.CustomTime `json:"birth_date"`
-		PhoneNumber string           `json:"phone_number"`
-		ImageURL    string           `json:"image_url"`
-	}
+	var input dto.UpdateUserDetailsDto
 
 	if err := c.BindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, custom_error.Error{Error: err.Error()})
 		return
 	}
 
 	err := h.service.UpdateUserDetailsService(uint(id), input)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "User details updated successfully"})
+	c.JSON(http.StatusOK, dto.UpdateUserDetailsResponseDto{Message: "user details updated successfully"})
 }

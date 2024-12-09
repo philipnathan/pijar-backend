@@ -1,29 +1,126 @@
 basePath: /api/v1
 definitions:
-    user.Error:
-        properties:
-            error:
-                example: user not found
-                type: string
-        type: object
-    user.RegisterUserDto:
-        properties:
-            email:
-                example: test@example.com
-                type: string
-            fullname:
-                example: John Doe
-                type: string
-            password:
-                example: password123
-                type: string
-        type: object
-    user.RegisterUserResponseDto:
-        properties:
-            message:
-                example: user registered successfully
-                type: string
-        type: object
+  user.ChangePasswordDto:
+    properties:
+      new_password:
+        example: newPassword123
+        type: string
+      old_password:
+        example: oldPassword123
+        type: string
+    required:
+    - new_password
+    - old_password
+    type: object
+  user.ChangePasswordResponseDto:
+    properties:
+      message:
+        example: password changed successfully
+        type: string
+    type: object
+  user.DeleteUserResponseDto:
+    properties:
+      message:
+        example: user deleted successfully
+        type: string
+    type: object
+  user.Error:
+    properties:
+      error:
+        example: user not found
+        type: string
+    type: object
+  user.GetUserResponseDto:
+    properties:
+      birth_date:
+        example: "1990-01-01"
+        type: string
+      email:
+        example: test@example.com
+        type: string
+      fullname:
+        example: John Doe
+        type: string
+      id:
+        example: 1
+        type: integer
+      image_url:
+        example: https://example.com/image.jpg
+        type: string
+      is_mentor:
+        example: true
+        type: boolean
+      phone_number:
+        example: "123456789"
+        type: string
+    type: object
+  user.LoginUserDto:
+    properties:
+      email:
+        example: test@example.com
+        type: string
+      password:
+        example: password123
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  user.LoginUserResponseDto:
+    properties:
+      access_token:
+        example: eyAsgh435789
+        type: string
+      message:
+        example: user logged in successfully
+        type: string
+      refresh_token:
+        example: eyAsgh435789
+        type: string
+    type: object
+  user.RegisterUserDto:
+    properties:
+      email:
+        example: test@example.com
+        type: string
+      fullname:
+        example: John Doe
+        type: string
+      password:
+        example: password123
+        type: string
+    required:
+    - email
+    - fullname
+    - password
+    type: object
+  user.RegisterUserResponseDto:
+    properties:
+      message:
+        example: user registered successfully
+        type: string
+    type: object
+  user.UpdateUserDetailsDto:
+    properties:
+      birth_date:
+        example: "1990-02-01"
+        type: string
+      fullname:
+        example: John Doe
+        type: string
+      image_url:
+        example: https://example.com/image.jpg
+        type: string
+      phone_number:
+        example: "123456789"
+        type: string
+    type: object
+  user.UpdateUserDetailsResponseDto:
+    properties:
+      message:
+        example: user details updated successfully
+        type: string
+    type: object
 host: localhost:8080
 info:
     contact: {}
@@ -31,32 +128,181 @@ info:
     title: Pijar API
     version: "1.0"
 paths:
-    /users/register:
-        post:
-            consumes:
-                - application/json
-            description: Register new user
-            parameters:
-                - description: User
-                  in: body
-                  name: user
-                  required: true
-                  schema:
-                      $ref: "#/definitions/user.RegisterUserDto"
-            responses:
-                "200":
-                    description: OK
-                    schema:
-                        $ref: "#/definitions/user.RegisterUserResponseDto"
-                "400":
-                    description: Invalid request body
-                    schema:
-                        $ref: "#/definitions/user.Error"
-                "500":
-                    description: Internal server error
-                    schema:
-                        $ref: "#/definitions/user.Error"
-            summary: Register new user
-            tags:
-                - User
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user
+      parameters:
+      - description: Login Information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.LoginUserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.LoginUserResponseDto'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/user.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/user.Error'
+      summary: Login user
+      tags:
+      - User
+  /users/me:
+    delete:
+      description: Delete user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.DeleteUserResponseDto'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/user.Error'
+      security:
+      - Bearer: []
+      summary: Delete user
+      tags:
+      - User
+    get:
+      consumes:
+      - application/json
+      description: Get user details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.GetUserResponseDto'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/user.Error'
+      security:
+      - Bearer: []
+      summary: Get user details
+      tags:
+      - User
+  /users/me/details:
+    patch:
+      consumes:
+      - application/json
+      description: Update user details
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.UpdateUserDetailsDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UpdateUserDetailsResponseDto'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/user.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/user.Error'
+      security:
+      - Bearer: []
+      summary: Update user details
+      tags:
+      - User
+  /users/me/password:
+    patch:
+      consumes:
+      - application/json
+      description: Update user password
+      parameters:
+      - description: User
+        in: body
+        name: password
+        required: true
+        schema:
+          $ref: '#/definitions/user.ChangePasswordDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ChangePasswordResponseDto'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/user.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/user.Error'
+      security:
+      - Bearer: []
+      summary: Update user password
+      tags:
+      - User
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      description: Register new user
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.RegisterUserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.RegisterUserResponseDto'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/user.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/user.Error'
+      summary: Register new user
+      tags:
+      - User
+securityDefinitions:
+  Bearer:
+    description: '"Type ''Bearer TOKEN'' to correctly set the API Key"'
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
