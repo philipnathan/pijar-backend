@@ -5,6 +5,5 @@ type AddLearnerInterestsDto struct {
 }
 
 type AddLearnerInterestsResponseDto struct {
-	CategoryID   uint   `json:"category_id" example:"1"`
-	CategoryName string `json:"category_name" example:"Development"`
+	Message string `json:"message" example:"interests added successfully"`
 }
