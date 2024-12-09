@@ -21,6 +21,5 @@ func LearnerRoute(r *gin.Engine, db *gorm.DB) {
 		protectedRoutes.Use(middleware.AuthMiddleware())
 		protectedRoutes.GET("/interests", handler.GetLearnerInterests)
 		protectedRoutes.POST("/interests", handler.AddLearnerInterests)
-		protectedRoutes.DELETE("/interests", handler.DeleteLearnerInterests)
 	}
 }
