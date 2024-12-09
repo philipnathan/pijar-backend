@@ -27,7 +27,6 @@ type User struct {
 
 func (t *CustomTime) UnmarshalJSON(b []byte) (err error) {
 	str := string(b)
-	str = str[1 : len(str)-1]
 
 	date, err := time.Parse("2006-01-02", str)
 
