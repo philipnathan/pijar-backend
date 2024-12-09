@@ -30,7 +30,24 @@ func (s *LearnerService) GetLearnerInterests(userID uint) ([]model.LearnerIntere
 }
 
 func (s *LearnerService) AddLearnerInterests(userID uint, interests []uint) error {
-	if err := s.repo.AddLearnerInterests(userID, interests); err != nil {
+	learnerInterests, err := s.repo.GetLearnerInterest(userID)
+	if err != nil {
+		return err
+	}
+
+	existingInterests := make(map[uint]bool)
+	for _, data := range learnerInterests {
+		existingInterests[data.Category.ID] = true
+	}
+
+	var newInterests []uint
+	for _, categoryID := range interests {
+		if !existingInterests[categoryID] {
+			newInterests = append(newInterests, categoryID)
+		}
+	}
+
+	if err := s.repo.AddLearnerInterests(userID, newInterests); err != nil {
 		return err
 	}
 

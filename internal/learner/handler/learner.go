@@ -38,13 +38,25 @@ func (h *LearnerHandler) GetLearnerInterests(c *gin.Context) {
 		return
 	}
 
-	var response []dto.AddLearnerInterestsResponseDto
-
+	var response dto.GetLearnerInterestResponseDto
+	var interestsOnly []dto.InterestOnlyDto
 	for _, interest := range learnerInterests {
-		response = append(response, dto.AddLearnerInterestsResponseDto{
+		interestsOnly = append(interestsOnly, dto.InterestOnlyDto{
 			CategoryID:   interest.Category.ID,
 			CategoryName: interest.Category.Category_name,
 		})
+	}
+
+	if len(interestsOnly) == 0 {
+		response = dto.GetLearnerInterestResponseDto{
+			Message: "No interests found",
+			Data:    []dto.InterestOnlyDto{},
+		}
+	} else {
+		response = dto.GetLearnerInterestResponseDto{
+			Message: "interests retrieved successfully",
+			Data:    interestsOnly,
+		}
 	}
 
 	c.JSON(http.StatusOK, response)
@@ -74,5 +86,5 @@ func (h *LearnerHandler) AddLearnerInterests(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusOK)
+	c.JSON(http.StatusOK, dto.AddLearnerInterestsResponseDto{Message: "interests added successfully"})
 }
