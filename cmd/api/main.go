@@ -7,6 +7,7 @@ import (
 	"github.com/philipnathan/pijar-backend/database"
 	_ "github.com/philipnathan/pijar-backend/docs"
 	categoryRoute "github.com/philipnathan/pijar-backend/internal/category/route"
+	learnerRoute "github.com/philipnathan/pijar-backend/internal/learner/route"
 	seed "github.com/philipnathan/pijar-backend/internal/seed"
 	userRoute "github.com/philipnathan/pijar-backend/internal/user/route"
 	swaggerFiles "github.com/swaggo/files"
@@ -46,6 +47,7 @@ func main() {
 
 	userRoute.UserRoute(r, db)
 	categoryRoute.CategoryRoute(r, db)
+	learnerRoute.LearnerRoute(r, db)
 
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server:", err)
