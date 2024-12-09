@@ -88,3 +88,30 @@ func (h *LearnerHandler) AddLearnerInterests(c *gin.Context) {
 
 	c.JSON(http.StatusOK, dto.AddLearnerInterestsResponseDto{Message: "interests added successfully"})
 }
+
+func (h *LearnerHandler) DeleteLearnerInterests(c *gin.Context) {
+	userID, exist := c.Get("user_id")
+	if !exist {
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		return
+	}
+
+	id, ok := userID.(float64)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		return
+	}
+
+	var input dto.DeleteLearnerInterestsDto
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, custom_error.Error{Error: err.Error()})
+		return
+	}
+
+	if err := h.service.DeleteLearnerInterests(uint(id), input.CategoryID); err != nil {
+		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, dto.DeleteLearnerInterestsResponseDto{Message: "interests deleted successfully"})
+}
