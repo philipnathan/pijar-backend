@@ -6,7 +6,7 @@ import (
 )
 
 type LearnerBio struct {
-	gorm.Model
+	gorm.Model  `json:"-"`
 	UserID      uint   `gorm:"not null" json:"user_id"`
 	Bio         string `gorm:"type:text;not null" json:"bio"`
 	Occupation  string `gorm:"type:varchar(50);not null" json:"occupation"`
@@ -14,7 +14,7 @@ type LearnerBio struct {
 }
 
 type LearnerInterest struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 	UserID     uint `gorm:"not null" json:"user_id"`
 	CategoryID uint `gorm:"type:varchar(50);not null" json:"category_id"`
 
