@@ -7,6 +7,7 @@ import (
 	"github.com/philipnathan/pijar-backend/database"
 	_ "github.com/philipnathan/pijar-backend/docs"
 	categoryRoute "github.com/philipnathan/pijar-backend/internal/category/route"
+	learnerRoute "github.com/philipnathan/pijar-backend/internal/learner/route"
 	seed "github.com/philipnathan/pijar-backend/internal/seed"
 	userRoute "github.com/philipnathan/pijar-backend/internal/user/route"
 	swaggerFiles "github.com/swaggo/files"
@@ -20,10 +21,10 @@ import (
 //	@host		localhost:8080
 //	@BasePath	/api/v1
 
-//	@securityDefinitions.apikey	Bearer
-//	@in							header
-//	@name						Authorization
-//	@description				"Type 'Bearer TOKEN' to correctly set the API Key"
+// @securityDefinitions.apikey	Bearer
+// @in							header
+// @name						Authorization
+// @description				"Type 'Bearer TOKEN' to correctly set the API Key"
 func main() {
 	db, err := database.ConnectToDatabase()
 
@@ -46,6 +47,7 @@ func main() {
 
 	userRoute.UserRoute(r, db)
 	categoryRoute.CategoryRoute(r, db)
+	learnerRoute.LearnerRoute(r, db)
 
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server:", err)
