@@ -162,6 +162,22 @@ func (s *UserService) UpdateUserDetailsService(userID uint, input interface{}) e
 
 		// Jika field valid dan dapat di-set
 		if userField.IsValid() && userField.CanSet() {
+
+			// Jika field "BirthDate" maka lakukan unmarshall dahulu
+			if v.Type().Field(i).Name == "BirthDate" {
+				str := field.String()
+				if str != "" {
+					var customTime model.CustomTime
+					err := customTime.UnmarshalJSON([]byte(str))
+					if err != nil {
+						return err
+					}
+
+					userField.Set(reflect.ValueOf(&customTime))
+				}
+				continue
+			}
+
 			// Set nilai field pada user
 			if userField.Type() == field.Type() {
 				userField.Set(field)
