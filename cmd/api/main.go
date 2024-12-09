@@ -19,6 +19,11 @@ import (
 
 //	@host		localhost:8080
 //	@BasePath	/api/v1
+
+//	@securityDefinitions.apikey	Bearer
+//	@in							header
+//	@name						Authorization
+//	@description				"Type 'Bearer TOKEN' to correctly set the API Key"
 func main() {
 	db, err := database.ConnectToDatabase()
 
