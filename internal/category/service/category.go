@@ -5,7 +5,7 @@ import (
 	repository "github.com/philipnathan/pijar-backend/internal/category/repository"
 )
 
-type CategoryServiceInterface interface{
+type CategoryServiceInterface interface {
 	GetAllCategoriesService() ([]model.Category, error)
 }
 
