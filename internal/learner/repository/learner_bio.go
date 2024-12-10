@@ -9,6 +9,7 @@ import (
 type LearnerBioRepositoryInterface interface {
 	CreateLearnerBio(UserID uint, input *dto.CreateLearnerBioDto) error
 	GetLearnerBio(UserID uint) (*model.LearnerBio, error)
+	SaveBio(*model.LearnerBio) error
 }
 
 type LearnerBioRepository struct {
@@ -29,4 +30,8 @@ func (r *LearnerBioRepository) GetLearnerBio(UserID uint) (*model.LearnerBio, er
 	var bio model.LearnerBio
 	err := r.db.Where("user_id = ?", UserID).First(&bio).Error
 	return &bio, err
+}
+
+func (r *LearnerBioRepository) SaveBio(bio *model.LearnerBio) error {
+	return r.db.Save(bio).Error
 }

@@ -21,5 +21,6 @@ func LearnerBioRoute(r *gin.Engine, db *gorm.DB) {
 		protectedRoutes.Use(middleware.AuthMiddleware())
 		protectedRoutes.POST("/", handler.CreateLearnerBio)
 		protectedRoutes.GET("/", handler.GetLearnerBio)
+		protectedRoutes.PUT("/", handler.UpdateLearnerBio)
 	}
 }
