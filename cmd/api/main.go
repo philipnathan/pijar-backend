@@ -48,6 +48,7 @@ func main() {
 	userRoute.UserRoute(r, db)
 	categoryRoute.CategoryRoute(r, db)
 	learnerRoute.LearnerRoute(r, db)
+	learnerRoute.LearnerBioRoute(r, db)
 
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server:", err)
