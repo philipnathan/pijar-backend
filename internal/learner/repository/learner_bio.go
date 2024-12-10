@@ -8,6 +8,7 @@ import (
 
 type LearnerBioRepositoryInterface interface {
 	CreateLearnerBio(UserID uint, input *dto.CreateLearnerBioDto) error
+	GetLearnerBio(UserID uint) (*model.LearnerBio, error)
 }
 
 type LearnerBioRepository struct {
@@ -22,4 +23,10 @@ func NewLearnerBioRepository(db *gorm.DB) LearnerBioRepositoryInterface {
 
 func (r *LearnerBioRepository) CreateLearnerBio(UserID uint, input *dto.CreateLearnerBioDto) error {
 	return r.db.Create(&model.LearnerBio{UserID: UserID, Bio: input.Bio, Occupation: input.Occupation, Institution: input.Institution}).Error
+}
+
+func (r *LearnerBioRepository) GetLearnerBio(UserID uint) (*model.LearnerBio, error) {
+	var bio model.LearnerBio
+	err := r.db.Where("user_id = ?", UserID).First(&bio).Error
+	return &bio, err
 }
