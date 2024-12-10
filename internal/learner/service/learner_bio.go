@@ -7,6 +7,7 @@ import (
 	dto "github.com/philipnathan/pijar-backend/internal/learner/dto"
 	model "github.com/philipnathan/pijar-backend/internal/learner/model"
 	repo "github.com/philipnathan/pijar-backend/internal/learner/repository"
+	"gorm.io/gorm"
 )
 
 type LearnerBioServiceInterface interface {
@@ -26,8 +27,8 @@ func NewLearnerBioService(repo repo.LearnerBioRepositoryInterface) LearnerBioSer
 }
 
 func (s *LearnerBioService) CreateLearnerBio(UserID uint, input *dto.CreateLearnerBioDto) error {
-	bio, _ := s.repo.GetLearnerBio(UserID)
-	if bio != nil {
+	_, err := s.repo.GetLearnerBio(UserID)
+	if err != gorm.ErrRecordNotFound {
 		return custom_error.ErrLearnerBioAlreadyExist
 	}
 	return s.repo.CreateLearnerBio(UserID, input)
@@ -43,11 +44,7 @@ func (s *LearnerBioService) GetLearnerBio(UserID uint) (*model.LearnerBio, error
 }
 
 func (s *LearnerBioService) UpdateLearnerBio(UserID uint, input *dto.UpdateLearnerBioDto) error {
-	learnerBio, err := s.repo.GetLearnerBio(UserID)
-	if err != nil {
-		return err
-	}
-
+	learnerBio, _ := s.repo.GetLearnerBio(UserID)
 	if learnerBio == nil {
 		return custom_error.ErrLearnerBioNotFound
 	}
