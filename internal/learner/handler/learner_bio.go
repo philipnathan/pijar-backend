@@ -46,3 +46,25 @@ func (h *LearnerBioHandler) CreateLearnerBio(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, dto.CreateLearnerBioResponseDto{Message: "bio added successfully"})
 }
+
+func (h *LearnerBioHandler) GetLearnerBio(c *gin.Context) {
+	userID, exist := c.Get("user_id")
+	if !exist {
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		return
+	}
+
+	id, ok := userID.(float64)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		return
+	}
+
+	bio, err := h.service.GetLearnerBio(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, dto.GetLearnerBioResponseDto{Message: "bio fetched successfully", Bio: bio})
+}
