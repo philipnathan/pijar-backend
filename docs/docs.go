@@ -44,6 +44,118 @@ const docTemplate = `{
                 }
             }
         },
+        "/learners/biographies": {
+            "put": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Update learner bio",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Learner Bio"
+                ],
+                "summary": "Update learner bio",
+                "parameters": [
+                    {
+                        "description": "bio",
+                        "name": "bio",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/learner.UpdateLearnerBioDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/learner.UpdateLearnerBioResponseDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/learner.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/learner.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/learner.Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Create learner bio",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Learner Bio"
+                ],
+                "summary": "Create learner bio",
+                "parameters": [
+                    {
+                        "description": "bio",
+                        "name": "bio",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/learner.CreateLearnerBioDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/learner.CreateLearnerBioResponseDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/learner.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/learner.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/learner.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/learners/interests": {
             "get": {
                 "security": [
@@ -501,6 +613,32 @@ const docTemplate = `{
                 }
             }
         },
+        "learner.CreateLearnerBioDto": {
+            "type": "object",
+            "properties": {
+                "bio": {
+                    "type": "string",
+                    "example": "My bio"
+                },
+                "institution": {
+                    "type": "string",
+                    "example": "Google"
+                },
+                "occupation": {
+                    "type": "string",
+                    "example": "Software Engineer"
+                }
+            }
+        },
+        "learner.CreateLearnerBioResponseDto": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "bio added successfully"
+                }
+            }
+        },
         "learner.DeleteLearnerInterestsDto": {
             "type": "object",
             "required": [
@@ -563,6 +701,32 @@ const docTemplate = `{
                 "category_name": {
                     "type": "string",
                     "example": "Development"
+                }
+            }
+        },
+        "learner.UpdateLearnerBioDto": {
+            "type": "object",
+            "properties": {
+                "bio": {
+                    "type": "string",
+                    "example": "My bio"
+                },
+                "institution": {
+                    "type": "string",
+                    "example": "Google"
+                },
+                "occupation": {
+                    "type": "string",
+                    "example": "Software Engineer"
+                }
+            }
+        },
+        "learner.UpdateLearnerBioResponseDto": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "bio updated successfully"
                 }
             }
         },
