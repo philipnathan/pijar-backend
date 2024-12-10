@@ -9,5 +9,6 @@ type Error struct {
 }
 
 var (
-	ErrLearnerBioNotFound = errors.New("learner bio not found. Please add bio first")
+	ErrLearnerBioNotFound     = errors.New("learner bio not found. Please add bio first")
+	ErrLearnerBioAlreadyExist = errors.New("bio already exist. Please update bio")
 )
