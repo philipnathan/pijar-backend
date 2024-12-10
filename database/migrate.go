@@ -2,7 +2,6 @@ package database
 
 import (
 	"fmt"
-	"os/user"
 
 	category "github.com/philipnathan/pijar-backend/internal/category/model"
 	learner "github.com/philipnathan/pijar-backend/internal/learner/model"
