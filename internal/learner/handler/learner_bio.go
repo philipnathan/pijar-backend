@@ -19,6 +19,19 @@ func NewLearnerBioHandler(service service.LearnerBioServiceInterface) *LearnerBi
 	}
 }
 
+// @Summary	Create learner bio
+// @Schemes
+// @Description	Create learner bio
+// @Tags			Learner Bio
+// @Accept			json
+// @Produce		json
+// @Security		Bearer
+// @Param			bio	body		CreateLearnerBioDto	true	"bio"
+// @Success		201	{object}	CreateLearnerBioResponseDto
+// @Failure		400	{object}	Error	"Invalid request body"
+// @Failure		401	{object}	Error	"Unauthorized"
+// @Failure		500	{object}	Error	"Internal server error"
+// @Router			/learners/biographies [post]
 func (h *LearnerBioHandler) CreateLearnerBio(c *gin.Context) {
 	userID, exist := c.Get("user_id")
 	if !exist {
@@ -69,6 +82,19 @@ func (h *LearnerBioHandler) GetLearnerBio(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.GetLearnerBioResponseDto{Message: "bio fetched successfully", Bio: bio})
 }
 
+// @Summary	Update learner bio
+// @Schemes
+// @Description	Update learner bio
+// @Tags			Learner Bio
+// @Accept			json
+// @Produce		json
+// @Security		Bearer
+// @Param			bio	body		UpdateLearnerBioDto	true	"bio"
+// @Success		200	{object}	UpdateLearnerBioResponseDto
+// @Failure		400	{object}	Error	"Invalid request body"
+// @Failure		401	{object}	Error	"Unauthorized"
+// @Failure		500	{object}	Error	"Internal server error"
+// @Router			/learners/biographies [put]
 func (h *LearnerBioHandler) UpdateLearnerBio(c *gin.Context) {
 	userID, exist := c.Get("user_id")
 	if !exist {

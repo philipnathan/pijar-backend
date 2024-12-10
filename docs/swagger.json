@@ -38,6 +38,118 @@
                 }
             }
         },
+        "/learners/biographies": {
+            "put": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Update learner bio",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Learner Bio"
+                ],
+                "summary": "Update learner bio",
+                "parameters": [
+                    {
+                        "description": "bio",
+                        "name": "bio",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/learner.UpdateLearnerBioDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/learner.UpdateLearnerBioResponseDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/learner.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/learner.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/learner.Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Create learner bio",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Learner Bio"
+                ],
+                "summary": "Create learner bio",
+                "parameters": [
+                    {
+                        "description": "bio",
+                        "name": "bio",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/learner.CreateLearnerBioDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/learner.CreateLearnerBioResponseDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/learner.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/learner.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/learner.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/learners/interests": {
             "get": {
                 "security": [
@@ -176,9 +288,15 @@
         "/users/login": {
             "post": {
                 "description": "Login user",
-                "consumes": ["application/json"],
-                "produces": ["application/json"],
-                "tags": ["User"],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
                 "summary": "Login user",
                 "parameters": [
                     {
@@ -221,9 +339,15 @@
                     }
                 ],
                 "description": "Get user details",
-                "consumes": ["application/json"],
-                "produces": ["application/json"],
-                "tags": ["User"],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
                 "summary": "Get user details",
                 "responses": {
                     "200": {
@@ -253,8 +377,12 @@
                     }
                 ],
                 "description": "Delete user",
-                "produces": ["application/json"],
-                "tags": ["User"],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
                 "summary": "Delete user",
                 "responses": {
                     "200": {
@@ -286,9 +414,15 @@
                     }
                 ],
                 "description": "Update user details",
-                "consumes": ["application/json"],
-                "produces": ["application/json"],
-                "tags": ["User"],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
                 "summary": "Update user details",
                 "parameters": [
                     {
@@ -331,9 +465,15 @@
                     }
                 ],
                 "description": "Update user password",
-                "consumes": ["application/json"],
-                "produces": ["application/json"],
-                "tags": ["User"],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
                 "summary": "Update user password",
                 "parameters": [
                     {
@@ -371,9 +511,15 @@
         "/users/register": {
             "post": {
                 "description": "Register new user",
-                "consumes": ["application/json"],
-                "produces": ["application/json"],
-                "tags": ["User"],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
                 "summary": "Register new user",
                 "parameters": [
                     {
@@ -461,6 +607,32 @@
                 }
             }
         },
+        "learner.CreateLearnerBioDto": {
+            "type": "object",
+            "properties": {
+                "bio": {
+                    "type": "string",
+                    "example": "My bio"
+                },
+                "institution": {
+                    "type": "string",
+                    "example": "Google"
+                },
+                "occupation": {
+                    "type": "string",
+                    "example": "Software Engineer"
+                }
+            }
+        },
+        "learner.CreateLearnerBioResponseDto": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "bio added successfully"
+                }
+            }
+        },
         "learner.DeleteLearnerInterestsDto": {
             "type": "object",
             "required": [
@@ -526,9 +698,38 @@
                 }
             }
         },
+        "learner.UpdateLearnerBioDto": {
+            "type": "object",
+            "properties": {
+                "bio": {
+                    "type": "string",
+                    "example": "My bio"
+                },
+                "institution": {
+                    "type": "string",
+                    "example": "Google"
+                },
+                "occupation": {
+                    "type": "string",
+                    "example": "Software Engineer"
+                }
+            }
+        },
+        "learner.UpdateLearnerBioResponseDto": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "bio updated successfully"
+                }
+            }
+        },
         "user.ChangePasswordDto": {
             "type": "object",
-            "required": ["new_password", "old_password"],
+            "required": [
+                "new_password",
+                "old_password"
+            ],
             "properties": {
                 "new_password": {
                     "type": "string",
@@ -602,7 +803,10 @@
         },
         "user.LoginUserDto": {
             "type": "object",
-            "required": ["email", "password"],
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string",
@@ -633,7 +837,11 @@
         },
         "user.RegisterUserDto": {
             "type": "object",
-            "required": ["email", "fullname", "password"],
+            "required": [
+                "email",
+                "fullname",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string",

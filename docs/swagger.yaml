@@ -34,6 +34,24 @@ definitions:
         example: interests added successfully
         type: string
     type: object
+  learner.CreateLearnerBioDto:
+    properties:
+      bio:
+        example: My bio
+        type: string
+      institution:
+        example: Google
+        type: string
+      occupation:
+        example: Software Engineer
+        type: string
+    type: object
+  learner.CreateLearnerBioResponseDto:
+    properties:
+      message:
+        example: bio added successfully
+        type: string
+    type: object
   learner.DeleteLearnerInterestsDto:
     properties:
       category_id:
@@ -76,6 +94,24 @@ definitions:
         type: integer
       category_name:
         example: Development
+        type: string
+    type: object
+  learner.UpdateLearnerBioDto:
+    properties:
+      bio:
+        example: My bio
+        type: string
+      institution:
+        example: Google
+        type: string
+      occupation:
+        example: Software Engineer
+        type: string
+    type: object
+  learner.UpdateLearnerBioResponseDto:
+    properties:
+      message:
+        example: bio updated successfully
         type: string
     type: object
   user.ChangePasswordDto:
@@ -201,10 +237,10 @@ definitions:
     type: object
 host: localhost:8080
 info:
-    contact: {}
-    description: This is a Pijar API
-    title: Pijar API
-    version: "1.0"
+  contact: {}
+  description: This is a Pijar API
+  title: Pijar API
+  version: "1.0"
 paths:
   /categories:
     get:
@@ -225,6 +261,77 @@ paths:
       summary: Get all categories
       tags:
       - Category
+  /learners/biographies:
+    post:
+      consumes:
+      - application/json
+      description: Create learner bio
+      parameters:
+      - description: bio
+        in: body
+        name: bio
+        required: true
+        schema:
+          $ref: '#/definitions/learner.CreateLearnerBioDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/learner.CreateLearnerBioResponseDto'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/learner.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/learner.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/learner.Error'
+      security:
+      - Bearer: []
+      summary: Create learner bio
+      tags:
+      - Learner Bio
+    put:
+      consumes:
+      - application/json
+      description: Update learner bio
+      parameters:
+      - description: bio
+        in: body
+        name: bio
+        required: true
+        schema:
+          $ref: '#/definitions/learner.UpdateLearnerBioDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/learner.UpdateLearnerBioResponseDto'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/learner.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/learner.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/learner.Error'
+      security:
+      - Bearer: []
+      summary: Update learner bio
+      tags:
+      - Learner Bio
   /learners/interests:
     delete:
       consumes:
