@@ -26,11 +26,7 @@ func NewLearnerBioService(repo repo.LearnerBioRepositoryInterface) LearnerBioSer
 }
 
 func (s *LearnerBioService) CreateLearnerBio(UserID uint, input *dto.CreateLearnerBioDto) error {
-	bio, err := s.repo.GetLearnerBio(UserID)
-	if err != nil {
-		return err
-	}
-
+	bio, _ := s.repo.GetLearnerBio(UserID)
 	if bio != nil {
 		return custom_error.ErrLearnerBioAlreadyExist
 	}
