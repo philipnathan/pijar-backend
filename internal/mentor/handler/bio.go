@@ -27,8 +27,19 @@ func (h *MentorBioHandler) MentorGetBio(c *gin.Context) {
 		return
 	}
 
+	IsMentor, exist := c.Get("is_mentor")
+	if !exist {
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		return
+	}
+
 	idFloat, ok := UserID.(float64)
 	if !ok {
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		return
+	}
+
+	if !IsMentor.(bool) || IsMentor != true {
 		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
 		return
 	}
