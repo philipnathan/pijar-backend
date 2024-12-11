@@ -37,14 +37,14 @@ func (h *MentorBioHandler) MentorGetBio(c *gin.Context) {
 	bio, err := h.service.GetMentorBio(&id)
 	if err != nil {
 		if err == custom_error.ErrMentorBioNotFound {
-			c.JSON(http.StatusNotFound, custom_error.Error{Error: "Mentor bio not found"})
+			c.JSON(http.StatusOK, dto.GetMentorBioResponseDto{Message: "bio not found", Bio: ""})
 			return
 		}
 		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, bio)
+	c.JSON(http.StatusOK, dto.GetMentorBioResponseDto{Message: "bio fetched successfully", Bio: bio.Bio})
 }
 
 func (h *MentorBioHandler) UserGetBio(c *gin.Context) {
