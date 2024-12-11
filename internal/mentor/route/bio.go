@@ -11,15 +11,20 @@ import (
 )
 
 func MentorBioRoute(r *gin.Engine, db *gorm.DB) {
-	apiV1 := "/api/v1/mentors/biographies"
+	apiV1 := "/api/v1/mentors"
 
 	repo := repository.NewMentorBioRepository(db)
 	services := service.NewMentorBioService(repo)
 	handler := handler.NewMentorBioHandler(services)
 
+	nonProtectedRoutes := r.Group(apiV1)
+	{
+		nonProtectedRoutes.GET("/:mentor_id/bio", handler.UserGetBio)
+	}
+
 	protectedRoutes := r.Group(apiV1)
 	{
 		protectedRoutes.Use(middleware.AuthMiddleware())
-		protectedRoutes.GET("/", handler.MentorGetBio)
+		protectedRoutes.GET("/me/bio", handler.MentorGetBio)
 	}
 }
