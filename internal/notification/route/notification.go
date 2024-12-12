@@ -11,7 +11,7 @@ import (
 )
 
 func NotificationRoute(r *gin.Engine, db *gorm.DB) {
-	apiV1 := "/api/v1/notifications"
+	apiV1 := "/api/v1/users/notifications"
 
 	repo := repository.NewNotificationRepository(db)
 	services := service.NewNotificationService(repo)
