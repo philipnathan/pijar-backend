@@ -13,7 +13,7 @@ import (
 )
 
 type UserServiceInterface interface {
-	RegisterUserService(user *dto.RegisterUserDto) error
+	RegisterUserService(user *dto.RegisterUserDto) (string, string, error)
 	LoginUserService(email, password string) (string, string, error)
 	GetUserDetails(userID uint) (*model.User, error)
 	DeleteUserService(userID uint) error
@@ -31,26 +31,37 @@ func NewUserService(repo repository.UserRepositoryInterface) UserServiceInterfac
 	}
 }
 
-func (s *UserService) RegisterUserService(user *dto.RegisterUserDto) error {
+func (s *UserService) RegisterUserService(user *dto.RegisterUserDto) (string, string, error) {
 	var err error
 
 	if exist, err := s.isUserExist(user); err != nil {
-		return err
+		return "", "", err
 	} else if exist {
-		return err
+		return "", "", err
 	}
 
 	user.Password, err = utils.HashPassword(user.Password)
 	if err != nil {
-		return err
+		return "", "", err
 	}
 
-	err = s.repo.CreateUser(user)
+	var createdUser model.User
+	createdUser, err = s.repo.CreateUser(user)
 	if err != nil {
-		return err
+		return "", "", err
 	}
 
-	return nil
+	var access_token string
+	if access_token, err = utils.GenerateJWT(createdUser.ID, createdUser.IsMentor); err != nil {
+		return "", "", err
+	}
+
+	var refresh_token string
+	if refresh_token, err = utils.GenerateRefreshToken(createdUser.ID, createdUser.IsMentor); err != nil {
+		return "", "", err
+	}
+
+	return access_token, refresh_token, nil
 }
 
 func (s *UserService) isUserExist(user *dto.RegisterUserDto) (bool, error) {

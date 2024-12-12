@@ -8,7 +8,7 @@ import (
 )
 
 type UserRepositoryInterface interface {
-	CreateUser(userDto *dto.RegisterUserDto) error
+	CreateUser(userDto *dto.RegisterUserDto) (model.User, error)
 	FindUserByEmail(email string) (*model.User, error)
 	FindByPhoneNumber(phoneNumber string) (*model.User, error)
 	FindByUserId(id uint) (*model.User, error)
@@ -27,13 +27,19 @@ func NewUserRepository(db *gorm.DB) UserRepositoryInterface {
 	}
 }
 
-func (r *userRepository) CreateUser(userDto *dto.RegisterUserDto) error {
+func (r *userRepository) CreateUser(userDto *dto.RegisterUserDto) (model.User, error) {
 	user := &model.User{
 		Email:    userDto.Email,
 		Password: userDto.Password,
 		Fullname: userDto.Fullname,
 	}
-	return r.db.Create(user).Error
+
+	err := r.db.Create(user).Error
+	if err != nil {
+		return model.User{}, err
+	}
+
+	return *user, nil
 }
 
 func (r *userRepository) FindUserByEmail(email string) (*model.User, error) {

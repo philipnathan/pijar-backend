@@ -283,8 +283,14 @@ definitions:
     type: object
   user.RegisterUserResponseDto:
     properties:
+      access_token:
+        example: eyAsgh435789
+        type: string
       message:
         example: user registered successfully
+        type: string
+      refresh_token:
+        example: eyAsgh435789
         type: string
     type: object
   user.UpdateUserDetailsDto:

@@ -1059,9 +1059,17 @@ const docTemplate = `{
         "user.RegisterUserResponseDto": {
             "type": "object",
             "properties": {
+                "access_token": {
+                    "type": "string",
+                    "example": "eyAsgh435789"
+                },
                 "message": {
                     "type": "string",
                     "example": "user registered successfully"
+                },
+                "refresh_token": {
+                    "type": "string",
+                    "example": "eyAsgh435789"
                 }
             }
         },
