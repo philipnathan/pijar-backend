@@ -60,3 +60,7 @@ func (t *CustomTime) Scan(value interface{}) error {
 		return errors.New("invalid type for CustomTime")
 	}
 }
+
+func (t *CustomTime) FormatToString() string {
+	return t.Time.Format("2006-01-02")
+}

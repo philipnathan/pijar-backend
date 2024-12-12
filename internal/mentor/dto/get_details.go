@@ -1,14 +1,10 @@
 package mentor
 
-import (
-	model "github.com/philipnathan/pijar-backend/internal/mentor/model"
-)
-
 type MentorExperiences struct {
-	Ocupation   *string           `json:"occupation"`
-	CompanyName *string           `json:"company_name"`
-	StartDate   *model.CustomTime `json:"start_date"`
-	EndDate     *model.CustomTime `json:"end_date"`
+	Ocupation   string `json:"occupation"`
+	CompanyName string `json:"company_name"`
+	StartDate   string `json:"start_date"`
+	EndDate     string `json:"end_date" example:"2022-01-01" omitempty:"true"`
 }
 
 type MentorExpertises struct {

@@ -114,6 +114,52 @@ definitions:
         example: bio updated successfully
         type: string
     type: object
+  mentor.Error:
+    properties:
+      error:
+        type: string
+    type: object
+  mentor.GetMentorDetailsDto:
+    properties:
+      fullname:
+        example: John Doe
+        type: string
+      image_url:
+        example: https://example.com/image.jpg
+        type: string
+      mentor_bio:
+        type: string
+      mentor_experiences:
+        items:
+          $ref: '#/definitions/mentor_dto.MentorExperiences'
+        type: array
+      mentor_expertise:
+        items:
+          $ref: '#/definitions/mentor_dto.MentorExpertises'
+        type: array
+      user_id:
+        example: 1
+        type: integer
+    type: object
+  mentor_dto.MentorExperiences:
+    properties:
+      company_name:
+        type: string
+      end_date:
+        example: "2022-01-01"
+        type: string
+      occupation:
+        type: string
+      start_date:
+        type: string
+    type: object
+  mentor_dto.MentorExpertises:
+    properties:
+      category:
+        type: string
+      expertise:
+        type: string
+    type: object
   user.ChangePasswordDto:
     properties:
       new_password:
@@ -417,6 +463,37 @@ paths:
       summary: Add learner interests
       tags:
       - Learner
+  /mentors/{mentor_id}:
+    get:
+      description: Get mentor details
+      parameters:
+      - description: mentor_id
+        in: path
+        name: mentor_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/mentor.GetMentorDetailsDto'
+        "400":
+          description: Invalid mentor_id
+          schema:
+            $ref: '#/definitions/mentor.Error'
+        "404":
+          description: Mentor not found
+          schema:
+            $ref: '#/definitions/mentor.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/mentor.Error'
+      summary: Get mentor details
+      tags:
+      - Mentor
   /users/login:
     post:
       consumes:
