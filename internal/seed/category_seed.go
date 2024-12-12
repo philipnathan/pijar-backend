@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func SeedDatabase(db *gorm.DB) error {
+func SeedCategory(db *gorm.DB) error {
 	tx := db.Begin()
 	if tx.Error != nil {
 		return tx.Error
