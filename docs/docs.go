@@ -561,6 +561,43 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/notifications": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Get all user's notifications",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Get all user's notifications",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/notification.GetAllNotificationsResponseDto"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/notification.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/notification.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/users/register": {
             "post": {
                 "description": "Register new user",
@@ -843,6 +880,46 @@ const docTemplate = `{
                 },
                 "expertise": {
                     "type": "string"
+                }
+            }
+        },
+        "notification.Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "notification.GetAllNotificationsResponseDto": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "No notifications found"
+                },
+                "notification": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/notification.Notif"
+                    }
+                }
+            }
+        },
+        "notification.Notif": {
+            "type": "object",
+            "properties": {
+                "is_read": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "schedule for python basic has been changed"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "schedule_change"
                 }
             }
         },

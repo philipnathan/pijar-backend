@@ -160,6 +160,33 @@ definitions:
       expertise:
         type: string
     type: object
+  notification.Error:
+    properties:
+      error:
+        type: string
+    type: object
+  notification.GetAllNotificationsResponseDto:
+    properties:
+      message:
+        example: No notifications found
+        type: string
+      notification:
+        items:
+          $ref: '#/definitions/notification.Notif'
+        type: array
+    type: object
+  notification.Notif:
+    properties:
+      is_read:
+        example: false
+        type: boolean
+      message:
+        example: schedule for python basic has been changed
+        type: string
+      type:
+        example: schedule_change
+        type: string
+    type: object
   user.ChangePasswordDto:
     properties:
       new_password:
@@ -635,6 +662,29 @@ paths:
       summary: Update user password
       tags:
       - User
+  /users/notifications:
+    get:
+      description: Get all user's notifications
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/notification.GetAllNotificationsResponseDto'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/notification.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/notification.Error'
+      security:
+      - Bearer: []
+      summary: Get all user's notifications
+      tags:
+      - Notification
   /users/register:
     post:
       consumes:
