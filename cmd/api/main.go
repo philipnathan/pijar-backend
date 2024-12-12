@@ -13,6 +13,7 @@ import (
 	userRoute "github.com/philipnathan/pijar-backend/internal/user/route"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"gorm.io/gorm"
 )
 
 //	@title			Pijar API
@@ -40,11 +41,7 @@ func main() {
 	r := gin.Default()
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	if err := seed.SeedDatabase(db); err != nil {
-		fmt.Println("Failed to seed database:", err)
-	} else {
-		fmt.Println("Database seeded successfully")
-	}
+	seedDatabase(db)
 
 	userRoute.UserRoute(r, db)
 	categoryRoute.CategoryRoute(r, db)
@@ -55,4 +52,23 @@ func main() {
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server:", err)
 	}
+}
+
+func seedDatabase(db *gorm.DB) error {
+	seeds := []func(db *gorm.DB) error{
+		seed.SeedCategory,
+		seed.SeedMentorBio,
+		seed.SeedMentorExperience,
+		seed.SeedMentorExpertise,
+	}
+
+	for _, seed := range seeds {
+		if err := seed(db); err != nil {
+			fmt.Println("Failed to seed database:", err)
+			return nil
+		}
+	}
+
+	fmt.Println("Database seeded successfully")
+	return nil
 }
