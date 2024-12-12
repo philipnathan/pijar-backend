@@ -60,6 +60,7 @@ func seedDatabase(db *gorm.DB) error {
 	seeds := []func(db *gorm.DB) error{
 		seed.SeedUser,
 		seed.SeedCategory,
+		seed.SeedSubCategory,
 		seed.SeedMentorBio,
 		seed.SeedMentorExperience,
 		seed.SeedMentorExpertise,
