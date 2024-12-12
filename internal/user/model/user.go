@@ -6,6 +6,7 @@ import (
 	"time"
 
 	learner "github.com/philipnathan/pijar-backend/internal/learner/model"
+	mentor "github.com/philipnathan/pijar-backend/internal/mentor/model"
 	"gorm.io/gorm"
 )
 
@@ -15,14 +16,19 @@ type CustomTime struct {
 
 type User struct {
 	gorm.Model  `json:"-"`
-	Email       string              `gorm:"type:varchar(50);uniqueIndex;not null" json:"email"`
-	Password    string              `gorm:"type:text;not null" json:"password"`
-	Fullname    string              `gorm:"type:varchar(100);not null" json:"fullname"`
-	BirthDate   *CustomTime         `gorm:"type:DATE" json:"birth_date"`
-	PhoneNumber *string             `gorm:"type:varchar(13);unique" json:"phonenumber"`
-	IsMentor    *bool               `gorm:"type:bool;default:false" json:"is_mentor"`
-	ImageURL    *string             `gorm:"type:text" json:"image_url"`
-	LearnerBio  *learner.LearnerBio `gorm:"foreignKey:UserID;references:ID" json:"learner_bio"`
+	Email       string      `gorm:"type:varchar(50);uniqueIndex;not null" json:"email"`
+	Password    string      `gorm:"type:text;not null" json:"password"`
+	Fullname    string      `gorm:"type:varchar(100);not null" json:"fullname"`
+	BirthDate   *CustomTime `gorm:"type:DATE" json:"birth_date"`
+	PhoneNumber *string     `gorm:"type:varchar(13);unique" json:"phonenumber"`
+	IsMentor    *bool       `gorm:"type:bool;default:false" json:"is_mentor"`
+	ImageURL    *string     `gorm:"type:text" json:"image_url"`
+
+	LearnerBio *learner.LearnerBio `gorm:"foreignKey:UserID;references:ID" json:"learner_bio"`
+
+	MentorBio         *mentor.MentorBiographies   `gorm:"foreignKey:UserID;references:ID" json:"mentor_bio"`
+	MentorExperiences []*mentor.MentorExperiences `gorm:"foreignKey:UserID;references:ID" json:"mentor_experience"`
+	MentorExpertises  []*mentor.MentorExpertises  `gorm:"foreignKey:UserID;references:ID" json:"mentor_expertise"`
 }
 
 func (t *CustomTime) UnmarshalJSON(b []byte) (err error) {
