@@ -21,6 +21,16 @@ func NewNotificationHandler(service service.NotificationServiceInterface) *Notif
 	}
 }
 
+// @Summary	Get all user's notifications
+// @Schemes
+// @Description	Get all user's notifications
+// @Tags			Notification
+// @Produce		json
+// @Security		Bearer
+// @Success		200	{object}	GetAllNotificationsResponseDto
+// @Failure		401	{object}	Error	"Unauthorized"
+// @Failure		500	{object}	Error	"Internal server error"
+// @Router			/users/notifications [get]
 func (h *NotificationHandler) GetAllNotificationsHandler(c *gin.Context) {
 	UserID, exist := c.Get("user_id")
 	if !exist {
