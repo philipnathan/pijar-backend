@@ -20,6 +20,17 @@ func NewMentorHandler(service service.MentorServiceInterface) *MentorHandler {
 	}
 }
 
+// @Summary	Get mentor details
+// @Schemes
+// @Description	Get mentor details
+// @Tags			Mentor
+// @Produce		json
+// @Param			mentor_id	path		uint	true	"mentor_id"
+// @Success		200			{object}	GetMentorDetailsDto
+// @Failure		400			{object}	Error	"Invalid mentor_id"
+// @Failure		404			{object}	Error	"Mentor not found"
+// @Failure		500			{object}	Error	"Internal server error"
+// @Router			/mentors/{mentor_id} [get]
 func (h *MentorHandler) UserGetMentorDetails(c *gin.Context) {
 	MentorIDStr := c.Param("mentor_id")
 	if MentorIDStr == "" {
@@ -47,14 +58,20 @@ func (h *MentorHandler) UserGetMentorDetails(c *gin.Context) {
 	for _, experience := range mentorDetails.MentorExperiences {
 		occupation := experience.Ocupation
 		companyName := experience.CompanyName
-		startDate := experience.StartDate
-		endDate := experience.EndDate
+		startDate := experience.StartDate.FormatToString()
+
+		var endDate string
+		if !experience.EndDate.IsZero() {
+			endDate = experience.EndDate.FormatToString()
+		} else {
+			endDate = ""
+		}
 
 		MentorExperiences = append(MentorExperiences, &dto.MentorExperiences{
-			Ocupation:   &occupation,
-			CompanyName: &companyName,
-			StartDate:   &startDate,
-			EndDate:     &endDate,
+			Ocupation:   occupation,
+			CompanyName: companyName,
+			StartDate:   startDate,
+			EndDate:     endDate,
 		})
 	}
 

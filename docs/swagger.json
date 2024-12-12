@@ -285,6 +285,53 @@
                 }
             }
         },
+        "/mentors/{mentor_id}": {
+            "get": {
+                "description": "Get mentor details",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mentor"
+                ],
+                "summary": "Get mentor details",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "mentor_id",
+                        "name": "mentor_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/mentor.GetMentorDetailsDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid mentor_id",
+                        "schema": {
+                            "$ref": "#/definitions/mentor.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Mentor not found",
+                        "schema": {
+                            "$ref": "#/definitions/mentor.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/mentor.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/users/login": {
             "post": {
                 "description": "Login user",
@@ -721,6 +768,75 @@
                 "message": {
                     "type": "string",
                     "example": "bio updated successfully"
+                }
+            }
+        },
+        "mentor.Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "mentor.GetMentorDetailsDto": {
+            "type": "object",
+            "properties": {
+                "fullname": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "image_url": {
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
+                },
+                "mentor_bio": {
+                    "type": "string"
+                },
+                "mentor_experiences": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/mentor_dto.MentorExperiences"
+                    }
+                },
+                "mentor_expertise": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/mentor_dto.MentorExpertises"
+                    }
+                },
+                "user_id": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "mentor_dto.MentorExperiences": {
+            "type": "object",
+            "properties": {
+                "company_name": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string",
+                    "example": "2022-01-01"
+                },
+                "occupation": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "mentor_dto.MentorExpertises": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "expertise": {
+                    "type": "string"
                 }
             }
         },
