@@ -14,11 +14,11 @@ type CustomTime struct {
 
 type MentorExperiences struct {
 	gorm.Model  `json:"-"`
-	UserID      *uint       `gorm:"not null" json:"user_id"`
-	Ocupation   *string     `gorm:"type:varchar(50);not null" json:"occupation"`
-	CompanyName *string     `gorm:"type:varchar(100);not null" json:"company_name"`
-	StartDate   *CustomTime `gorm:"type:DATE;not null" json:"start_date"`
-	EndDate     *CustomTime `gorm:"type:DATE" json:"end_date"`
+	UserID      uint       `gorm:"not null" json:"user_id"`
+	Ocupation   string     `gorm:"type:varchar(50);not null" json:"occupation"`
+	CompanyName string     `gorm:"type:varchar(100);not null" json:"company_name"`
+	StartDate   CustomTime `gorm:"type:DATE;not null" json:"start_date"`
+	EndDate     CustomTime `gorm:"type:DATE" json:"end_date"`
 }
 
 func (t *CustomTime) UnmarshalJSON(b []byte) (err error) {
