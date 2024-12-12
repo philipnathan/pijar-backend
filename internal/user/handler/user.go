@@ -38,7 +38,7 @@ func (h *UserHandler) RegisterUser(c *gin.Context) {
 		return
 	}
 
-	err := h.service.RegisterUserService(&user)
+	access_token, refresh_token, err := h.service.RegisterUserService(&user)
 
 	if err != nil {
 		switch err {
@@ -51,7 +51,13 @@ func (h *UserHandler) RegisterUser(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "User registered successfully"})
+	response := dto.RegisterUserResponseDto{
+		Message:      "user registered successfully",
+		AccessToken:  access_token,
+		RefreshToken: refresh_token,
+	}
+
+	c.JSON(http.StatusOK, response)
 }
 
 // @Summary	Login user
