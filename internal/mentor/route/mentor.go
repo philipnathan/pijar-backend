@@ -2,6 +2,7 @@ package mentor
 
 import (
 	"github.com/gin-gonic/gin"
+	learnerInterestsRepo "github.com/philipnathan/pijar-backend/internal/learner/repository"
 	repository "github.com/philipnathan/pijar-backend/internal/mentor/repository"
 	service "github.com/philipnathan/pijar-backend/internal/mentor/service"
 	middleware "github.com/philipnathan/pijar-backend/middleware"
@@ -17,13 +18,16 @@ func MentorBioRoute(r *gin.Engine, db *gorm.DB) {
 	services := service.NewMentorBioService(repo)
 	handler := mentor.NewMentorBioHandler(services)
 
+	learnerInterestsRepo := learnerInterestsRepo.NewLearnerRepository(db)
+
 	mentorRepo := repository.NewMentorRepository(db)
-	mentorServices := service.NewMentorService(mentorRepo)
+	mentorServices := service.NewMentorService(mentorRepo, learnerInterestsRepo)
 	mentorHandler := mentor.NewMentorHandler(mentorServices)
 
 	nonProtectedRoutes := r.Group(apiV1)
 	{
 		nonProtectedRoutes.GET("/:mentor_id", mentorHandler.UserGetMentorDetails)
+		nonProtectedRoutes.GET("/landingpage", mentorHandler.UserGetMentorLandingPage)
 	}
 
 	protectedRoutes := r.Group(apiV1)
