@@ -29,6 +29,34 @@ func SeedMentorExperience(db *gorm.DB) error {
 			StartDate:   model.CustomTime{Time: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)},
 			EndDate:     model.CustomTime{Time: time.Date(2022, 1, 1, 0, 0, 0, 0, time.UTC)},
 		},
+		{
+			UserID:      4,
+			Ocupation:   "Software Engineer",
+			CompanyName: "Google",
+			StartDate:   model.CustomTime{Time: time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)},
+			EndDate:     model.CustomTime{Time: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)},
+		},
+		{
+			UserID:      4,
+			Ocupation:   "Software Engineer",
+			CompanyName: "Facebook",
+			StartDate:   model.CustomTime{Time: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)},
+			EndDate:     model.CustomTime{Time: time.Date(2022, 1, 1, 0, 0, 0, 0, time.UTC)},
+		},
+		{
+			UserID:      5,
+			Ocupation:   "Software Engineer",
+			CompanyName: "Google",
+			StartDate:   model.CustomTime{Time: time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)},
+			EndDate:     model.CustomTime{Time: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)},
+		},
+		{
+			UserID:      5,
+			Ocupation:   "Software Engineer",
+			CompanyName: "Facebook",
+			StartDate:   model.CustomTime{Time: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)},
+			EndDate:     model.CustomTime{Time: time.Date(2022, 1, 1, 0, 0, 0, 0, time.UTC)},
+		},
 	}
 
 	var count int64

@@ -14,6 +14,8 @@ func SeedMentorBio(db *gorm.DB) error {
 
 	mentors := []model.MentorBiographies{
 		{UserID: 1, Bio: "I am a software engineer."},
+		{UserID: 4, Bio: "I am a software engineer."},
+		{UserID: 5, Bio: "I am a software engineer."},
 	}
 
 	var count int64
