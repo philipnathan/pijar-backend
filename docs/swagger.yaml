@@ -8,11 +8,22 @@ definitions:
         type: integer
       image_url:
         type: string
+      sub_categories:
+        items:
+          $ref: '#/definitions/category.SubCategory'
+        type: array
     type: object
   category.Error:
     properties:
       error:
         example: category not found
+        type: string
+    type: object
+  category.SubCategory:
+    properties:
+      category_id:
+        type: integer
+      sub_category_name:
         type: string
     type: object
   learner.AddLearnerInterestsDto:
@@ -140,6 +151,37 @@ definitions:
       user_id:
         example: 1
         type: integer
+    type: object
+  mentor.MentorDetails:
+    properties:
+      fullname:
+        example: John Doe
+        type: string
+      id:
+        example: 1
+        type: integer
+      image_url:
+        example: https://example.com/image.jpg
+        type: string
+      occupation:
+        example: Software Engineer
+        type: string
+    type: object
+  mentor.MentorLandingPageResponseDto:
+    properties:
+      countData:
+        type: integer
+      currentPage:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/mentor.MentorDetails'
+        type: array
+      dataPerPage:
+        type: integer
+      message:
+        example: success
+        type: string
     type: object
   mentor_dto.MentorExperiences:
     properties:
@@ -525,6 +567,36 @@ paths:
           schema:
             $ref: '#/definitions/mentor.Error'
       summary: Get mentor details
+      tags:
+      - Mentor
+  /mentors/landingpage:
+    get:
+      description: Get mentor landing page
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: pagesize
+        in: query
+        name: pagesize
+        type: integer
+      - description: categoryid
+        in: query
+        name: categoryid
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/mentor.MentorLandingPageResponseDto'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/mentor.Error'
+      summary: Get mentor landing page
       tags:
       - Mentor
   /users/login:

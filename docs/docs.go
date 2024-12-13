@@ -291,6 +291,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/mentors/landingpage": {
+            "get": {
+                "description": "Get mentor landing page",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mentor"
+                ],
+                "summary": "Get mentor landing page",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "pagesize",
+                        "name": "pagesize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "categoryid",
+                        "name": "categoryid",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/mentor.MentorLandingPageResponseDto"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/mentor.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/mentors/{mentor_id}": {
             "get": {
                 "description": "Get mentor details",
@@ -657,6 +703,12 @@ const docTemplate = `{
                 },
                 "image_url": {
                     "type": "string"
+                },
+                "sub_categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/category.SubCategory"
+                    }
                 }
             }
         },
@@ -666,6 +718,17 @@ const docTemplate = `{
                 "error": {
                     "type": "string",
                     "example": "category not found"
+                }
+            }
+        },
+        "category.SubCategory": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "integer"
+                },
+                "sub_category_name": {
+                    "type": "string"
                 }
             }
         },
@@ -851,6 +914,51 @@ const docTemplate = `{
                 "user_id": {
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "mentor.MentorDetails": {
+            "type": "object",
+            "properties": {
+                "fullname": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "image_url": {
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
+                },
+                "occupation": {
+                    "type": "string",
+                    "example": "Software Engineer"
+                }
+            }
+        },
+        "mentor.MentorLandingPageResponseDto": {
+            "type": "object",
+            "properties": {
+                "countData": {
+                    "type": "integer"
+                },
+                "currentPage": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/mentor.MentorDetails"
+                    }
+                },
+                "dataPerPage": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "success"
                 }
             }
         },
