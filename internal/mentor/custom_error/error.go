@@ -9,4 +9,5 @@ type Error struct {
 var (
 	ErrMentorBioNotFound = errors.New("mentor bio not found")
 	ErrMentorNotFound    = errors.New("mentor not found")
+	ErrUserNotFound      = errors.New("user not found")
 )
