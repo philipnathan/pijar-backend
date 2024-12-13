@@ -99,6 +99,17 @@ func (h *MentorHandler) UserGetMentorDetails(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// @Summary	Get mentor landing page
+// @Schemes
+// @Description	Get mentor landing page
+// @Tags			Mentor
+// @Produce		json
+// @Param			page		query		int	false	"page"
+// @Param			pagesize	query		int	false	"pagesize"
+// @Param			categoryid	query		int	false	"categoryid"
+// @Success		200			{object}	MentorLandingPageResponseDto
+// @Failure		500			{object}	Error	"Internal server error"
+// @Router			/mentors/landingpage [get]
 func (h *MentorHandler) UserGetMentorLandingPage(c *gin.Context) {
 	// check if user is authenticated
 	var isAuthenticated bool
