@@ -16,6 +16,8 @@ func SeedUser(db *gorm.DB) error {
 	mentor01PW, _ := utils.HashPassword("mentor01")
 	learner01PW, _ := utils.HashPassword("learner01")
 	learner02PW, _ := utils.HashPassword("learner02")
+	mentor02PW, _ := utils.HashPassword("mentor02")
+	mentor03PW, _ := utils.HashPassword("mentor03")
 
 	users := []userModel.User{
 		{
@@ -32,6 +34,16 @@ func SeedUser(db *gorm.DB) error {
 			Email:    "learner02@example.com",
 			Password: learner02PW,
 			Fullname: "learner02",
+		},
+		{
+			Email:    "mentor02@example.com",
+			Password: mentor02PW,
+			Fullname: "mentor02",
+		},
+		{
+			Email:    "mentor03@example.com",
+			Password: mentor03PW,
+			Fullname: "mentor03",
 		},
 	}
 

@@ -26,7 +26,7 @@ func SeedNotification(db *gorm.DB) error {
 			IsRead:             false,
 		},
 		{
-			NotificationTypeID: 3,
+			NotificationTypeID: 2,
 			UserID:             2,
 			Message:            "schedule for python basic has been changed",
 			IsRead:             false,
