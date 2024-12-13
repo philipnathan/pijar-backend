@@ -43,6 +43,11 @@ func SeedMentorExpertise(db *gorm.DB) error {
 			Expertise:   "Software Engineer",
 			Category_id: 2,
 		},
+		{
+			UserID:      5,
+			Expertise:   "Software Engineer",
+			Category_id: 3,
+		},
 	}
 
 	var count int64
