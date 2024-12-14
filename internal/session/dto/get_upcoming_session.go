@@ -1,6 +1,5 @@
 package dto
 
-import "time"
 
 type GetUpcomingSessionResponse struct {
 	Sessions []SessionDetail `json:"sessions"`

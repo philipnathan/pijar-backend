@@ -1,12 +1,19 @@
-package session
+package customerror
 
-import "errors"
+import (
 
-type SessionError struct {
-	Err error `json:"error"`
-}
-
-var (
-	ErrSessionNotFound = errors.New("session not found")
+    "github.com/gin-gonic/gin"
 )
 
+func CustomErrorHandler(c *gin.Context) {
+    c.Next()
+
+    if len(c.Errors) > 0 {
+        c.JSON(-1, gin.H{"errors": c.Errors})
+        return
+    }
+}
+
+func RegisterCustomErrorHandler(router *gin.Engine) {
+    router.Use(CustomErrorHandler)
+}
