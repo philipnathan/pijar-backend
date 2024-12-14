@@ -4,7 +4,7 @@ import (
 	"time"
 	model "github.com/philipnathan/pijar-backend/internal/session/model"
 	repository "github.com/philipnathan/pijar-backend/internal/session/repository"
-	dto "github.com/philipnathan/pijar-backend/internal/session/dto" // Import the dto package
+	dto "github.com/philipnathan/pijar-backend/internal/session/dto" 
 )
 
 type SessionService struct {
