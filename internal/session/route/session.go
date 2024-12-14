@@ -17,6 +17,6 @@ func SessionRoute(router *gin.RouterGroup, db *gorm.DB) {
 	sessionService := service.NewSessionService(sessionRepository)
 	sessionHandler := handler.NewSessionHandler(sessionService)
 
-	router.GET("/upcoming", middleware.AuthMiddleware(), sessionHandler.GetUpcomingSessions)
+	router.GET(apiV1+"/upcoming", middleware.AuthMiddleware(), sessionHandler.GetUpcomingSessions) 
 
 }

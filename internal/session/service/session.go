@@ -1,9 +1,10 @@
 package service
 
 import (
+	"time"
 	model "github.com/philipnathan/pijar-backend/internal/session/model"
 	repository "github.com/philipnathan/pijar-backend/internal/session/repository"
-	"time"
+	dto "github.com/philipnathan/pijar-backend/internal/session/dto" // Import the dto package
 )
 
 type SessionService struct {
@@ -11,7 +12,7 @@ type SessionService struct {
 }
 
 func MapMentorSessionToResponse(session model.MentorSession, isRegistered bool) model.MentorSessionResponse {
-	day := session.Schedule.Weekday().String() 
+	day := session.Schedule.Weekday().String()
 	timeFormatted := session.Schedule.Format("03:04 PM") 
 
 	return model.MentorSessionResponse{
@@ -19,7 +20,7 @@ func MapMentorSessionToResponse(session model.MentorSession, isRegistered bool) 
 		Time:               timeFormatted,
 		MentorSessionTitle: session.Title,
 		ShortDescription:   session.ShortDescription,
-		Schedule:           session.Schedule.Format("2006-01-02"), // Format to "YYYY-MM-DD"
+		Schedule:           session.Schedule.Format("2006-01-02"), 
 		Registered:         isRegistered,
 	}
 }
@@ -34,15 +35,15 @@ func (s *SessionService) GetUpcomingSessions(userID uint) (*dto.GetUpcomingSessi
 	// Map the repository result to the DTO
 	var sessionDetails []dto.SessionDetail
 	for _, session := range sessions {
-		day := session.Schedule.Weekday().String() // 
-		time := session.Schedule.Format("03:04 PM")
+		day := session.Schedule.Weekday().String()
+		time := session.Schedule.Format("03:04 PM") 
 		sessionDetails = append(sessionDetails, dto.SessionDetail{
 			Day:                day,
 			Time:               time,
 			MentorSessionTitle: session.Title,
 			ShortDescription:   session.ShortDescription,
-			Schedule:           session.Schedule.Format("2006-01-02"), 
-			Registered:         session.IsRegistered,                  
+			Schedule:           session.Schedule.Format("2006-01-02"),
+			Registered:         session.IsRegistered,
 		})
 	}
 
