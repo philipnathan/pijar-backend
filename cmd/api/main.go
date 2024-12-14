@@ -12,6 +12,7 @@ import (
 	notification "github.com/philipnathan/pijar-backend/internal/notification/route"
 	seed "github.com/philipnathan/pijar-backend/internal/seed"
 	userRoute "github.com/philipnathan/pijar-backend/internal/user/route"
+	sessionRoute "github.com/philipnathan/pijar-backend/internal/session/route"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
@@ -50,6 +51,7 @@ func main() {
 	learnerRoute.LearnerBioRoute(r, db)
 	mentor.MentorBioRoute(r, db)
 	notification.NotificationRoute(r, db)
+	sessionRoute.SessionRoute(r, db)
 
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server:", err)
@@ -66,6 +68,8 @@ func seedDatabase(db *gorm.DB) error {
 		seed.SeedMentorExpertise,
 		seed.SeedNotificationType,
 		seed.SeedNotification,
+		seed.SeedSession,
+		
 	}
 
 	for _, seed := range seeds {

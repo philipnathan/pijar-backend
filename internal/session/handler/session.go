@@ -33,3 +33,20 @@ func (h *SessionHandler) GetSessions(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"sessions": sessions})
 }
+
+// New method to handle fetching upcoming sessions
+func (h *SessionHandler) GetUpcomingSessions(c *gin.Context) {
+	userID, err := strconv.ParseUint(c.Query("user_id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	upcomingSessions, err := h.service.GetUpcomingSessions(uint(userID))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"upcoming_sessions": upcomingSessions})
+}

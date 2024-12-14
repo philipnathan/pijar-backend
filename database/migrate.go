@@ -8,11 +8,12 @@ import (
 	mentor "github.com/philipnathan/pijar-backend/internal/mentor/model"
 	notification "github.com/philipnathan/pijar-backend/internal/notification/model"
 	user "github.com/philipnathan/pijar-backend/internal/user/model"
+	session "github.com/philipnathan/pijar-backend/internal/session/model"
 	"gorm.io/gorm"
 )
 
 func MigrateDatabase(db *gorm.DB) {
-	err := db.AutoMigrate(&user.User{}, &category.Category{}, &category.SubCategory{}, &learner.LearnerBio{}, &learner.LearnerInterest{}, &mentor.MentorBiographies{}, &mentor.MentorExperiences{}, &mentor.MentorExpertises{}, &notification.Notification{}, &notification.NotificationType{})
+	err := db.AutoMigrate(&user.User{}, &category.Category{}, &category.SubCategory{}, &learner.LearnerBio{}, &learner.LearnerInterest{}, &mentor.MentorBiographies{}, &mentor.MentorExperiences{}, &mentor.MentorExpertises{}, &notification.Notification{}, &notification.NotificationType{}, &session.Session{})
 
 	if err != nil {
 		panic(err)
