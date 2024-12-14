@@ -1,22 +1,17 @@
-package session
+package route
 
 import (
-	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
-
-	handler "github.com/philipnathan/pijar-backend/internal/session/handler"
-	repository "github.com/philipnathan/pijar-backend/internal/session/repository"
-	service "github.com/philipnathan/pijar-backend/internal/session/service"
-	middleware "github.com/philipnathan/pijar-backend/middleware"
+    "github.com/gin-gonic/gin"
+    handler "github.com/philipnathan/pijar-backend/internal/session/handler"
+    repository "github.com/philipnathan/pijar-backend/internal/session/repository"
+    service "github.com/philipnathan/pijar-backend/internal/session/service"
+    "gorm.io/gorm"
 )
 
-func SessionRoute(router *gin.RouterGroup, db *gorm.DB) {
-	apiV1 := "/api/v1/sessions"
-	
-	sessionRepository := repository.NewSessionRepository(db)
-	sessionService := service.NewSessionService(sessionRepository)
-	sessionHandler := handler.NewSessionHandler(sessionService)
+func SessionRoute(r *gin.Engine, db *gorm.DB) {
+    repo := repository.NewSessionRepository(db)
+    srv := service.NewSessionService(repo)
+    hnd := handler.NewSessionHandler(srv)
 
-	router.GET(apiV1+"/upcoming", middleware.AuthMiddleware(), sessionHandler.GetUpcomingSessions) 
-
+    r.GET("/api/v1/sessions/:user_id", hnd.GetSessions)
 }

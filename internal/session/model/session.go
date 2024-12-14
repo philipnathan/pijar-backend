@@ -2,7 +2,6 @@ package session
 
 import (
     "time"
-    "gorm.io/gorm"
 )
 
 type MentorSession struct {
@@ -21,11 +20,11 @@ type MentorSession struct {
 }
 
 type MentorSessionParticipant struct {
-    ID              uint      `gorm:"primaryKey"`
-    UserID          uint      `gorm:"not null" json:"user_id"`
-    MentorSessionID uint      `gorm:"not null" json:"mentor_session_id"`
-    Status          string    `gorm:"type:enum('registered', 'confirmed', 'cancelled_by_mentor', 'cancelled_by_learner', 'complete');default:'registered';not null" json:"status"`
-    Rating          float64   `gorm:"default:0;not null" json:"rating"`
-    RegisteredAt    time.Time `gorm:"autoCreateTime" json:"registered_at"`
-    UpdatedAt       time.Time `gorm:"autoUpdateTime" json:"updated_at"`
+    ID               uint      `gorm:"primaryKey"`
+    UserID           uint      `gorm:"not null" json:"user_id"`
+    MentorSessionID  uint      `gorm:"not null" json:"mentor_session_id"`
+    Status           string    `gorm:"type:mentor_session_participants_status;default:'registered';not null" json:"status"`
+    Rating           float32   `json:"rating"`
+    RegisteredAt     time.Time `gorm:"autoCreateTime" json:"registered_at"`
+    UpdatedAt        time.Time `gorm:"autoUpdateTime" json:"updated_at"`
 }
