@@ -5,6 +5,15 @@ import (
     "github.com/philipnathan/pijar-backend/internal/user/model"
 )
 
+type MentorSessionParticipantStatus string  
+
+const (
+    Registered          MentorSessionParticipantStatus = "registered"
+    Confirmed           MentorSessionParticipantStatus = "confirmed"
+    CancelledByMentor   MentorSessionParticipantStatus = "cancelled_by_mentor"
+    CancelledByLearner  MentorSessionParticipantStatus = "cancelled_by_learner"
+    Complete            MentorSessionParticipantStatus = "complete"
+)
 type MentorSession struct {
     ID               uint      `gorm:"primaryKey"`
     UserID           uint      `gorm:"not null;index" json:"user_id"`
@@ -27,7 +36,7 @@ type MentorSessionParticipant struct {
     MentorSession   MentorSession `gorm:"foreignKey:MentorSessionID;references:ID"`
     UserID          uint          `gorm:"not null;index" json:"user_id"`
     User            user.User     `gorm:"foreignKey:UserID;references:ID"`
-    Status          string        `gorm:"type:mentor_session_participants_status;default:'registered';not null" json:"status"`
+    Status          MentorSessionParticipantStatus `gorm:"type:varchar(20);default:'registered';not null" json:"status"`
     Rating          float32       `json:"rating"`
     RegisteredAt    time.Time     `gorm:"autoCreateTime" json:"registered_at"`
     UpdatedAt       time.Time     `gorm:"autoUpdateTime" json:"updated_at"`

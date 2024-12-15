@@ -13,7 +13,20 @@ import (
 )
 
 func MigrateDatabase(db *gorm.DB) {
-	err := db.AutoMigrate(&user.User{}, &category.Category{}, &category.SubCategory{}, &learner.LearnerBio{}, &learner.LearnerInterest{}, &mentor.MentorBiographies{}, &mentor.MentorExperiences{}, &mentor.MentorExpertises{}, &notification.Notification{}, &notification.NotificationType{}, &session.MentorSession{}, &session.MentorSessionParticipant{})
+	err := db.AutoMigrate(
+		&user.User{}, 
+		&category.Category{}, 
+		&category.SubCategory{}, 
+		&learner.LearnerBio{}, 
+		&learner.LearnerInterest{}, 
+		&mentor.MentorBiographies{}, 
+		&mentor.MentorExperiences{}, 
+		&mentor.MentorExpertises{}, 
+		&notification.Notification{}, 
+		&notification.NotificationType{}, 
+		&session.MentorSession{}, 
+		&session.MentorSessionParticipant{},
+	)
 
 	if err != nil {
 		panic(err)
