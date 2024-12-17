@@ -11,11 +11,13 @@ import (
 	mentor "github.com/philipnathan/pijar-backend/internal/mentor/route"
 	notification "github.com/philipnathan/pijar-backend/internal/notification/route"
 	seed "github.com/philipnathan/pijar-backend/internal/seed"
-	userRoute "github.com/philipnathan/pijar-backend/internal/user/route"
 	sessionRoute "github.com/philipnathan/pijar-backend/internal/session/route"
+	userRoute "github.com/philipnathan/pijar-backend/internal/user/route"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
+
+	"github.com/gin-contrib/cors"
 )
 
 //	@title			Pijar API
@@ -41,6 +43,13 @@ func main() {
 	database.MigrateDatabase(db)
 
 	r := gin.Default()
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH"},
+		AllowHeaders:     []string{"Authorization", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	seedDatabase(db)
@@ -69,7 +78,6 @@ func seedDatabase(db *gorm.DB) error {
 		seed.SeedNotificationType,
 		seed.SeedNotification,
 		seed.SeedSession,
-		
 	}
 
 	for _, seed := range seeds {
