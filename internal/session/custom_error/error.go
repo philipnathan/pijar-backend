@@ -1,19 +1,22 @@
-package customerror
+package session
 
 import (
-
-    "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 )
 
 func CustomErrorHandler(c *gin.Context) {
-    c.Next()
+	c.Next()
 
-    if len(c.Errors) > 0 {
-        c.JSON(-1, gin.H{"errors": c.Errors})
-        return
-    }
+	if len(c.Errors) > 0 {
+		c.JSON(-1, gin.H{"errors": c.Errors})
+		return
+	}
 }
 
 func RegisterCustomErrorHandler(router *gin.Engine) {
-    router.Use(CustomErrorHandler)
+	router.Use(CustomErrorHandler)
+}
+
+type Error struct {
+	Error string `json:"error"`
 }

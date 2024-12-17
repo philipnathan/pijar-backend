@@ -238,6 +238,36 @@ definitions:
         example: schedule_change
         type: string
     type: object
+  session.Error:
+    properties:
+      error:
+        type: string
+    type: object
+  session.MentorDetails:
+    properties:
+      fullname:
+        example: John Doe
+        type: string
+      id:
+        example: 1
+        type: integer
+      image_url:
+        example: https://example.com/image.jpg
+        type: string
+    type: object
+  session.MentorSessionResponse:
+    properties:
+      mentor_details:
+        $ref: '#/definitions/session.MentorDetails'
+      mentor_session_title:
+        type: string
+      registered:
+        type: boolean
+      schedule:
+        type: string
+      short_description:
+        type: string
+    type: object
   user.ChangePasswordDto:
     properties:
       new_password:
@@ -638,15 +668,30 @@ paths:
       summary: Get mentor landing page
       tags:
       - Mentor
+<<<<<<< HEAD
   /user/profile:
     get:
       description: Get the profile of the logged-in user
+=======
+  /sessions/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get all sessions for a specific user by user ID
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+>>>>>>> 88bee45 (feat(session): create documentation for mentor session)
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
+<<<<<<< HEAD
             $ref: '#/definitions/user.UserProfileResponse'
         "401":
           description: Unauthorized
@@ -659,6 +704,22 @@ paths:
       summary: Get user profile
       tags:
       - User
+=======
+            items:
+              $ref: '#/definitions/session.MentorSessionResponse'
+            type: array
+        "400":
+          description: Invalid user ID
+          schema:
+            $ref: '#/definitions/session.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/session.Error'
+      summary: Get sessions for a user
+      tags:
+      - Mentor
+>>>>>>> 88bee45 (feat(session): create documentation for mentor session)
   /users/login:
     post:
       consumes:
