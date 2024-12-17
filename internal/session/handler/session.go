@@ -1,19 +1,19 @@
-package handler
+package session
 
 import (
-    "net/http"
-    "strconv"
+	"net/http"
+	"strconv"
 
-    "github.com/gin-gonic/gin"
-    service "github.com/philipnathan/pijar-backend/internal/session/service"
+	"github.com/gin-gonic/gin"
+	service "github.com/philipnathan/pijar-backend/internal/session/service"
 )
 
 type SessionHandler struct {
-    service service.SessionService
+	service service.SessionService
 }
 
 func NewSessionHandler(service service.SessionService) *SessionHandler {
-    return &SessionHandler{service: service}
+	return &SessionHandler{service: service}
 }
 
 // GetSessions godoc
@@ -28,17 +28,17 @@ func NewSessionHandler(service service.SessionService) *SessionHandler {
 // @Failure 500 {object} gin.H{"error": "Internal Server Error"}
 // @Router /sessions/{user_id} [get]
 func (h *SessionHandler) GetSessions(c *gin.Context) {
-    userID, err := strconv.Atoi(c.Param("user_id"))
-    if err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
-        return
-    }
+	userID, err := strconv.Atoi(c.Param("user_id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
 
-    sessions, err := h.service.GetSessions(uint(userID))
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
+	sessions, err := h.service.GetSessions(uint(userID))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-    c.JSON(http.StatusOK, sessions)
+	c.JSON(http.StatusOK, sessions)
 }
