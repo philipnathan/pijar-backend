@@ -319,6 +319,36 @@ definitions:
       short_description:
         type: string
     type: object
+  session.Error:
+    properties:
+      error:
+        type: string
+    type: object
+  session.MentorDetails:
+    properties:
+      fullname:
+        example: John Doe
+        type: string
+      id:
+        example: 1
+        type: integer
+      image_url:
+        example: https://example.com/image.jpg
+        type: string
+    type: object
+  session.MentorSessionResponse:
+    properties:
+      mentor_details:
+        $ref: '#/definitions/session.MentorDetails'
+      mentor_session_title:
+        type: string
+      registered:
+        type: boolean
+      schedule:
+        type: string
+      short_description:
+        type: string
+    type: object
   user.ChangePasswordDto:
     properties:
       new_password:
@@ -798,6 +828,37 @@ paths:
       summary: Get user profile
       tags:
       - User
+  /sessions/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get all sessions for a specific user by user ID
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/session.MentorSessionResponse'
+            type: array
+        "400":
+          description: Invalid user ID
+          schema:
+            $ref: '#/definitions/session.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/session.Error'
+      summary: Get sessions for a user
+      tags:
+      - Mentor
   /users/login:
     post:
       consumes:
