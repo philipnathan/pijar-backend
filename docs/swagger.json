@@ -407,20 +407,45 @@
                 }
             }
         },
+<<<<<<< HEAD
         "/user/profile": {
             "get": {
                 "description": "Get the profile of the logged-in user",
+=======
+        "/sessions/{user_id}": {
+            "get": {
+                "description": "Get all sessions for a specific user by user ID",
+                "consumes": [
+                    "application/json"
+                ],
+>>>>>>> 88bee45 (feat(session): create documentation for mentor session)
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
+<<<<<<< HEAD
                     "User"
                 ],
                 "summary": "Get user profile",
+=======
+                    "Mentor"
+                ],
+                "summary": "Get sessions for a user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+>>>>>>> 88bee45 (feat(session): create documentation for mentor session)
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
+<<<<<<< HEAD
                             "$ref": "#/definitions/user.UserProfileResponse"
                         }
                     },
@@ -428,12 +453,28 @@
                         "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/user.Error"
+=======
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/session.MentorSessionResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid user ID",
+                        "schema": {
+                            "$ref": "#/definitions/session.Error"
+>>>>>>> 88bee45 (feat(session): create documentation for mentor session)
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
+<<<<<<< HEAD
                             "$ref": "#/definitions/user.Error"
+=======
+                            "$ref": "#/definitions/session.Error"
+>>>>>>> 88bee45 (feat(session): create documentation for mentor session)
                         }
                     }
                 }
@@ -1096,6 +1137,51 @@
                 "type": {
                     "type": "string",
                     "example": "schedule_change"
+                }
+            }
+        },
+        "session.Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "session.MentorDetails": {
+            "type": "object",
+            "properties": {
+                "fullname": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "image_url": {
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
+                }
+            }
+        },
+        "session.MentorSessionResponse": {
+            "type": "object",
+            "properties": {
+                "mentor_details": {
+                    "$ref": "#/definitions/session.MentorDetails"
+                },
+                "mentor_session_title": {
+                    "type": "string"
+                },
+                "registered": {
+                    "type": "boolean"
+                },
+                "schedule": {
+                    "type": "string"
+                },
+                "short_description": {
+                    "type": "string"
                 }
             }
         },
