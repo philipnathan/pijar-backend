@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	dto "github.com/philipnathan/pijar-backend/internal/session/dto"
 	service "github.com/philipnathan/pijar-backend/internal/session/service"
 )
 
@@ -40,5 +41,29 @@ func (h *SessionHandler) GetSessions(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, sessions)
+	var response []dto.MentorSessionResponse
+	var mentorImageURL string
+	var registered bool = false
+
+	for _, session := range sessions {
+		if session.User.ImageURL != nil {
+			mentorImageURL = *session.User.ImageURL
+		} else {
+			mentorImageURL = ""
+		}
+
+		response = append(response, dto.MentorSessionResponse{
+			MentorSessionTitle: session.Title,
+			ShortDescription:   session.ShortDescription,
+			Schedule:           session.Schedule,
+			Registered:         registered,
+			MentorDetails: dto.MentorDetails{
+				Id:       session.User.ID,
+				Fullname: session.User.Fullname,
+				ImageURL: mentorImageURL,
+			},
+		})
+	}
+
+	c.JSON(http.StatusOK, response)
 }
