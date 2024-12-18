@@ -1,5 +1,5 @@
 # Gunakan image Go resmi
-FROM golang:1.23.3-alpine3.20
+FROM golang:1.23.3-alpine3.20 AS builder
 
 # Set working directory di dalam container
 WORKDIR /app
@@ -7,20 +7,29 @@ WORKDIR /app
 # Install dependencies sistem yang diperlukan
 RUN apk add --no-cache git curl
 
-# Install command for air
-RUN go install github.com/air-verse/air@latest
+# Copy go.mod and go.sum
+COPY go.* ./
 
-# # Copy go.mod dan go.sum
-# COPY go.* ./
+# Download dependency
+RUN go mod download
 
-# # Download dependency
-# RUN go mod download
+# Copy semua file ke dalam container
+COPY . .
 
-# # Copy semua file ke dalam container
-# COPY . .
+# Build go app
+RUN go build -o main ./cmd/api/main.go
 
-# Ekspor port aplikasi (misalnya 8080)
+# Stage 2
+FROM alpine:3.20
+
+# Set working directory di dalam container
+WORKDIR /app
+
+# Copy binary dari stage 1
+COPY --from=builder /app/main .
+
+# Expose port 8080
 EXPOSE 8080
 
-# Jalankan Air saat container dimulai
-CMD ["air"]
+# Run binary
+CMD ["./main"]
