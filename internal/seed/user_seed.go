@@ -24,6 +24,8 @@ func SeedUser(db *gorm.DB) error {
 			Email:    "mentor01@example.com",
 			Password: mentor01PW,
 			Fullname: "Mentor01",
+
+			IsMentor: &[]bool{true}[0],
 		},
 		{
 			Email:    "learner01@example.com",
@@ -39,11 +41,15 @@ func SeedUser(db *gorm.DB) error {
 			Email:    "mentor02@example.com",
 			Password: mentor02PW,
 			Fullname: "mentor02",
+
+			IsMentor: &[]bool{true}[0],
 		},
 		{
 			Email:    "mentor03@example.com",
 			Password: mentor03PW,
 			Fullname: "mentor03",
+
+			IsMentor: &[]bool{true}[0],
 		},
 	}
 
