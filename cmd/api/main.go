@@ -13,6 +13,7 @@ import (
 	seed "github.com/philipnathan/pijar-backend/internal/seed"
 	sessionRoute "github.com/philipnathan/pijar-backend/internal/session/route"
 	userRoute "github.com/philipnathan/pijar-backend/internal/user/route"
+	searchRoute "github.com/philipnathan/pijar-backend/internal/search/route"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
@@ -61,6 +62,7 @@ func main() {
 	mentor.MentorBioRoute(r, db)
 	notification.NotificationRoute(r, db)
 	sessionRoute.SessionRoute(r, db)
+	searchRoute.SearchRoute(r, db)
 
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server:", err)
