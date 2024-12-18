@@ -13,10 +13,11 @@ type MentorExpertises struct {
 }
 
 type GetMentorDetailsDto struct {
-	UserID    uint    `json:"user_id" example:"1"`
-	Fullname  string  `json:"fullname" example:"John Doe"`
-	ImageURL  *string `json:"image_url" example:"https://example.com/image.jpg"`
-	MentorBio string  `json:"mentor_bio"`
+	UserID     uint    `json:"user_id" example:"1"`
+	Fullname   string  `json:"fullname" example:"John Doe"`
+	ImageURL   *string `json:"image_url" example:"https://example.com/image.jpg"`
+	MentorBio  string  `json:"mentor_bio"`
+	Occupation string  `json:"occupation" example:"Software Engineer"`
 
 	MentorExperiences []*MentorExperiences `json:"mentor_experiences"`
 	MentorExpertises  []*MentorExpertises  `json:"mentor_expertise"`
