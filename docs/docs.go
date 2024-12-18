@@ -413,6 +413,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/search": {
+            "get": {
+                "description": "Search for sessions, mentors, and categories by keyword",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Search"
+                ],
+                "summary": "Search for sessions, mentors, and categories",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search Keyword",
+                        "name": "keyword",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/search.SearchResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/search.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/search.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/sessions/{user_id}": {
             "get": {
                 "description": "Get all sessions for a specific user by user ID",
@@ -1153,6 +1194,76 @@ const docTemplate = `{
                 "type": {
                     "type": "string",
                     "example": "schedule_change"
+                }
+            }
+        },
+        "search.CategoryDetail": {
+            "type": "object",
+            "properties": {
+                "category_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "search.Error": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "search.MentorDetail": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "fullname": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "search.SearchResponse": {
+            "type": "object",
+            "properties": {
+                "mentors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/search.MentorDetail"
+                    }
+                },
+                "sessions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/search.SessionDetail"
+                    }
+                },
+                "topics": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/search.CategoryDetail"
+                    }
+                }
+            }
+        },
+        "search.SessionDetail": {
+            "type": "object",
+            "properties": {
+                "image_url": {
+                    "type": "string"
+                },
+                "schedule": {
+                    "type": "string"
+                },
+                "short_description": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         },
