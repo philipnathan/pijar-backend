@@ -533,6 +533,32 @@ const docTemplate = `{
                 }
             }
         },
+        "/sessions/upcoming": {
+            "get": {
+                "description": "Get all upcoming sessions",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Session"
+                ],
+                "summary": "Get upcoming sessions",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/session.GetUpcomingSessionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/session.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/sessions/{user_id}": {
             "get": {
                 "description": "Get all sessions for a specific user by user ID",
@@ -1244,126 +1270,22 @@ const docTemplate = `{
                 }
             }
         },
-        "search.CategoryDetail": {
+        "session.Error": {
             "type": "object",
             "properties": {
-                "category_name": {
+                "error": {
                     "type": "string"
                 }
             }
         },
-        "search.Error": {
+        "session.GetUpcomingSessionResponse": {
             "type": "object",
             "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "search.MentorDetail": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "fullname": {
-                    "type": "string"
-                },
-                "image_url": {
-                    "type": "string"
-                }
-            }
-        },
-        "search.SearchResponse": {
-            "type": "object",
-            "properties": {
-                "mentors": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/search.MentorDetail"
-                    }
-                },
                 "sessions": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/search.SessionDetail"
+                        "$ref": "#/definitions/session.SessionDetail"
                     }
-                },
-                "topics": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/search.CategoryDetail"
-                    }
-                }
-            }
-        },
-        "search.SessionDetail": {
-            "type": "object",
-            "properties": {
-                "image_url": {
-                    "type": "string"
-                },
-                "schedule": {
-                    "type": "string"
-                },
-                "short_description": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "session.Error": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string"
-                }
-            }
-        },
-        "session.MentorDetails": {
-            "type": "object",
-            "properties": {
-                "fullname": {
-                    "type": "string",
-                    "example": "John Doe"
-                },
-                "id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "image_url": {
-                    "type": "string",
-                    "example": "https://example.com/image.jpg"
-                }
-            }
-        },
-        "session.MentorSessionResponse": {
-            "type": "object",
-            "properties": {
-                "mentor_details": {
-                    "$ref": "#/definitions/session.MentorDetails"
-                },
-                "mentor_session_title": {
-                    "type": "string"
-                },
-                "registered": {
-                    "type": "boolean"
-                },
-                "schedule": {
-                    "type": "string"
-                },
-                "short_description": {
-                    "type": "string"
-                }
-            }
-        },
-        "session.Error": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string"
                 }
             }
         },

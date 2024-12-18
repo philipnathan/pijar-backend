@@ -7,6 +7,7 @@ import (
 
 type SessionService interface {
 	GetSessions(userID uint) ([]model.MentorSession, error)
+	GetUpcomingSessions() ([]model.MentorSession, error)
 }
 
 type sessionService struct {
@@ -25,4 +26,8 @@ func (s *sessionService) GetSessions(userID uint) ([]model.MentorSession, error)
 	}
 
 	return sessions, nil
+}
+
+func (s *sessionService) GetUpcomingSessions() ([]model.MentorSession, error) {
+	return s.repo.GetUpcomingSessions()
 }

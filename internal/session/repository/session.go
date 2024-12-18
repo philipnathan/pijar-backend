@@ -10,6 +10,7 @@ import (
 type SessionRepository interface {
 	GetSessions(userID uint) ([]model.MentorSession, error)
 	FetchUpcomingSessions(userID uint) ([]model.MentorSession, error)
+	GetUpcomingSessions() ([]model.MentorSession, error)
 }
 
 type sessionRepository struct {
@@ -37,4 +38,13 @@ func (r *sessionRepository) FetchUpcomingSessions(userID uint) ([]model.MentorSe
 		return nil, err
 	}
 	return sessions, nil
+}
+
+func (r *sessionRepository) GetUpcomingSessions() ([]model.MentorSession, error) {
+    var sessions []model.MentorSession
+    err := r.db.Where("schedule > ?", time.Now()).Find(&sessions).Error
+    if err != nil {
+        return nil, err
+    }
+    return sessions, nil
 }
