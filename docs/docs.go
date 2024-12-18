@@ -44,6 +44,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/categories/featured": {
+            "get": {
+                "description": "Get featured categories",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Get featured categories",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.FeaturedCategoryResponseDto"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/category.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/learners/biographies": {
             "put": {
                 "security": [
@@ -657,6 +686,12 @@ const docTemplate = `{
                 },
                 "image_url": {
                     "type": "string"
+                },
+                "sub_categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/category.SubCategory"
+                    }
                 }
             }
         },
@@ -666,6 +701,30 @@ const docTemplate = `{
                 "error": {
                     "type": "string",
                     "example": "category not found"
+                }
+            }
+        },
+        "category.SubCategory": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "integer"
+                },
+                "sub_category_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.FeaturedCategoryResponseDto": {
+            "type": "object",
+            "properties": {
+                "category_name": {
+                    "type": "string",
+                    "example": "Coding Basics"
+                },
+                "image_url": {
+                    "type": "string",
+                    "example": "https://example.com/image.png"
                 }
             }
         },
