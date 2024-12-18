@@ -157,6 +157,9 @@ definitions:
         items:
           $ref: '#/definitions/mentor_dto.MentorExpertises'
         type: array
+      occupation:
+        example: Software Engineer
+        type: string
       user_id:
         example: 1
         type: integer
@@ -236,6 +239,51 @@ definitions:
         type: string
       type:
         example: schedule_change
+        type: string
+    type: object
+  search.CategoryDetail:
+    properties:
+      category_name:
+        type: string
+    type: object
+  search.Error:
+    properties:
+      message:
+        type: string
+    type: object
+  search.MentorDetail:
+    properties:
+      email:
+        type: string
+      fullname:
+        type: string
+      image_url:
+        type: string
+    type: object
+  search.SearchResponse:
+    properties:
+      mentors:
+        items:
+          $ref: '#/definitions/search.MentorDetail'
+        type: array
+      sessions:
+        items:
+          $ref: '#/definitions/search.SessionDetail'
+        type: array
+      topics:
+        items:
+          $ref: '#/definitions/search.CategoryDetail'
+        type: array
+    type: object
+  search.SessionDetail:
+    properties:
+      image_url:
+        type: string
+      schedule:
+        type: string
+      short_description:
+        type: string
+      title:
         type: string
     type: object
   session.Error:
@@ -668,11 +716,33 @@ paths:
       summary: Get mentor landing page
       tags:
       - Mentor
-<<<<<<< HEAD
-  /user/profile:
+  /search:
     get:
-      description: Get the profile of the logged-in user
-=======
+      description: Search for sessions, mentors, and categories by keyword
+      parameters:
+      - description: Search Keyword
+        in: query
+        name: keyword
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/search.SearchResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/search.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/search.Error'
+      summary: Search for sessions, mentors, and categories
+      tags:
+      - Search
   /sessions/{user_id}:
     get:
       consumes:
@@ -684,27 +754,12 @@ paths:
         name: user_id
         required: true
         type: integer
->>>>>>> 88bee45 (feat(session): create documentation for mentor session)
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-<<<<<<< HEAD
-            $ref: '#/definitions/user.UserProfileResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/user.Error'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/user.Error'
-      summary: Get user profile
-      tags:
-      - User
-=======
             items:
               $ref: '#/definitions/session.MentorSessionResponse'
             type: array
@@ -719,7 +774,27 @@ paths:
       summary: Get sessions for a user
       tags:
       - Mentor
->>>>>>> 88bee45 (feat(session): create documentation for mentor session)
+  /user/profile:
+    get:
+      description: Get the profile of the logged-in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserProfileResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/user.Error'
+      summary: Get user profile
+      tags:
+      - User
   /users/login:
     post:
       consumes:

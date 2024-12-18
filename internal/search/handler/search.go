@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	custom_error "github.com/philipnathan/pijar-backend/internal/search/custom_error"
 	service "github.com/philipnathan/pijar-backend/internal/search/service"
-    custom_error "github.com/philipnathan/pijar-backend/internal/search/custom_error"
 )
 
 type SearchHandler struct {
@@ -21,9 +21,9 @@ func NewSearchHandler(service service.SearchServiceInterface) *SearchHandler {
 // @Tags Search
 // @Produce json
 // @Param keyword query string true "Search Keyword"
-// @Success 200 {object} search.SearchResponse
-// @Failure 400 {object} search.Error "Bad Request"
-// @Failure 500 {object} search.Error "Internal server error"
+// @Success 200 {object} SearchResponse
+// @Failure 400 {object} Error "Bad Request"
+// @Failure 500 {object} Error "Internal server error"
 // @Router /search [get]
 func (h *SearchHandler) Search(c *gin.Context) {
 	keyword := c.Query("keyword")
