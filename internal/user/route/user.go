@@ -29,5 +29,6 @@ func UserRoute(r *gin.Engine, db *gorm.DB) {
 		protectedRoutes.DELETE("/me", handler.DeleteUserHandler)
 		protectedRoutes.PATCH("/me/password", handler.UpdateUserPasswordHandler)
 		protectedRoutes.PATCH("/me/details", handler.UpdateUserDetailsHandler)
+		protectedRoutes.GET("me/profile", handler.GetUserProfile)
 	}
 }
