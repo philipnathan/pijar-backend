@@ -2,12 +2,14 @@ package category
 
 import (
 	model "github.com/philipnathan/pijar-backend/internal/category/model"
+	dto "github.com/philipnathan/pijar-backend/internal/category/dto"
 	"gorm.io/gorm"
 )
 
 type CategoryRepositoryInterface interface {
 	GetAllCategories() ([]model.Category, error)
 	SaveCategory(category *model.Category) error
+	GetFeaturedCategories() ([]dto.FeaturedCategoryResponseDto, error)
 }
 
 type CategoryRepository struct {
@@ -35,4 +37,10 @@ func (r *CategoryRepository) SaveCategory(category *model.Category) error {
 		return err
 	}
 	return nil
+}
+
+func (r *CategoryRepository) GetFeaturedCategories() ([]dto.FeaturedCategoryResponseDto, error) {
+    var categories []dto.FeaturedCategoryResponseDto
+    err := r.db.Model(&model.Category{}).Select("category_name, image_url").Scan(&categories).Error
+    return categories, err
 }
