@@ -14,4 +14,5 @@ func SessionRoute(r *gin.Engine, db *gorm.DB) {
     hnd := handler.NewSessionHandler(srv)
 
     r.GET("/api/v1/sessions/:user_id", hnd.GetSessions)
+    r.GET("/api/v1/sessions/upcoming", hnd.GetUpcomingSessions)
 }

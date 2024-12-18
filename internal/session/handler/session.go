@@ -3,6 +3,7 @@ package session
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	custom_error "github.com/philipnathan/pijar-backend/internal/session/custom_error"
@@ -66,4 +67,34 @@ func (h *SessionHandler) GetSessions(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response)
+}
+
+// @Summary Get upcoming sessions
+// @Description Get all upcoming sessions
+// @Tags Session
+// @Produce json
+// @Success 200 {object} session.GetUpcomingSessionResponse
+// @Failure 500 {object} Error "Internal server error"
+// @Router /sessions/upcoming [get]
+func (h *SessionHandler) GetUpcomingSessions(c *gin.Context) {
+    sessions, err := h.service.GetUpcomingSessions()
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    var sessionDetails []dto.SessionDetail
+    for _, session := range sessions {
+        sessionDetails = append(sessionDetails, dto.SessionDetail{
+            Day:              session.Schedule.Weekday().String(),
+            Time:             session.Schedule.Format("03:04 PM"),
+            Title:            session.Title,
+            ShortDescription: session.ShortDescription,
+            Schedule:         session.Schedule.Format(time.RFC3339),
+            ImageURL:         session.ImageURL,
+            Registered:       true, 
+            Duration:         session.EstimateDuration,
+        })
+    }
+    c.JSON(http.StatusOK, dto.GetUpcomingSessionResponse{Sessions: sessionDetails})
 }

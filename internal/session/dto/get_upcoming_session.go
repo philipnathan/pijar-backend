@@ -5,10 +5,13 @@ type GetUpcomingSessionResponse struct {
 }
 
 type SessionDetail struct {
-	Day                string `json:"day"`
-	Time               string `json:"time"`
-	MentorSessionTitle string `json:"mentor_session_title"`
-	ShortDescription   string `json:"short_description"`
-	Schedule           string `json:"schedule"`
-	Registered         bool   `json:"registered"`
+	Day              string `json:"day"`
+	Time             string `json:"time"`
+	Title            string `json:"title"`
+	ShortDescription string `json:"short_description"`
+	Schedule         string `json:"schedule"`
+	ImageURL         string `json:"image_url"`
+	Registered       bool   `json:"registered"`
+	Duration         int    `json:"duration"`
 }
+

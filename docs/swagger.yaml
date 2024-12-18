@@ -324,6 +324,13 @@ definitions:
       error:
         type: string
     type: object
+  session.GetUpcomingSessionResponse:
+    properties:
+      sessions:
+        items:
+          $ref: '#/definitions/session.SessionDetail'
+        type: array
+    type: object
   session.MentorDetails:
     properties:
       fullname:
@@ -347,6 +354,25 @@ definitions:
       schedule:
         type: string
       short_description:
+        type: string
+    type: object
+  session.SessionDetail:
+    properties:
+      day:
+        type: string
+      duration:
+        type: integer
+      image_url:
+        type: string
+      registered:
+        type: boolean
+      schedule:
+        type: string
+      short_description:
+        type: string
+      time:
+        type: string
+      title:
         type: string
     type: object
   user.ChangePasswordDto:
@@ -859,6 +885,23 @@ paths:
       summary: Get sessions for a user
       tags:
       - Mentor
+  /sessions/upcoming:
+    get:
+      description: Get all upcoming sessions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/session.GetUpcomingSessionResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/session.Error'
+      summary: Get upcoming sessions
+      tags:
+      - Session
   /users/login:
     post:
       consumes:
