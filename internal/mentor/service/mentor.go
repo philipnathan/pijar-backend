@@ -31,6 +31,10 @@ func (s *MentorService) GetMentorDetails(MentorID uint) (*userModel.User, error)
 		return nil, err
 	}
 
+	if mentor.IsMentor == nil || !*mentor.IsMentor {
+		return nil, custom_error.ErrMentorNotFound
+	}
+
 	return mentor, nil
 }
 
