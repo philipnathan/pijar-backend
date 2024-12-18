@@ -92,6 +92,7 @@ func (h *MentorHandler) UserGetMentorDetails(c *gin.Context) {
 		Fullname:          mentorDetails.Fullname,
 		ImageURL:          mentorDetails.ImageURL,
 		MentorBio:         mentorDetails.MentorBio.Bio,
+		Occupation:        MentorExperiences[0].Ocupation,
 		MentorExperiences: MentorExperiences,
 		MentorExpertises:  MentorExpertises,
 	}
