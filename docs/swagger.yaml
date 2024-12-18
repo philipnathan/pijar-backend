@@ -157,6 +157,9 @@ definitions:
         items:
           $ref: '#/definitions/mentor_dto.MentorExpertises'
         type: array
+      occupation:
+        example: Software Engineer
+        type: string
       user_id:
         example: 1
         type: integer
@@ -668,11 +671,6 @@ paths:
       summary: Get mentor landing page
       tags:
       - Mentor
-<<<<<<< HEAD
-  /user/profile:
-    get:
-      description: Get the profile of the logged-in user
-=======
   /sessions/{user_id}:
     get:
       consumes:
@@ -684,27 +682,12 @@ paths:
         name: user_id
         required: true
         type: integer
->>>>>>> 88bee45 (feat(session): create documentation for mentor session)
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-<<<<<<< HEAD
-            $ref: '#/definitions/user.UserProfileResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/user.Error'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/user.Error'
-      summary: Get user profile
-      tags:
-      - User
-=======
             items:
               $ref: '#/definitions/session.MentorSessionResponse'
             type: array
@@ -719,7 +702,27 @@ paths:
       summary: Get sessions for a user
       tags:
       - Mentor
->>>>>>> 88bee45 (feat(session): create documentation for mentor session)
+  /user/profile:
+    get:
+      description: Get the profile of the logged-in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserProfileResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/user.Error'
+      summary: Get user profile
+      tags:
+      - User
   /users/login:
     post:
       consumes:

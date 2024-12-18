@@ -413,27 +413,16 @@ const docTemplate = `{
                 }
             }
         },
-<<<<<<< HEAD
-        "/user/profile": {
-            "get": {
-                "description": "Get the profile of the logged-in user",
-=======
         "/sessions/{user_id}": {
             "get": {
                 "description": "Get all sessions for a specific user by user ID",
                 "consumes": [
                     "application/json"
                 ],
->>>>>>> 88bee45 (feat(session): create documentation for mentor session)
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-<<<<<<< HEAD
-                    "User"
-                ],
-                "summary": "Get user profile",
-=======
                     "Mentor"
                 ],
                 "summary": "Get sessions for a user",
@@ -446,20 +435,10 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
->>>>>>> 88bee45 (feat(session): create documentation for mentor session)
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-<<<<<<< HEAD
-                            "$ref": "#/definitions/user.UserProfileResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/user.Error"
-=======
                             "type": "array",
                             "items": {
                                 "$ref": "#/definitions/session.MentorSessionResponse"
@@ -470,17 +449,44 @@ const docTemplate = `{
                         "description": "Invalid user ID",
                         "schema": {
                             "$ref": "#/definitions/session.Error"
->>>>>>> 88bee45 (feat(session): create documentation for mentor session)
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-<<<<<<< HEAD
-                            "$ref": "#/definitions/user.Error"
-=======
                             "$ref": "#/definitions/session.Error"
->>>>>>> 88bee45 (feat(session): create documentation for mentor session)
+                        }
+                    }
+                }
+            }
+        },
+        "/user/profile": {
+            "get": {
+                "description": "Get the profile of the logged-in user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user profile",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.UserProfileResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/user.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/user.Error"
                         }
                     }
                 }
@@ -811,7 +817,7 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/category.SubCategory"
                     }
-                },
+                }
             }
         },
         "category.Error": {
@@ -1025,6 +1031,10 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/mentor_dto.MentorExpertises"
                     }
+                },
+                "occupation": {
+                    "type": "string",
+                    "example": "Software Engineer"
                 },
                 "user_id": {
                     "type": "integer",
