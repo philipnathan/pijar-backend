@@ -15,6 +15,7 @@ type UserRepositoryInterface interface {
 	DeleteUserById(id uint) error
 	UpdateUserPassword(user *model.User) error
 	SaveUser(user *model.User) error
+	GetUserByID(userID uint) (*model.User, error)
 }
 
 type userRepository struct {
@@ -83,4 +84,13 @@ func (r *userRepository) UpdateUserPassword(user *model.User) error {
 
 func (r *userRepository) SaveUser(user *model.User) error {
 	return r.db.Save(user).Error
+}
+
+func (r *userRepository) GetUserByID(userID uint) (*model.User, error) {
+    var user model.User
+    err := r.db.First(&user, userID).Error
+    if err != nil {
+        return nil, err
+    }
+    return &user, nil
 }
