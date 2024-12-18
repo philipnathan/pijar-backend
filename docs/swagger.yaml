@@ -26,6 +26,15 @@ definitions:
       sub_category_name:
         type: string
     type: object
+  dto.FeaturedCategoryResponseDto:
+    properties:
+      category_name:
+        example: Coding Basics
+        type: string
+      image_url:
+        example: https://example.com/image.png
+        type: string
+    type: object
   learner.AddLearnerInterestsDto:
     properties:
       category_id:
@@ -380,6 +389,25 @@ paths:
           schema:
             $ref: '#/definitions/category.Error'
       summary: Get all categories
+      tags:
+      - Category
+  /categories/featured:
+    get:
+      description: Get featured categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.FeaturedCategoryResponseDto'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/category.Error'
+      summary: Get featured categories
       tags:
       - Category
   /learners/biographies:
