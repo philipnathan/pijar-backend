@@ -19,6 +19,7 @@ type UserServiceInterface interface {
 	DeleteUserService(userID uint) error
 	UpdateUserPasswordService(userID uint, oldPassword, newPassword string) error
 	UpdateUserDetailsService(userID uint, input interface{}) error
+	GetUserProfile(userID uint) (*dto.UserProfileResponse, error)
 }
 
 type UserService struct {
@@ -203,4 +204,18 @@ func (s *UserService) UpdateUserDetailsService(userID uint, input interface{}) e
 	}
 
 	return nil
+}
+
+func (s *UserService) GetUserProfile(userID uint) (*dto.UserProfileResponse, error) {
+    user, err := s.repo.GetUserByID(userID)
+    if err != nil {
+        return nil, err
+    }
+
+    return &dto.UserProfileResponse{
+        ID:       user.ID,
+        Fullname: user.Fullname,
+        Email:    user.Email,
+		ImageURL: *user.ImageURL,
+    }, nil
 }

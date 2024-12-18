@@ -365,6 +365,17 @@ definitions:
         example: user details updated successfully
         type: string
     type: object
+  user.UserProfileResponse:
+    properties:
+      email:
+        type: string
+      fullname:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -627,6 +638,27 @@ paths:
       summary: Get mentor landing page
       tags:
       - Mentor
+  /user/profile:
+    get:
+      description: Get the profile of the logged-in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserProfileResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/user.Error'
+      summary: Get user profile
+      tags:
+      - User
   /users/login:
     post:
       consumes:

@@ -269,3 +269,27 @@ func (h *UserHandler) UpdateUserDetailsHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, dto.UpdateUserDetailsResponseDto{Message: "user details updated successfully"})
 }
+
+// @Summary Get user profile
+// @Description Get the profile of the logged-in user
+// @Tags User
+// @Produce json
+// @Success 200 {object} user.UserProfileResponse
+// @Failure 401 {object} Error "Unauthorized"
+// @Failure 500 {object} Error "Internal server error"
+// @Router /user/profile [get]
+func (h *UserHandler) GetUserProfile(c *gin.Context) {
+    userID, exists := c.Get("userID")
+    if !exists {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+        return
+    }
+
+    profile, err := h.service.GetUserProfile(userID.(uint))
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, profile)
+}
