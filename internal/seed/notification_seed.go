@@ -16,19 +16,13 @@ func SeedNotification(db *gorm.DB) error {
 		{
 			NotificationTypeID: 1,
 			UserID:             2,
-			Message:            "schedule for python basic has been changed",
+			Message:            "Sesi mentor 'Teknik Bertani Modern' akan dimulai pada 22 Desember 2024 pukul 09:00.",
 			IsRead:             false,
 		},
 		{
-			NotificationTypeID: 2,
-			UserID:             2,
-			Message:            "schedule for python basic has been changed",
-			IsRead:             false,
-		},
-		{
-			NotificationTypeID: 2,
-			UserID:             2,
-			Message:            "schedule for python basic has been changed",
+			NotificationTypeID: 1,
+			UserID:             4,
+			Message:            "Sesi mentor 'Membuat Keripik Pisang Berkualitas Ekspor' akan dimulai pada 30 Desember 2024 pukul 15:00.",
 			IsRead:             false,
 		},
 	}

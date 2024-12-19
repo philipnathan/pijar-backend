@@ -13,13 +13,10 @@ func SeedCategory(db *gorm.DB) error {
 	}
 
 	categories := []model.Category{
-		{Category_name: "Development", Image_url: "development.png"},
-		{Category_name: "Design", Image_url: "design.png"},
-		{Category_name: "Marketing", Image_url: "marketing.png"},
-		{Category_name: "Business", Image_url: "business.png"},
-		{Category_name: "Photography", Image_url: "photography.png"},
-		{Category_name: "Music", Image_url: "music.png"},
-		{Category_name: "Finance", Image_url: "finance.png"},
+		{Category_name: "Pertanian", Image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOD9cAXPUyh6yJu8ThKALMyB3ROQTmJv4_uR9J9NDL1GdnUZjfQuPuRXpMMM8CuF3t-Wg&usqp=CAU"},
+		{Category_name: "Kewirausahaan", Image_url: "https://st2.depositphotos.com/1010613/11110/i/450/depositphotos_111105200-stock-photo-businesspeople-making-various-business-chart.jpg"},
+		{Category_name: "Kerajinan Tangan", Image_url: "https://cdn0-production-images-kly.akamaized.net/AHPg4s_tV7B2FgD-6VsRrzniHEE=/500x0/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/4342502/original/049461600_1677665012-Berburu_Kerajinan_Tangan_di_INACRAFT_2023-Angga-1.jpg"},
+		{Category_name: "Pengolahan Hasil Pertanian", Image_url: "https://3.bp.blogspot.com/-rp4EgZWQmWs/WOVnoPJey4I/AAAAAAAAADE/bnWhUXddIwgeS8fXY2SMkfSSGs3fVg5zQCLcB/s1600/sapta-usaha-tani-kesejahteraan-petani.jpg"},
 	}
 
 	var count int64

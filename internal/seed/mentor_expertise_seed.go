@@ -13,41 +13,10 @@ func SeedMentorExpertise(db *gorm.DB) error {
 	}
 
 	mentors := []model.MentorExpertises{
-		{
-			UserID:      1,
-			Expertise:   "Software Engineer",
-			Category_id: 1,
-		},
-		{
-			UserID:      1,
-			Expertise:   "Software Engineer",
-			Category_id: 2,
-		},
-		{
-			UserID:      4,
-			Expertise:   "Software Engineer",
-			Category_id: 1,
-		},
-		{
-			UserID:      4,
-			Expertise:   "Software Engineer",
-			Category_id: 2,
-		},
-		{
-			UserID:      5,
-			Expertise:   "Software Engineer",
-			Category_id: 1,
-		},
-		{
-			UserID:      5,
-			Expertise:   "Software Engineer",
-			Category_id: 2,
-		},
-		{
-			UserID:      5,
-			Expertise:   "Software Engineer",
-			Category_id: 3,
-		},
+		{UserID: 1, Expertise: "Pertanian Organik", Category_id: 1},
+		{UserID: 1, Expertise: "Kewirausahaan Desa", Category_id: 2},
+		{UserID: 3, Expertise: "Kerajinan Daur Ulang", Category_id: 3},
+		{UserID: 3, Expertise: "Pengolahan Hasil Pertanian", Category_id: 4},
 	}
 
 	var count int64

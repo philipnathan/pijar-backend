@@ -17,45 +17,15 @@ func SeedMentorExperience(db *gorm.DB) error {
 	mentors := []model.MentorExperiences{
 		{
 			UserID:      1,
-			Occupation:  "Software Engineer",
-			CompanyName: "Google",
-			StartDate:   model.CustomTime{Time: time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)},
-			EndDate:     model.CustomTime{Time: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)},
+			Occupation:  "Penyuluh Pertanian",
+			CompanyName: "Dinas Pertanian",
+			StartDate:   model.CustomTime{Time: time.Date(2012, 1, 1, 0, 0, 0, 0, time.UTC)},
 		},
 		{
-			UserID:      1,
-			Occupation:  "Software Engineer",
-			CompanyName: "Facebook",
-			StartDate:   model.CustomTime{Time: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)},
-			EndDate:     model.CustomTime{Time: time.Date(2022, 1, 1, 0, 0, 0, 0, time.UTC)},
-		},
-		{
-			UserID:      4,
-			Occupation:  "Software Engineer",
-			CompanyName: "Google",
-			StartDate:   model.CustomTime{Time: time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)},
-			EndDate:     model.CustomTime{Time: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)},
-		},
-		{
-			UserID:      4,
-			Occupation:  "Software Engineer",
-			CompanyName: "Facebook",
-			StartDate:   model.CustomTime{Time: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)},
-			EndDate:     model.CustomTime{Time: time.Date(2022, 1, 1, 0, 0, 0, 0, time.UTC)},
-		},
-		{
-			UserID:      5,
-			Occupation:  "Software Engineer",
-			CompanyName: "Google",
-			StartDate:   model.CustomTime{Time: time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)},
-			EndDate:     model.CustomTime{Time: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)},
-		},
-		{
-			UserID:      5,
-			Occupation:  "Software Engineer",
-			CompanyName: "Facebook",
-			StartDate:   model.CustomTime{Time: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)},
-			EndDate:     model.CustomTime{Time: time.Date(2022, 1, 1, 0, 0, 0, 0, time.UTC)},
+			UserID:      3,
+			Occupation:  "Pelatih Kerajinan",
+			CompanyName: "Komunitas Kreatif Indonesia",
+			StartDate:   model.CustomTime{Time: time.Date(2016, 5, 1, 0, 0, 0, 0, time.UTC)},
 		},
 	}
 
