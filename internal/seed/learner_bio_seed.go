@@ -24,6 +24,18 @@ func LearnerBio(db *gorm.DB) error {
 			Occupation:  "Petani",
 			Institution: "Kelompok Tani Maju",
 		},
+		{
+			UserID:      6,
+			Bio:         "Siapapun bisa menjadi apapun",
+			Occupation:  "Pelajar",
+			Institution: "SMA Satu Dua Tiga",
+		},
+		{
+			UserID:      8,
+			Bio:         "Maju terus pantang mundur",
+			Occupation:  "Pelari",
+			Institution: "PT. Maju Mundur Cantik",
+		},
 	}
 
 	var count int64

@@ -22,6 +22,16 @@ func MentorSessionParticipant(db *gorm.DB) error {
 			MentorSessionID: 4,
 			Status:          "registered",
 		},
+		{
+			UserID:          6,
+			MentorSessionID: 4,
+			Status:          "registered",
+		},
+		{
+			UserID:          8,
+			MentorSessionID: 4,
+			Status:          "registered",
+		},
 	}
 
 	var count int64
