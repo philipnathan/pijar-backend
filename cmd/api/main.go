@@ -5,7 +5,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/philipnathan/pijar-backend/database"
-	_ "github.com/philipnathan/pijar-backend/docs"
 	categoryRoute "github.com/philipnathan/pijar-backend/internal/category/route"
 	learnerRoute "github.com/philipnathan/pijar-backend/internal/learner/route"
 	mentor "github.com/philipnathan/pijar-backend/internal/mentor/route"
@@ -16,6 +15,8 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
+
+	docs "github.com/philipnathan/pijar-backend/docs"
 
 	"github.com/gin-contrib/cors"
 )
@@ -43,12 +44,19 @@ func main() {
 	database.MigrateDatabase(db)
 
 	r := gin.Default()
+
+	docs.SwaggerInfo.Title = "Swagger Example API"
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = "108.136.220.233"
+	docs.SwaggerInfo.BasePath = "/api/v1"
+	docs.SwaggerInfo.Schemes = []string{"http"}
+
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH"},
 		AllowHeaders:     []string{"Authorization", "Content-Type"},
 		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
+		AllowCredentials: false,
 	}))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
