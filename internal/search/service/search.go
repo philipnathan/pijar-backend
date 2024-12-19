@@ -1,8 +1,10 @@
 package search
 
 import (
-    dto "github.com/philipnathan/pijar-backend/internal/search/dto"
-    repository "github.com/philipnathan/pijar-backend/internal/search/repository"
+	// "fmt"
+
+	dto "github.com/philipnathan/pijar-backend/internal/search/dto"
+	repository "github.com/philipnathan/pijar-backend/internal/search/repository"
 )
 
 type SearchServiceInterface interface {
@@ -30,14 +32,14 @@ func (s *SearchService) Search(keyword string) (*dto.SearchResponse, error) {
         return nil, err
     }
 
-    categories, err := s.repo.SearchCategories(keyword)
-    if err != nil {
-        return nil, err
-    }
+    // categories, err := s.repo.SearchCategories(keyword)
+    // if err != nil {
+    //     return nil, err
+    // }
 
     return &dto.SearchResponse{
         Sessions:  sessions,
         Mentors:   mentors,
-        Topics: categories,
+        Topics: nil,
     }, nil
 }

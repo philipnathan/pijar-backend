@@ -1,11 +1,13 @@
 package repository
 
 import (
-    dto "github.com/philipnathan/pijar-backend/internal/search/dto"
-    sessionModel "github.com/philipnathan/pijar-backend/internal/session/model"
-    userModel "github.com/philipnathan/pijar-backend/internal/user/model"
-    categoryModel "github.com/philipnathan/pijar-backend/internal/category/model"
-    "gorm.io/gorm"
+	"fmt"
+
+	categoryModel "github.com/philipnathan/pijar-backend/internal/category/model"
+	dto "github.com/philipnathan/pijar-backend/internal/search/dto"
+	sessionModel "github.com/philipnathan/pijar-backend/internal/session/model"
+	userModel "github.com/philipnathan/pijar-backend/internal/user/model"
+	"gorm.io/gorm"
 )
 
 type SearchRepositoryInterface interface {
@@ -27,6 +29,8 @@ func NewSearchRepository(db *gorm.DB) SearchRepositoryInterface {
 func (r *SearchRepository) SearchSessions(keyword string) ([]dto.SessionDetail, error) {
     var sessions []sessionModel.MentorSession
     err := r.db.Where("title LIKE ? OR short_description LIKE ?", "%"+keyword+"%", "%"+keyword+"%").Find(&sessions).Error
+    fmt.Println(sessions)
+    fmt.Println(err)
     if err != nil {
         return nil, err
     }
@@ -51,19 +55,25 @@ func (r *SearchRepository) SearchMentors(keyword string) ([]dto.MentorDetail, er
     }
 
     var mentorDetails []dto.MentorDetail
+    
     for _, mentor := range mentors {
-        mentorDetails = append(mentorDetails, dto.MentorDetail{
+        
+        mentorDetail := dto.MentorDetail{
             Fullname: mentor.Fullname,
             Email:    mentor.Email,
-            ImageURL: *mentor.ImageURL,
-        })
+        }
+        if mentor.ImageURL != nil {
+            mentorDetail.ImageURL = *mentor.ImageURL
+        }
+        mentorDetails = append(mentorDetails, mentorDetail)
     }
+    fmt.Println("test")
     return mentorDetails, nil
 }
 
 func (r *SearchRepository) SearchCategories(keyword string) ([]dto.CategoryDetail, error) {
     var categories []categoryModel.Category
-    err := r.db.Where("title LIKE ? OR description LIKE ?", "%"+keyword+"%", "%"+keyword+"%").Find(&categories).Error
+    err := r.db.Where("category_name LIKE ? ", "%"+keyword+"%").Find(&categories).Error
     if err != nil {
         return nil, err
     }
