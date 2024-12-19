@@ -13,10 +13,13 @@ func SeedNotificationType(db *gorm.DB) error {
 
 	notificationTypes := []model.NotificationType{
 		{
-			Type: "schedule_change",
+			Type: "Pengingat Sesi",
 		},
 		{
-			Type: "next_class",
+			Type: "Pembatalan Sesi",
+		},
+		{
+			Type: "Pendaftaran Diterima",
 		},
 	}
 
