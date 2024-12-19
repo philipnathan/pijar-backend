@@ -27,6 +27,18 @@ func SeedMentorExperience(db *gorm.DB) error {
 			CompanyName: "Komunitas Kreatif Indonesia",
 			StartDate:   model.CustomTime{Time: time.Date(2016, 5, 1, 0, 0, 0, 0, time.UTC)},
 		},
+		{
+			UserID:      5,
+			Occupation:  "Pengerajin Anyaman Bambu",
+			CompanyName: "Pengerajin Bambu Denpasar",
+			StartDate:   model.CustomTime{Time: time.Date(2005, 5, 1, 0, 0, 0, 0, time.UTC)},
+		},
+		{
+			UserID:      7,
+			Occupation:  "Business Owner",
+			CompanyName: "UD. Minum Yang Manis",
+			StartDate:   model.CustomTime{Time: time.Date(2000, 5, 1, 0, 0, 0, 0, time.UTC)},
+		},
 	}
 
 	var count int64

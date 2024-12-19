@@ -20,6 +20,22 @@ func SeedLearnerInterests(db *gorm.DB) error {
 			UserID:     4,
 			CategoryID: 4,
 		},
+		{
+			UserID:     6,
+			CategoryID: 4,
+		},
+		{
+			UserID:     6,
+			CategoryID: 3,
+		},
+		{
+			UserID:     8,
+			CategoryID: 1,
+		},
+		{
+			UserID:     8,
+			CategoryID: 2,
+		},
 	}
 
 	var count int64

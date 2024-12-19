@@ -19,6 +19,10 @@ func SeedUser(db *gorm.DB) error {
 	user02, _ := utils.HashPassword("hashed_password_nurul")
 	user03, _ := utils.HashPassword("hashed_password_siti")
 	user04, _ := utils.HashPassword("hashed_password_agus")
+	user05, _ := utils.HashPassword("hashed_password_wayan")
+	user06, _ := utils.HashPassword("hashed_password_komang")
+	user07, _ := utils.HashPassword("hashed_password_ari")
+	user08, _ := utils.HashPassword("hashed_password_supriyadi")
 
 	users := []userModel.User{
 		{
@@ -60,6 +64,46 @@ func SeedUser(db *gorm.DB) error {
 			},
 			ImageURL:    &[]string{"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKlbHGf_ERPpChbcnvpjn6aC2TMycroaR8IQ&s"}[0],
 			PhoneNumber: &[]string{"081678912345"}[0],
+		},
+		{
+			Email:    "wayan.budiasa@example.com",
+			Password: user05,
+			Fullname: "Wayan Budiasa",
+			IsMentor: &[]bool{true}[0],
+			BirthDate: &userModel.CustomTime{
+				Time: time.Date(1960, 3, 21, 0, 0, 0, 0, time.UTC),
+			},
+			ImageURL: &[]string{"https://st.depositphotos.com/1715570/2652/i/450/depositphotos_26521259-stock-photo-portrait-of-a-handsome-young.jpg"}[0],
+		},
+		{
+			Email:    "komang.ariasa@example.com",
+			Password: user06,
+			Fullname: "Komang Ariasa",
+			IsMentor: &[]bool{false}[0],
+			BirthDate: &userModel.CustomTime{
+				Time: time.Date(1997, 7, 12, 0, 0, 0, 0, time.UTC),
+			},
+			ImageURL: &[]string{"https://img.freepik.com/free-photo/artist-white_1368-3546.jpg"}[0],
+		},
+		{
+			Email:    "ari.komang@example.com",
+			Password: user07,
+			Fullname: "Ari Komang",
+			IsMentor: &[]bool{true}[0],
+			BirthDate: &userModel.CustomTime{
+				Time: time.Date(1960, 3, 21, 0, 0, 0, 0, time.UTC),
+			},
+			ImageURL: &[]string{"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvi7HpQ-_PMSMOFrj1hwjp6LDcI-jm3Ro0Xw&s"}[0],
+		},
+		{
+			Email:    "supriyadi@example.com",
+			Password: user08,
+			Fullname: "Supriyadi",
+			IsMentor: &[]bool{false}[0],
+			BirthDate: &userModel.CustomTime{
+				Time: time.Date(1997, 7, 12, 0, 0, 0, 0, time.UTC),
+			},
+			ImageURL: &[]string{"https://static.vecteezy.com/system/resources/thumbnails/009/887/693/small_2x/male-man-african-american-black-diversity-person-afro-hair-ethnic-happy-smile-model-close-up-face-enjoyment-hashion-lifestyle-professional-human-father-boy-business-education-young-adult-teenage-photo.jpg"}[0],
 		},
 	}
 
