@@ -291,13 +291,6 @@ definitions:
       error:
         type: string
     type: object
-  session.GetUpcomingSessionResponse:
-    properties:
-      sessions:
-        items:
-          $ref: '#/definitions/session.SessionDetail'
-        type: array
-    type: object
   session.GetUserHistorySessionResponseDto:
     properties:
       histories:
@@ -341,25 +334,6 @@ definitions:
       schedule:
         type: string
       short_description:
-        type: string
-    type: object
-  session.SessionDetail:
-    properties:
-      day:
-        type: string
-      duration:
-        type: integer
-      image_url:
-        type: string
-      registered:
-        type: boolean
-      schedule:
-        type: string
-      short_description:
-        type: string
-      time:
-        type: string
-      title:
         type: string
     type: object
   user.ChangePasswordDto:
@@ -845,14 +819,31 @@ paths:
       - Learner
   /sessions/upcoming:
     get:
-      description: Get all upcoming sessions
+      description: Get upcoming sessions
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: pagesize
+        in: query
+        name: pagesize
+        type: integer
+      - description: categoryid
+        in: query
+        name: categoryid
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/session.GetUpcomingSessionResponse'
+            $ref: '#/definitions/session.MentorSessionResponse'
+        "400":
+          description: Invalid user ID
+          schema:
+            $ref: '#/definitions/session.Error'
         "500":
           description: Internal server error
           schema:
