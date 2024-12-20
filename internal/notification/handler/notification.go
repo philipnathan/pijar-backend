@@ -3,6 +3,7 @@ package notification
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	custom_error "github.com/philipnathan/pijar-backend/internal/notification/custom_error"
@@ -81,4 +82,46 @@ func (h *NotificationHandler) GetAllNotificationsHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response)
+}
+
+func (h *NotificationHandler) ReadNotificationHandler(c *gin.Context) {
+	UserID, exist := c.Get("user_id")
+	if !exist {
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		return
+	}
+
+	id, ok := UserID.(float64)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		return
+	}
+
+	notificationID := c.Param("notificationid")
+	if !exist {
+		c.JSON(http.StatusBadRequest, custom_error.Error{Error: "Please provide a notification_id"})
+		return
+	}
+
+	notificationIDuint64, err := strconv.ParseUint(notificationID, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, custom_error.Error{Error: err.Error()})
+		return
+	}
+
+	err = h.service.ReadNotification(uint(id), uint(notificationIDuint64))
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, custom_error.Error{Error: err.Error()})
+			return
+		}
+		if err == custom_error.ErrNotificationHasBeenRead {
+			c.JSON(http.StatusBadRequest, custom_error.Error{Error: err.Error()})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, dto.ReadNotificationResponseDto{Message: "Notification with ID " + notificationID + " has been read"})
 }

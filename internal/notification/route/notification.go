@@ -21,5 +21,6 @@ func NotificationRoute(r *gin.Engine, db *gorm.DB) {
 	{
 		protectedRoutes.Use(middleware.AuthMiddleware())
 		protectedRoutes.GET("/", handler.GetAllNotificationsHandler)
+		protectedRoutes.PUT("/read/:notificationid", handler.ReadNotificationHandler)
 	}
 }
