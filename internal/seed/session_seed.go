@@ -59,6 +59,17 @@ func SeedSession(db *gorm.DB) error {
 			ImageURL:         "https://static.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/p1/995/2024/12/13/WhatsApp-Image-2024-12-12-at-221459_90f678e5-1808357494.jpg",
 			Link:             "https://example.com/session_4",
 		},
+		{
+			UserID:           1,
+			CategoryID:       1,
+			Title:            "Teknik Bertani Rumahan",
+			ShortDescription: "Belajar teknik bertani rumahan untuk meningkatkan produksi tanaman.",
+			Detail:           "Sesi ini akan membahas penggunaan pupuk organik, perawatan tanaman, dan pemanfaatan teknologi dalam pertanian.",
+			Schedule:         time.Date(2024, 11, 1, 9, 0, 0, 0, time.UTC),
+			EstimateDuration: 120,
+			ImageURL:         "https://i.ytimg.com/vi/6Zt7HZbRbe8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBaNkQoCRq5CgByzkb5KY_DzGUKrg",
+			Link:             "https://example.com/session_1",
+		},
 	}
 
 	var count int64

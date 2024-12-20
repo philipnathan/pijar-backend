@@ -13,6 +13,11 @@ func MentorSessionParticipant(db *gorm.DB) error {
 
 	mentorSessionParticipants := []model.MentorSessionParticipant{
 		{
+			UserID:          1,
+			MentorSessionID: 5,
+			Status:          "complete",
+		},
+		{
 			UserID:          2,
 			MentorSessionID: 1,
 			Status:          "registered",
