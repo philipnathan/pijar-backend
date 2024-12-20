@@ -160,9 +160,6 @@ definitions:
       occupation:
         example: Software Engineer
         type: string
-      occupation:
-        example: Software Engineer
-        type: string
       user_id:
         example: 1
         type: integer
@@ -294,42 +291,32 @@ definitions:
       error:
         type: string
     type: object
-  session.MentorDetails:
-    properties:
-      fullname:
-        example: John Doe
-        type: string
-      id:
-        example: 1
-        type: integer
-      image_url:
-        example: https://example.com/image.jpg
-        type: string
-    type: object
-  session.MentorSessionResponse:
-    properties:
-      mentor_details:
-        $ref: '#/definitions/session.MentorDetails'
-      mentor_session_title:
-        type: string
-      registered:
-        type: boolean
-      schedule:
-        type: string
-      short_description:
-        type: string
-    type: object
-  session.Error:
-    properties:
-      error:
-        type: string
-    type: object
   session.GetUpcomingSessionResponse:
     properties:
       sessions:
         items:
           $ref: '#/definitions/session.SessionDetail'
         type: array
+    type: object
+  session.GetUserHistorySessionResponseDto:
+    properties:
+      histories:
+        items:
+          $ref: '#/definitions/session.History'
+        type: array
+    type: object
+  session.History:
+    properties:
+      mentor_details:
+        $ref: '#/definitions/session.MentorDetails'
+      mentor_session_title:
+        type: string
+      schedule:
+        type: string
+      short_description:
+        type: string
+      status:
+        type: string
     type: object
   session.MentorDetails:
     properties:
@@ -833,6 +820,46 @@ paths:
       summary: Get sessions for a user
       tags:
       - Mentor
+  /sessions/histories:
+    get:
+      description: Get learner history session
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/session.GetUserHistorySessionResponseDto'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/session.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/session.Error'
+      security:
+      - Bearer: []
+      summary: Get learner history session
+      tags:
+      - Learner
+  /sessions/upcoming:
+    get:
+      description: Get all upcoming sessions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/session.GetUpcomingSessionResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/session.Error'
+      summary: Get upcoming sessions
+      tags:
+      - Session
   /user/profile:
     get:
       description: Get the profile of the logged-in user
@@ -854,54 +881,6 @@ paths:
       summary: Get user profile
       tags:
       - User
-  /sessions/{user_id}:
-    get:
-      consumes:
-      - application/json
-      description: Get all sessions for a specific user by user ID
-      parameters:
-      - description: User ID
-        in: path
-        name: user_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/session.MentorSessionResponse'
-            type: array
-        "400":
-          description: Invalid user ID
-          schema:
-            $ref: '#/definitions/session.Error'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/session.Error'
-      summary: Get sessions for a user
-      tags:
-      - Mentor
-  /sessions/upcoming:
-    get:
-      description: Get all upcoming sessions
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/session.GetUpcomingSessionResponse'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/session.Error'
-      summary: Get upcoming sessions
-      tags:
-      - Session
   /users/login:
     post:
       consumes:

@@ -454,6 +454,69 @@ const docTemplate = `{
                 }
             }
         },
+        "/sessions/histories": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Get learner history session",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Learner"
+                ],
+                "summary": "Get learner history session",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/session.GetUserHistorySessionResponseDto"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/session.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/session.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/sessions/upcoming": {
+            "get": {
+                "description": "Get all upcoming sessions",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Session"
+                ],
+                "summary": "Get upcoming sessions",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/session.GetUpcomingSessionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/session.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/sessions/{user_id}": {
             "get": {
                 "description": "Get all sessions for a specific user by user ID",
@@ -528,79 +591,6 @@ const docTemplate = `{
                         "description": "Internal server error",
                         "schema": {
                             "$ref": "#/definitions/user.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/sessions/upcoming": {
-            "get": {
-                "description": "Get all upcoming sessions",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Session"
-                ],
-                "summary": "Get upcoming sessions",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/session.GetUpcomingSessionResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/session.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/sessions/{user_id}": {
-            "get": {
-                "description": "Get all sessions for a specific user by user ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Mentor"
-                ],
-                "summary": "Get sessions for a user",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/session.MentorSessionResponse"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid user ID",
-                        "schema": {
-                            "$ref": "#/definitions/session.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/session.Error"
                         }
                     }
                 }
@@ -1270,6 +1260,76 @@ const docTemplate = `{
                 }
             }
         },
+        "search.CategoryDetail": {
+            "type": "object",
+            "properties": {
+                "category_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "search.Error": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "search.MentorDetail": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "fullname": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "search.SearchResponse": {
+            "type": "object",
+            "properties": {
+                "mentors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/search.MentorDetail"
+                    }
+                },
+                "sessions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/search.SessionDetail"
+                    }
+                },
+                "topics": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/search.CategoryDetail"
+                    }
+                }
+            }
+        },
+        "search.SessionDetail": {
+            "type": "object",
+            "properties": {
+                "image_url": {
+                    "type": "string"
+                },
+                "schedule": {
+                    "type": "string"
+                },
+                "short_description": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "session.Error": {
             "type": "object",
             "properties": {
@@ -1286,6 +1346,37 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/session.SessionDetail"
                     }
+                }
+            }
+        },
+        "session.GetUserHistorySessionResponseDto": {
+            "type": "object",
+            "properties": {
+                "histories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/session.History"
+                    }
+                }
+            }
+        },
+        "session.History": {
+            "type": "object",
+            "properties": {
+                "mentor_details": {
+                    "$ref": "#/definitions/session.MentorDetails"
+                },
+                "mentor_session_title": {
+                    "type": "string"
+                },
+                "schedule": {
+                    "type": "string"
+                },
+                "short_description": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },
@@ -1322,6 +1413,35 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "short_description": {
+                    "type": "string"
+                }
+            }
+        },
+        "session.SessionDetail": {
+            "type": "object",
+            "properties": {
+                "day": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "integer"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "registered": {
+                    "type": "boolean"
+                },
+                "schedule": {
+                    "type": "string"
+                },
+                "short_description": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }
