@@ -493,7 +493,7 @@ const docTemplate = `{
         },
         "/sessions/upcoming": {
             "get": {
-                "description": "Get all upcoming sessions",
+                "description": "Get upcoming sessions",
                 "produces": [
                     "application/json"
                 ],
@@ -501,11 +501,37 @@ const docTemplate = `{
                     "Session"
                 ],
                 "summary": "Get upcoming sessions",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "pagesize",
+                        "name": "pagesize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "categoryid",
+                        "name": "categoryid",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/session.GetUpcomingSessionResponse"
+                            "$ref": "#/definitions/session.MentorSessionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid user ID",
+                        "schema": {
+                            "$ref": "#/definitions/session.Error"
                         }
                     },
                     "500": {
@@ -1338,17 +1364,6 @@ const docTemplate = `{
                 }
             }
         },
-        "session.GetUpcomingSessionResponse": {
-            "type": "object",
-            "properties": {
-                "sessions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/session.SessionDetail"
-                    }
-                }
-            }
-        },
         "session.GetUserHistorySessionResponseDto": {
             "type": "object",
             "properties": {
@@ -1413,35 +1428,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "short_description": {
-                    "type": "string"
-                }
-            }
-        },
-        "session.SessionDetail": {
-            "type": "object",
-            "properties": {
-                "day": {
-                    "type": "string"
-                },
-                "duration": {
-                    "type": "integer"
-                },
-                "image_url": {
-                    "type": "string"
-                },
-                "registered": {
-                    "type": "boolean"
-                },
-                "schedule": {
-                    "type": "string"
-                },
-                "short_description": {
-                    "type": "string"
-                },
-                "time": {
-                    "type": "string"
-                },
-                "title": {
                     "type": "string"
                 }
             }
