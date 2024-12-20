@@ -8,6 +8,7 @@ import (
 type NotificationRepositoryInterface interface {
 	GetAllNotifications(userID *uint) ([]model.Notification, error)
 	SaveNotification(notification *model.Notification) error
+	GetNotificationByUserIDandNotificationID(userID *uint, notificationID *uint) (*model.Notification, error)
 }
 
 type NotificationRepository struct {
@@ -30,4 +31,13 @@ func (r *NotificationRepository) GetAllNotifications(userID *uint) ([]model.Noti
 
 func (r *NotificationRepository) SaveNotification(notification *model.Notification) error {
 	return r.db.Save(notification).Error
+}
+
+func (r *NotificationRepository) GetNotificationByUserIDandNotificationID(userID *uint, notificationID *uint) (*model.Notification, error) {
+	var notification model.Notification
+	if err := r.db.Where("user_id = ? AND id = ?", userID, notificationID).First(&notification).Error; err != nil {
+		return nil, err
+	}
+
+	return &notification, nil
 }
