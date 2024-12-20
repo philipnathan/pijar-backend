@@ -882,6 +882,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/notifications/read/{notificationid}": {
+            "put": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Change IsRead Field to True",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Read notification",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Notification ID",
+                        "name": "notificationid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/notification.ReadNotificationResponseDto"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/notification.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/notification.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/users/register": {
             "post": {
                 "description": "Register new user",
@@ -1272,6 +1318,10 @@ const docTemplate = `{
         "notification.Notif": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
                 "is_read": {
                     "type": "boolean",
                     "example": false
@@ -1283,6 +1333,15 @@ const docTemplate = `{
                 "type": {
                     "type": "string",
                     "example": "schedule_change"
+                }
+            }
+        },
+        "notification.ReadNotificationResponseDto": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Notification with ID 1 has been read"
                 }
             }
         },

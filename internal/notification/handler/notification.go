@@ -85,6 +85,17 @@ func (h *NotificationHandler) GetAllNotificationsHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// @Summary	Read notification
+// @Schemes
+// @Description	Change IsRead Field to True
+// @Tags			Notification
+// @Produce		json
+// @Security		Bearer
+// @Param			notificationid	path		string	true	"Notification ID"
+// @Success		200				{object}	ReadNotificationResponseDto
+// @Failure		401				{object}	Error	"Unauthorized"
+// @Failure		500				{object}	Error	"Internal server error"
+// @Router			/users/notifications/read/{notificationid} [put]
 func (h *NotificationHandler) ReadNotificationHandler(c *gin.Context) {
 	UserID, exist := c.Get("user_id")
 	if !exist {

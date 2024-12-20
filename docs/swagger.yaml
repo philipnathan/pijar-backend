@@ -231,6 +231,9 @@ definitions:
     type: object
   notification.Notif:
     properties:
+      id:
+        example: 1
+        type: integer
       is_read:
         example: false
         type: boolean
@@ -239,6 +242,12 @@ definitions:
         type: string
       type:
         example: schedule_change
+        type: string
+    type: object
+  notification.ReadNotificationResponseDto:
+    properties:
+      message:
+        example: Notification with ID 1 has been read
         type: string
     type: object
   search.CategoryDetail:
@@ -1034,6 +1043,35 @@ paths:
       security:
       - Bearer: []
       summary: Get all user's notifications
+      tags:
+      - Notification
+  /users/notifications/read/{notificationid}:
+    put:
+      description: Change IsRead Field to True
+      parameters:
+      - description: Notification ID
+        in: path
+        name: notificationid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/notification.ReadNotificationResponseDto'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/notification.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/notification.Error'
+      security:
+      - Bearer: []
+      summary: Read notification
       tags:
       - Notification
   /users/register:
