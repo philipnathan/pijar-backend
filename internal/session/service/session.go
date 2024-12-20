@@ -8,6 +8,7 @@ import (
 type SessionService interface {
 	GetSessions(userID uint) ([]model.MentorSession, error)
 	GetUpcomingSessions() ([]model.MentorSession, error)
+	GetLearnerHistorySession(userID uint) (*[]model.MentorSessionParticipant, error)
 }
 
 type sessionService struct {
@@ -30,4 +31,14 @@ func (s *sessionService) GetSessions(userID uint) ([]model.MentorSession, error)
 
 func (s *sessionService) GetUpcomingSessions() ([]model.MentorSession, error) {
 	return s.repo.GetUpcomingSessions()
+}
+
+func (s *sessionService) GetLearnerHistorySession(userID uint) (*[]model.MentorSessionParticipant, error) {
+	// Fetch sessions from the repository
+	session, err := s.repo.GetLearnerHistorySession(&userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return session, nil
 }

@@ -77,24 +77,82 @@ func (h *SessionHandler) GetSessions(c *gin.Context) {
 // @Failure 500 {object} Error "Internal server error"
 // @Router /sessions/upcoming [get]
 func (h *SessionHandler) GetUpcomingSessions(c *gin.Context) {
-    sessions, err := h.service.GetUpcomingSessions()
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
+	sessions, err := h.service.GetUpcomingSessions()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-    var sessionDetails []dto.SessionDetail
-    for _, session := range sessions {
-        sessionDetails = append(sessionDetails, dto.SessionDetail{
-            Day:              session.Schedule.Weekday().String(),
-            Time:             session.Schedule.Format("03:04 PM"),
-            Title:            session.Title,
-            ShortDescription: session.ShortDescription,
-            Schedule:         session.Schedule.Format(time.RFC3339),
-            ImageURL:         session.ImageURL,
-            Registered:       true, 
-            Duration:         session.EstimateDuration,
-        })
-    }
-    c.JSON(http.StatusOK, dto.GetUpcomingSessionResponse{Sessions: sessionDetails})
+	var sessionDetails []dto.SessionDetail
+	for _, session := range sessions {
+		sessionDetails = append(sessionDetails, dto.SessionDetail{
+			Day:              session.Schedule.Weekday().String(),
+			Time:             session.Schedule.Format("03:04 PM"),
+			Title:            session.Title,
+			ShortDescription: session.ShortDescription,
+			Schedule:         session.Schedule.Format(time.RFC3339),
+			ImageURL:         session.ImageURL,
+			Registered:       true,
+			Duration:         session.EstimateDuration,
+		})
+	}
+	c.JSON(http.StatusOK, dto.GetUpcomingSessionResponse{Sessions: sessionDetails})
+}
+
+// @Summary		Get learner history session
+// @Description	Get learner history session
+// @Tags			Learner
+// @Produce		json
+// @Security		Bearer
+// @Success		200	{object}	GetUserHistorySessionResponseDto
+// @Failure		401	{object}	Error	"Unauthorized"
+// @Failure		500	{object}	Error	"Internal server error"
+// @Router			/sessions/histories [get]
+func (h *SessionHandler) GetLearnerHistorySession(c *gin.Context) {
+	UserID, exist := c.Get("user_id")
+	if !exist {
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		return
+	}
+
+	id, ok := UserID.(float64)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+		return
+	}
+
+	histories, err := h.service.GetLearnerHistorySession(uint(id))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
+		return
+	}
+
+	var response dto.GetUserHistorySessionResponseDto
+	var mentorImageURL string
+
+	for _, history := range *histories {
+		if history.MentorSession.Schedule.After(time.Now()) {
+			continue
+		}
+		if history.MentorSession.User.ImageURL != nil {
+			mentorImageURL = *history.MentorSession.User.ImageURL
+		} else {
+			mentorImageURL = ""
+		}
+
+		response.Histories = append(response.Histories, dto.History{
+			MentorSessionTitle: history.MentorSession.Title,
+			ShortDescription:   history.MentorSession.ShortDescription,
+			Schedule:           history.MentorSession.Schedule,
+			Status:             string(history.Status),
+			MentorDetails: dto.MentorDetails{
+				Id:       history.MentorSession.User.ID,
+				Fullname: history.MentorSession.User.Fullname,
+				ImageURL: mentorImageURL,
+			},
+		})
+	}
+
+	c.JSON(http.StatusOK, response)
 }
