@@ -21,6 +21,18 @@ func SeedNotification(db *gorm.DB) error {
 		},
 		{
 			NotificationTypeID: 1,
+			UserID:             2,
+			Message:            "Sesi mentor 'Cara Memulai Usaha Kecil' akan dimulai pada 25 Desember 2024 pukul 14:00.",
+			IsRead:             false,
+		},
+		{
+			NotificationTypeID: 1,
+			UserID:             2,
+			Message:            "Sesi mentor 'Membuat Keripik Pisang Berkualitas Ekspor' akan dimulai pada 30 Desember 2024 pukul 15:00.",
+			IsRead:             false,
+		},
+		{
+			NotificationTypeID: 1,
 			UserID:             4,
 			Message:            "Sesi mentor 'Membuat Keripik Pisang Berkualitas Ekspor' akan dimulai pada 30 Desember 2024 pukul 15:00.",
 			IsRead:             false,
