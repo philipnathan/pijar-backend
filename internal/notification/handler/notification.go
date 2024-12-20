@@ -70,6 +70,7 @@ func (h *NotificationHandler) GetAllNotificationsHandler(c *gin.Context) {
 
 	for _, notification := range notifications {
 		data = append(data, dto.Notif{
+			ID:      notification.ID,
 			Type:    notification.NotificationType.Type,
 			Message: notification.Message,
 			IsRead:  notification.IsRead},
