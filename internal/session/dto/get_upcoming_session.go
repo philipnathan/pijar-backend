@@ -2,6 +2,9 @@ package session
 
 type GetUpcomingSessionResponse struct {
 	Sessions []SessionDetail `json:"sessions"`
+	Page     int             `json:"page"`
+	PageSize int             `json:"page_size"`
+	Total    int             `json:"total"`
 }
 
 type SessionDetail struct {
@@ -14,4 +17,3 @@ type SessionDetail struct {
 	Registered       bool   `json:"registered"`
 	Duration         int    `json:"duration"`
 }
-
