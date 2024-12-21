@@ -28,6 +28,22 @@ func SeedSubCategory(db *gorm.DB) error {
 			CategoryID:      4,
 			SubCategoryName: "Olahan Pisang",
 		},
+		{
+			CategoryID:      5,
+			SubCategoryName: "Facebook",
+		},
+		{
+			CategoryID:      5,
+			SubCategoryName: "Instagram",
+		},
+		{
+			CategoryID:      6,
+			SubCategoryName: "Pengolahan Hasil Perikanan",
+		},
+		{
+			CategoryID:      6,
+			SubCategoryName: "Pengolahan Hasil Peternakan",
+		},
 	}
 
 	var count int64
