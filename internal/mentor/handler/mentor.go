@@ -148,17 +148,15 @@ func (h *MentorHandler) UserGetMentorLandingPage(c *gin.Context) {
 		return
 	}
 
-	// if user is not authenticated (without JWT) and category_id is not available (category will be 1)
+	// if user is not authenticated (without JWT) and category_id is not available
 	if !isAuthenticated && categoryIDint == 0 {
-		categoryIDuint = 1
-
-		mentors, total, err := h.service.GetMentorLandingPageByCategory(categoryIDuint, page, pageSize)
+		mentors, total, err := h.service.GetAllMentors(page, pageSize)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
 			return
 		}
 
-		c.JSON(http.StatusOK, dto.NewMentorLandingPageResponseDto(&mentors, total, page, pageSize))
+		c.JSON(http.StatusOK, dto.NewMentorLandingPageResponseDto(mentors, total, page, pageSize))
 		return
 	}
 

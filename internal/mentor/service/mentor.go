@@ -11,6 +11,7 @@ type MentorServiceInterface interface {
 	GetMentorDetails(MentorID uint) (*userModel.User, error)
 	GetMentorLandingPageByUserInterests(UserID uint, page, pageSize int) ([]userModel.User, int, error)
 	GetMentorLandingPageByCategory(category_id uint, page, pageSize int) ([]userModel.User, int, error)
+	GetAllMentors(page, pageSize int) (*[]userModel.User, int, error)
 }
 
 type MentorService struct {
@@ -79,4 +80,13 @@ func (s *MentorService) GetMentorLandingPageByCategory(category_id uint, page, p
 	}
 
 	return mentor, total, nil
+}
+
+func (s *MentorService) GetAllMentors(page, pageSize int) (*[]userModel.User, int, error) {
+	mentors, total, err := s.repo.GetAllMentors(page, pageSize)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return mentors, total, err
 }
