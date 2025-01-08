@@ -9,15 +9,15 @@ import (
 	learnerRoute "github.com/philipnathan/pijar-backend/internal/learner/route"
 	mentor "github.com/philipnathan/pijar-backend/internal/mentor/route"
 	notification "github.com/philipnathan/pijar-backend/internal/notification/route"
+	searchRoute "github.com/philipnathan/pijar-backend/internal/search/route"
 	seed "github.com/philipnathan/pijar-backend/internal/seed"
 	sessionRoute "github.com/philipnathan/pijar-backend/internal/session/route"
 	userRoute "github.com/philipnathan/pijar-backend/internal/user/route"
-	searchRoute "github.com/philipnathan/pijar-backend/internal/search/route"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
 
-	docs "github.com/philipnathan/pijar-backend/docs"
+	_ "github.com/philipnathan/pijar-backend/docs"
 
 	"github.com/gin-contrib/cors"
 )
@@ -46,11 +46,11 @@ func main() {
 
 	r := gin.Default()
 
-	docs.SwaggerInfo.Title = "Swagger Example API"
-	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = "108.136.220.233"
-	docs.SwaggerInfo.BasePath = "/api/v1"
-	docs.SwaggerInfo.Schemes = []string{"http"}
+	// docs.SwaggerInfo.Title = "Swagger Example API"
+	// docs.SwaggerInfo.Version = "1.0"
+	// docs.SwaggerInfo.Host = "108.136.220.233"
+	// docs.SwaggerInfo.BasePath = "/api/v1"
+	// docs.SwaggerInfo.Schemes = []string{"http"}
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
