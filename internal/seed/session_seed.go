@@ -70,6 +70,17 @@ func SeedSession(db *gorm.DB) error {
 			ImageURL:         "https://i.ytimg.com/vi/6Zt7HZbRbe8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBaNkQoCRq5CgByzkb5KY_DzGUKrg",
 			Link:             "https://example.com/session_1",
 		},
+		{
+			UserID:           3,
+			CategoryID:       1,
+			Title:            "Teknik Bertani di Indonesia",
+			ShortDescription: "Belajar teknik bertani di Indonesia untuk meningkatkan produksi tanaman.",
+			Detail:           "Sesi ini akan membahas penggunaan pupuk organik, perawatan tanaman, dan pemanfaatan teknologi dalam pertanian.",
+			Schedule:         time.Date(2024, 12, 1, 9, 0, 0, 0, time.UTC),
+			EstimateDuration: 120,
+			ImageURL:         "https://i.ytimg.com/vi/6Zt7HZbRbe8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBaNkQoCRq5CgByzkb5KY_DzGUKrg",
+			Link:             "https://example.com/session_1",
+		},
 	}
 
 	var count int64
