@@ -1,8 +1,9 @@
 package session
 
 import (
-	"github.com/philipnathan/pijar-backend/internal/user/model"
 	"time"
+
+	user "github.com/philipnathan/pijar-backend/internal/user/model"
 )
 
 type MentorSessionParticipantStatus string
