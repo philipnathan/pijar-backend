@@ -454,6 +454,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/sessions": {
+            "get": {
+                "description": "Get all sessions by category",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Session"
+                ],
+                "summary": "Get all sessions by category",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "categoryid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "pagesize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/session.GetAllSessionsResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/session.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/sessions/histories": {
             "get": {
                 "security": [
@@ -1423,6 +1470,26 @@ const docTemplate = `{
                 }
             }
         },
+        "session.GetAllSessionsResponse": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "sessions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/session.MentorSessionsDetail"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "session.GetUserHistorySessionResponseDto": {
             "type": "object",
             "properties": {
@@ -1487,6 +1554,49 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "short_description": {
+                    "type": "string"
+                }
+            }
+        },
+        "session.MentorSessionsDetail": {
+            "type": "object",
+            "properties": {
+                "mentor_details": {
+                    "$ref": "#/definitions/session.MentorDetails"
+                },
+                "mentor_sessions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/session.SessionDetail"
+                    }
+                }
+            }
+        },
+        "session.SessionDetail": {
+            "type": "object",
+            "properties": {
+                "day": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "integer"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "registered": {
+                    "type": "boolean"
+                },
+                "schedule": {
+                    "type": "string"
+                },
+                "short_description": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }
