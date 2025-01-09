@@ -12,6 +12,7 @@ type SessionRepository interface {
 	GetUpcomingSessions(page, pageSize int) ([]model.MentorSession, int, error)
 	GetLearnerHistorySession(userID *uint) (*[]model.MentorSessionParticipant, error)
 	GetUpcommingSessionsByCategory(categoryID []uint, page, pageSize int) (*[]model.MentorSession, int, error)
+	GetAllSessionsByCategory(categoryID uint, page, pageSize int) (*[]model.MentorSession, int, error)
 }
 
 type sessionRepository struct {
@@ -80,5 +81,29 @@ func (r *sessionRepository) GetUpcommingSessionsByCategory(categoryID []uint, pa
 		return nil, 0, err
 	}
 
+	return &sessions, int(total), nil
+}
+
+func (r *sessionRepository) GetAllSessionsByCategory(categoryID uint, page, pageSize int) (*[]model.MentorSession, int, error) {
+	var sessions []model.MentorSession
+	var total int64
+
+	countQuery := r.db.Model(&model.MentorSession{}).
+		Where("category_id = ?", categoryID)
+
+	if err := countQuery.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	err := r.db.Where("category_id = ?", categoryID).
+		Preload("User").
+		Order("schedule ASC").
+		Offset((page - 1) * pageSize).
+		Limit(pageSize).
+		Find(&sessions).Error
+
+	if err != nil {
+		return nil, 0, err
+	}
 	return &sessions, int(total), nil
 }

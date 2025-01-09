@@ -129,7 +129,7 @@ func (h *SessionHandler) GetLearnerHistorySession(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Summary		Get upcoming sessions
+// @Summary	Get upcoming sessions
 // @Schemes
 // @Description	Get upcoming sessions
 // @Tags			Session
@@ -137,9 +137,9 @@ func (h *SessionHandler) GetLearnerHistorySession(c *gin.Context) {
 // @Param			page		query		int	false	"page"
 // @Param			pagesize	query		int	false	"pagesize"
 // @Param			categoryid	query		int	false	"categoryid"
-// @Success		200	{object}		MentorSessionResponse
-// @Failure		400	{object}	Error	"Invalid user ID"
-// @Failure		500	{object}	Error	"Internal server error"
+// @Success		200			{object}	MentorSessionResponse
+// @Failure		400			{object}	Error	"Invalid user ID"
+// @Failure		500			{object}	Error	"Internal server error"
 // @Router			/sessions/upcoming [get]
 func (h *SessionHandler) GetUpcommingSessionsLandingPage(c *gin.Context) {
 	// check if user is authenticated
@@ -253,4 +253,85 @@ func (h *SessionHandler) GetUpcommingSessionsLandingPage(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, dto.GetUpcomingSessionResponse{Sessions: sessionDetails, Page: page, PageSize: pageSize, Total: total})
+}
+
+// @Summary		Get all sessions by category
+// @Description	Get all sessions by category
+// @Tags			Session
+// @Produce		json
+// @Param			categoryid	query		int	true	"Category ID"
+// @Param			page		query		int	false	"Page number"
+// @Param			pagesize	query		int	false	"Page size"
+// @Success		200			{object}	GetAllSessionsResponse
+// @Failure		500			{object}	Error
+// @Router			/sessions [get]
+func (h *SessionHandler) GetAllSessionsByCategory(c *gin.Context) {
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	pageSize, _ := strconv.Atoi(c.DefaultQuery("pagesize", "10"))
+	categoryIDint, _ := strconv.Atoi(c.DefaultQuery("categoryid", "0"))
+
+	// if category_id is negative (invalid)
+	if categoryIDint <= 0 {
+		c.JSON(http.StatusBadRequest, custom_error.Error{Error: "category_id is invalid"})
+		return
+	}
+
+	sessions, total, err := h.service.GetAllSessionsByCategory(uint(categoryIDint), page, pageSize)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
+		return
+	}
+
+	var response []dto.GetAllSessionsResponse
+	var sessionImageURL *string
+	var mentorImageURL *string
+	mentorSessionMap := make(map[uint]*dto.MentorSessionsDetail)
+
+	for _, session := range *sessions {
+		if _, exist := mentorSessionMap[session.User.ID]; !exist {
+			if session.User.ImageURL == nil {
+				mentorImageURL = nil
+			} else {
+				mentorImageURL = session.User.ImageURL
+			}
+
+			mentorSessionMap[session.User.ID] = &dto.MentorSessionsDetail{
+				MentorSessions: []dto.SessionDetail{},
+				MentorDetails: dto.MentorDetails{
+					Id:       session.User.ID,
+					Fullname: session.User.Fullname,
+					ImageURL: *mentorImageURL,
+				},
+			}
+		}
+
+		if session.ImageURL == "" {
+			sessionImageURL = nil
+		} else {
+			sessionImageURL = &session.ImageURL
+		}
+
+		sessionDetail := dto.SessionDetail{
+			Day:              session.Schedule.Weekday().String(),
+			Time:             session.Schedule.Format("03:04 PM"),
+			Title:            session.Title,
+			ShortDescription: session.ShortDescription,
+			Schedule:         session.Schedule.Format(time.RFC3339),
+			ImageURL:         *sessionImageURL,
+			Registered:       true,
+			Duration:         session.EstimateDuration,
+		}
+
+		mentorSessionMap[session.User.ID].MentorSessions = append(mentorSessionMap[session.User.ID].MentorSessions, sessionDetail)
+	}
+
+	var mentorSessionsDetails []dto.MentorSessionsDetail
+	for _, mentor := range mentorSessionMap {
+		mentorSessionsDetails = append(mentorSessionsDetails, *mentor)
+	}
+
+	response = append(response, dto.GetAllSessionsResponse{AllSessions: mentorSessionsDetails, Page: page, PageSize: pageSize, Total: total})
+
+	c.JSON(http.StatusOK, response)
 }
