@@ -13,6 +13,7 @@ type SessionRepository interface {
 	GetLearnerHistorySession(userID *uint) (*[]model.MentorSessionParticipant, error)
 	GetUpcommingSessionsByCategory(categoryID []uint, page, pageSize int) (*[]model.MentorSession, int, error)
 	GetAllSessionsByCategory(categoryID uint, page, pageSize int) (*[]model.MentorSession, int, error)
+	GetSessionByID(sessionID uint) (*model.MentorSession, error)
 }
 
 type sessionRepository struct {
@@ -106,4 +107,13 @@ func (r *sessionRepository) GetAllSessionsByCategory(categoryID uint, page, page
 		return nil, 0, err
 	}
 	return &sessions, int(total), nil
+}
+
+func (r *sessionRepository) GetSessionByID(sessionID uint) (*model.MentorSession, error) {
+	err := r.db.Where("id = ?", sessionID).Find(&model.MentorSession{}).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.MentorSession{}, nil
 }
