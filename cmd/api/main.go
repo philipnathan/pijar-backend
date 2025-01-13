@@ -8,6 +8,7 @@ import (
 	categoryRoute "github.com/philipnathan/pijar-backend/internal/category/route"
 	learnerRoute "github.com/philipnathan/pijar-backend/internal/learner/route"
 	mentor "github.com/philipnathan/pijar-backend/internal/mentor/route"
+	mentorSessionParticipant "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/route"
 	notification "github.com/philipnathan/pijar-backend/internal/notification/route"
 	searchRoute "github.com/philipnathan/pijar-backend/internal/search/route"
 	seed "github.com/philipnathan/pijar-backend/internal/seed"
@@ -71,6 +72,7 @@ func main() {
 	notification.NotificationRoute(r, db)
 	sessionRoute.SessionRoute(r, db)
 	searchRoute.SearchRoute(r, db)
+	mentorSessionParticipant.MentorSessionParticipantRoute(r, db)
 
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server:", err)
