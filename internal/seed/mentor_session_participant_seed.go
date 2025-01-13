@@ -1,7 +1,7 @@
 package seed
 
 import (
-	model "github.com/philipnathan/pijar-backend/internal/session/model"
+	model "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/model"
 	"gorm.io/gorm"
 )
 
