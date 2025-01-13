@@ -30,7 +30,7 @@ func NewMentorSessionParticipantHandler(service service.MentorSessionParticipant
 // @Success		200			{object}	RegistrationResponse
 // @Failure		400			{object}	CustomError	"Invalid session ID"
 // @Failure		500			{object}	CustomError	"Internal server error"
-// @Router			/sessions/{session_id}/participants [post]
+// @Router			/sessions/{session_id}/enroll [post]
 func (h *MentorSessionParticipantHandler) CreateMentorSessionParticipantHandler(c *gin.Context) {
 	UserID, exist := c.Get("user_id")
 	if !exist {

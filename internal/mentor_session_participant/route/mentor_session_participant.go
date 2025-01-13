@@ -15,7 +15,7 @@ import (
 )
 
 func MentorSessionParticipantRoute(r *gin.Engine, db *gorm.DB) {
-	apiV1 := "/api/v1/sessions/:session_id/participants"
+	apiV1 := "/api/v1/sessions/"
 
 	repo := repo.NewMentorSessionParticipantRepository(db)
 	userRepo := userRepository.NewUserRepository(db)
@@ -31,7 +31,6 @@ func MentorSessionParticipantRoute(r *gin.Engine, db *gorm.DB) {
 	protectedRoutes := r.Group(apiV1)
 	{
 		protectedRoutes.Use(middleware.AuthMiddleware())
-		protectedRoutes.POST("", hnd.CreateMentorSessionParticipantHandler)
+		protectedRoutes.POST("/:session_id/enroll", hnd.CreateMentorSessionParticipantHandler)
 	}
-
 }
