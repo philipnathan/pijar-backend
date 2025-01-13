@@ -2,6 +2,7 @@ package mentor_session_participant
 
 import (
 	custom_error "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/custom_error"
+	model "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/model"
 	repo "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/repository"
 	session "github.com/philipnathan/pijar-backend/internal/session/service"
 	userService "github.com/philipnathan/pijar-backend/internal/user/service"
@@ -9,6 +10,7 @@ import (
 
 type MentorSessionParticipantServiceInterface interface {
 	CreateMentorSessionParticipant(userID, mentorSessionID *uint) error
+	GetLearnerEnrollments(userID *uint, page, pageSize *int) (*[]model.MentorSessionParticipant, int, error)
 }
 
 type MentorSessionParticipantService struct {
@@ -67,4 +69,25 @@ func (s *MentorSessionParticipantService) CreateMentorSessionParticipant(userID,
 	}
 
 	return nil
+}
+
+func (s *MentorSessionParticipantService) GetLearnerEnrollments(userID *uint, page, pageSize *int) (*[]model.MentorSessionParticipant, int, error) {
+	// check if user exist
+	user, err := s.userService.GetUserDetails(*userID)
+	if err != nil {
+		return nil, 0, err
+	}
+	if user == nil {
+		return nil, 0, custom_error.ErrUserNotFound
+	}
+	if user.DeletedAt.Valid {
+		return nil, 0, custom_error.ErrUserNotFound
+	}
+
+	data, total, err := s.repo.GetLearnerEnrollments(userID, page, pageSize)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return data, total, nil
 }

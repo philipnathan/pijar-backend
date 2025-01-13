@@ -32,5 +32,6 @@ func MentorSessionParticipantRoute(r *gin.Engine, db *gorm.DB) {
 	{
 		protectedRoutes.Use(middleware.AuthMiddleware())
 		protectedRoutes.POST("/:session_id/enroll", hnd.CreateMentorSessionParticipantHandler)
+		protectedRoutes.GET("/enrollments", hnd.GetLearnerEnrollmentsHandler)
 	}
 }

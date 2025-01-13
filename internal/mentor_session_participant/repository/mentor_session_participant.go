@@ -9,6 +9,7 @@ import (
 type MentorSessionParticipantRepositoryInterface interface {
 	CreateMentorSessionParticipant(userID, mentorSessionID *uint) error
 	GetMentorSessionParticipant(userID, mentorSessionID *uint) (*model.MentorSessionParticipant, error)
+	GetLearnerEnrollments(userID *uint, page, pageSize *int) (*[]model.MentorSessionParticipant, int, error)
 }
 
 type MentorSessionParticipantRepository struct {
@@ -38,4 +39,26 @@ func (r *MentorSessionParticipantRepository) GetMentorSessionParticipant(userID,
 	}
 
 	return &participant, nil
+}
+
+func (r *MentorSessionParticipantRepository) GetLearnerEnrollments(userID *uint, page, pageSize *int) (*[]model.MentorSessionParticipant, int, error) {
+	var data []model.MentorSessionParticipant
+	var total int64
+
+	countQuery := r.db.Model(&model.MentorSessionParticipant{}).Where("user_id = ?", *userID)
+	if err := countQuery.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	err := r.db.Where("user_id = ?", *userID).
+		Preload("MentorSession").
+		Offset((*page - 1) * *pageSize).
+		Limit(*pageSize).
+		Find(&data).Error
+
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return &data, int(total), nil
 }
