@@ -590,6 +590,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/sessions/{session_id}/participants": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Used for learner to join a mentor session",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mentor"
+                ],
+                "summary": "Create mentor session participant",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Session ID",
+                        "name": "session_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/mentor_session_participant.RegistrationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid session ID",
+                        "schema": {
+                            "$ref": "#/definitions/mentor_session_participant.CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/mentor_session_participant.CustomError"
+                        }
+                    }
+                }
+            }
+        },
         "/sessions/{user_id}": {
             "get": {
                 "description": "Get all sessions for a specific user by user ID",
@@ -1335,6 +1381,22 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "expertise": {
+                    "type": "string"
+                }
+            }
+        },
+        "mentor_session_participant.CustomError": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "mentor_session_participant.RegistrationResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
                     "type": "string"
                 }
             }
