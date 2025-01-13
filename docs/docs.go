@@ -590,7 +590,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/sessions/{session_id}/participants": {
+        "/sessions/{session_id}/enroll": {
             "post": {
                 "security": [
                     {

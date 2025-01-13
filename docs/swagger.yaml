@@ -839,7 +839,7 @@ paths:
       summary: Get all sessions by category
       tags:
       - Session
-  /sessions/{session_id}/participants:
+  /sessions/{session_id}/enroll:
     post:
       description: Used for learner to join a mentor session
       parameters:
