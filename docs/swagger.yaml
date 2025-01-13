@@ -318,7 +318,7 @@ definitions:
         type: integer
       sessions:
         items:
-          $ref: '#/definitions/session.MentorSessionsDetail'
+          $ref: '#/definitions/session.Session'
         type: array
       total:
         type: integer
@@ -368,32 +368,17 @@ definitions:
       short_description:
         type: string
     type: object
-  session.MentorSessionsDetail:
+  session.Session:
     properties:
-      mentor_details:
-        $ref: '#/definitions/session.MentorDetails'
-      mentor_sessions:
-        items:
-          $ref: '#/definitions/session.SessionDetail'
-        type: array
-    type: object
-  session.SessionDetail:
-    properties:
-      day:
-        type: string
-      duration:
-        type: integer
       image_url:
         type: string
-      registered:
-        type: boolean
+      mentor_details:
+        $ref: '#/definitions/session.MentorDetails'
+      mentor_session_title:
+        type: string
       schedule:
         type: string
       short_description:
-        type: string
-      time:
-        type: string
-      title:
         type: string
     type: object
   user.ChangePasswordDto:

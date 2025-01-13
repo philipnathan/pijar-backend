@@ -283,55 +283,42 @@ func (h *SessionHandler) GetAllSessionsByCategory(c *gin.Context) {
 		return
 	}
 
-	var response []dto.GetAllSessionsResponse
+	var response dto.GetAllSessionsResponse
+	var sessionsResponse []dto.Session
 	var sessionImageURL *string
 	var mentorImageURL *string
-	mentorSessionMap := make(map[uint]*dto.MentorSessionsDetail)
 
 	for _, session := range *sessions {
-		if _, exist := mentorSessionMap[session.User.ID]; !exist {
-			if session.User.ImageURL == nil {
-				mentorImageURL = nil
-			} else {
-				mentorImageURL = session.User.ImageURL
-			}
-
-			mentorSessionMap[session.User.ID] = &dto.MentorSessionsDetail{
-				MentorSessions: []dto.SessionDetail{},
-				MentorDetails: dto.MentorDetails{
-					Id:       session.User.ID,
-					Fullname: session.User.Fullname,
-					ImageURL: *mentorImageURL,
-				},
-			}
-		}
-
-		if session.ImageURL == "" {
-			sessionImageURL = nil
-		} else {
+		if session.ImageURL != "" {
 			sessionImageURL = &session.ImageURL
+		} else {
+			sessionImageURL = nil
+		}
+		if session.User.ImageURL != nil {
+			mentorImageURL = session.User.ImageURL
+		} else {
+			mentorImageURL = nil
 		}
 
-		sessionDetail := dto.SessionDetail{
-			Day:              session.Schedule.Weekday().String(),
-			Time:             session.Schedule.Format("03:04 PM"),
-			Title:            session.Title,
-			ShortDescription: session.ShortDescription,
-			Schedule:         session.Schedule.Format(time.RFC3339),
-			ImageURL:         *sessionImageURL,
-			Registered:       true,
-			Duration:         session.EstimateDuration,
+		sessionsResponse = append(sessionsResponse, dto.Session{
+			MentorSessionTitle: session.Title,
+			ShortDescription:   session.ShortDescription,
+			ImageURL:           *sessionImageURL,
+			Schedule:           session.Schedule,
+			MentorDetails: dto.MentorDetails{
+				Id:       session.User.ID,
+				Fullname: session.User.Fullname,
+				ImageURL: *mentorImageURL,
+			},
+		})
+
+		response = dto.GetAllSessionsResponse{
+			Sessions: sessionsResponse,
+			Total:    total,
+			Page:     page,
+			PageSize: pageSize,
 		}
-
-		mentorSessionMap[session.User.ID].MentorSessions = append(mentorSessionMap[session.User.ID].MentorSessions, sessionDetail)
 	}
-
-	var mentorSessionsDetails []dto.MentorSessionsDetail
-	for _, mentor := range mentorSessionMap {
-		mentorSessionsDetails = append(mentorSessionsDetails, *mentor)
-	}
-
-	response = append(response, dto.GetAllSessionsResponse{AllSessions: mentorSessionsDetails, Page: page, PageSize: pageSize, Total: total})
 
 	c.JSON(http.StatusOK, response)
 }
