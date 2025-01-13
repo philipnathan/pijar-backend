@@ -214,6 +214,16 @@ definitions:
       expertise:
         type: string
     type: object
+  mentor_session_participant.CustomError:
+    properties:
+      error:
+        type: string
+    type: object
+  mentor_session_participant.RegistrationResponse:
+    properties:
+      message:
+        type: string
+    type: object
   notification.Error:
     properties:
       error:
@@ -844,6 +854,35 @@ paths:
       summary: Get all sessions by category
       tags:
       - Session
+  /sessions/{session_id}/participants:
+    post:
+      description: Used for learner to join a mentor session
+      parameters:
+      - description: Session ID
+        in: path
+        name: session_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/mentor_session_participant.RegistrationResponse'
+        "400":
+          description: Invalid session ID
+          schema:
+            $ref: '#/definitions/mentor_session_participant.CustomError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/mentor_session_participant.CustomError'
+      security:
+      - Bearer: []
+      summary: Create mentor session participant
+      tags:
+      - Mentor
   /sessions/{user_id}:
     get:
       consumes:
