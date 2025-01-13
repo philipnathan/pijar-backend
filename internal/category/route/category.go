@@ -18,7 +18,7 @@ func CategoryRoute(r *gin.Engine, db *gorm.DB) {
 
 	categoryRoutes := r.Group(apiV1)
 	{
-		categoryRoutes.GET("/", handler.GetAllCategoriesHandler)
+		categoryRoutes.GET("", handler.GetAllCategoriesHandler)
 		categoryRoutes.GET("/featured", handler.GetFeaturedCategoriesHandler)
 	}
 }

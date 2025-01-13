@@ -20,7 +20,7 @@ func NotificationRoute(r *gin.Engine, db *gorm.DB) {
 	protectedRoutes := r.Group(apiV1)
 	{
 		protectedRoutes.Use(middleware.AuthMiddleware())
-		protectedRoutes.GET("/", handler.GetAllNotificationsHandler)
+		protectedRoutes.GET("", handler.GetAllNotificationsHandler)
 		protectedRoutes.PUT("/read/:notificationid", handler.ReadNotificationHandler)
 	}
 }
