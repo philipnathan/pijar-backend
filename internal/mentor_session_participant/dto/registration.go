@@ -1,5 +1,5 @@
 package mentor_session_participant
 
-type RegistrationRequestDto struct {
-	MentorSessionID *uint `json:"mentor_session_id"`
+type RegistrationResponse struct {
+	Message string `json:"message"`
 }

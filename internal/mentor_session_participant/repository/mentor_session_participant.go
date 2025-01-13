@@ -8,6 +8,7 @@ import (
 
 type MentorSessionParticipantRepositoryInterface interface {
 	CreateMentorSessionParticipant(userID, mentorSessionID *uint) error
+	GetMentorSessionParticipant(userID, mentorSessionID *uint) (*model.MentorSessionParticipant, error)
 }
 
 type MentorSessionParticipantRepository struct {
@@ -28,4 +29,13 @@ func (r *MentorSessionParticipantRepository) CreateMentorSessionParticipant(user
 	}
 
 	return r.db.Create(&participant).Error
+}
+
+func (r *MentorSessionParticipantRepository) GetMentorSessionParticipant(userID, mentorSessionID *uint) (*model.MentorSessionParticipant, error) {
+	var participant model.MentorSessionParticipant
+	if err := r.db.Where("user_id = ? AND mentor_session_id = ?", *userID, *mentorSessionID).First(&participant).Error; err != nil {
+		return nil, err
+	}
+
+	return &participant, nil
 }
