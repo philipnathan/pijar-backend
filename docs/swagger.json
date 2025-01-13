@@ -1538,7 +1538,7 @@
                 "sessions": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/session.MentorSessionsDetail"
+                        "$ref": "#/definitions/session.Session"
                     }
                 },
                 "total": {
@@ -1614,45 +1614,22 @@
                 }
             }
         },
-        "session.MentorSessionsDetail": {
+        "session.Session": {
             "type": "object",
             "properties": {
-                "mentor_details": {
-                    "$ref": "#/definitions/session.MentorDetails"
-                },
-                "mentor_sessions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/session.SessionDetail"
-                    }
-                }
-            }
-        },
-        "session.SessionDetail": {
-            "type": "object",
-            "properties": {
-                "day": {
-                    "type": "string"
-                },
-                "duration": {
-                    "type": "integer"
-                },
                 "image_url": {
                     "type": "string"
                 },
-                "registered": {
-                    "type": "boolean"
+                "mentor_details": {
+                    "$ref": "#/definitions/session.MentorDetails"
+                },
+                "mentor_session_title": {
+                    "type": "string"
                 },
                 "schedule": {
                     "type": "string"
                 },
                 "short_description": {
-                    "type": "string"
-                },
-                "time": {
-                    "type": "string"
-                },
-                "title": {
                     "type": "string"
                 }
             }

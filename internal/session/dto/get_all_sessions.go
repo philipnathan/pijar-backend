@@ -1,13 +1,20 @@
 package session
 
+import (
+	"time"
+)
+
 type GetAllSessionsResponse struct {
-	AllSessions []MentorSessionsDetail `json:"sessions"`
-	Page        int                    `json:"page"`
-	PageSize    int                    `json:"page_size"`
-	Total       int                    `json:"total"`
+	Sessions []Session `json:"sessions"`
+	Total    int       `json:"total"`
+	Page     int       `json:"page"`
+	PageSize int       `json:"page_size"`
 }
 
-type MentorSessionsDetail struct {
-	MentorSessions []SessionDetail `json:"mentor_sessions"`
-	MentorDetails  MentorDetails   `json:"mentor_details"`
+type Session struct {
+	MentorSessionTitle string        `json:"mentor_session_title"`
+	ShortDescription   string        `json:"short_description"`
+	ImageURL           string        `json:"image_url"`
+	Schedule           time.Time     `json:"schedule"`
+	MentorDetails      MentorDetails `json:"mentor_details"`
 }
