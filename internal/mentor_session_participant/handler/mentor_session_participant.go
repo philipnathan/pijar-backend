@@ -20,17 +20,17 @@ func NewMentorSessionParticipantHandler(service service.MentorSessionParticipant
 	}
 }
 
-// @Summary	Create mentor session participant
-// @Schemes
-// @Description	Used for learner to join a mentor session
-// @Tags			Mentor
-// @Produce		json
-// @Security		Bearer
-// @Param			session_id	path		int	true	"Session ID"
-// @Success		200			{object}	RegistrationResponse
-// @Failure		400			{object}	CustomError	"Invalid session ID"
-// @Failure		500			{object}	CustomError	"Internal server error"
-// @Router			/sessions/{session_id}/enroll [post]
+//	@Summary	Create mentor session participant
+//	@Schemes
+//	@Description	Used for learner to join a mentor session
+//	@Tags			Mentor
+//	@Produce		json
+//	@Security		Bearer
+//	@Param			session_id	path		int	true	"Session ID"
+//	@Success		200			{object}	RegistrationResponse
+//	@Failure		400			{object}	CustomError	"Invalid session ID"
+//	@Failure		500			{object}	CustomError	"Internal server error"
+//	@Router			/sessions/{session_id}/enroll [post]
 func (h *MentorSessionParticipantHandler) CreateMentorSessionParticipantHandler(c *gin.Context) {
 	UserID, exist := c.Get("user_id")
 	if !exist {
@@ -69,4 +69,70 @@ func (h *MentorSessionParticipantHandler) CreateMentorSessionParticipantHandler(
 	}
 
 	c.JSON(http.StatusOK, dto.RegistrationResponse{Message: "Successfully registered"})
+}
+
+//	@Summary	Get learner enrollments
+//	@Schemes
+//	@Description	Get learner enrollments
+//	@Tags			Session
+//	@Produce		json
+//	@Security		Bearer
+//	@Param			page		query		int	false	"Page number"
+//	@Param			page_size	query		int	false	"Page size"
+//	@Success		200			{object}	EnrollmentResponse
+//	@Failure		500			{object}	CustomError	"Internal server error"
+//	@Router			/sessions/enrollments [get]
+func (h *MentorSessionParticipantHandler) GetLearnerEnrollmentsHandler(c *gin.Context) {
+	UserID, exist := c.Get("user_id")
+	if !exist {
+		c.JSON(http.StatusUnauthorized, custom_error.NewCustomError("Unauthorized"))
+	}
+
+	userIDFloat, ok := UserID.(float64)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, custom_error.NewCustomError("Unauthorized"))
+	}
+
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	pageSize, _ := strconv.Atoi(c.DefaultQuery("pagesize", "10"))
+
+	uintUserID := uint(userIDFloat)
+
+	data, total, err := h.service.GetLearnerEnrollments(&uintUserID, &page, &pageSize)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, custom_error.NewCustomError(err.Error()))
+		return
+	}
+
+	var details []dto.EnrollmentDetails
+	var sessionImage string
+	for _, d := range *data {
+		if d.MentorSession.ImageURL == "" {
+			sessionImage = ""
+		} else {
+			sessionImage = d.MentorSession.ImageURL
+		}
+
+		details = append(details, dto.EnrollmentDetails{
+			MentorSessionParticipantID: d.ID,
+			SessionDetails: dto.SessionDetails{
+				MentorSessionID:    d.MentorSession.ID,
+				MentorSessionTitle: d.MentorSession.Title,
+				ShortDescription:   d.MentorSession.ShortDescription,
+				ImageURL:           sessionImage,
+				Schedule:           d.MentorSession.Schedule,
+			},
+			Status: string(d.Status),
+		})
+	}
+
+	response := dto.EnrollmentResponse{
+		Message:     "Enrollments fetched successfully",
+		Enrollments: details,
+		Total:       total,
+		Page:        page,
+		PageSize:    pageSize,
+	}
+
+	c.JSON(http.StatusOK, response)
 }
