@@ -219,9 +219,46 @@ definitions:
       error:
         type: string
     type: object
+  mentor_session_participant.EnrollmentDetails:
+    properties:
+      mentor_session_participant_id:
+        type: integer
+      session_details:
+        $ref: '#/definitions/mentor_session_participant.SessionDetails'
+      status:
+        type: string
+    type: object
+  mentor_session_participant.EnrollmentResponse:
+    properties:
+      enrollments:
+        items:
+          $ref: '#/definitions/mentor_session_participant.EnrollmentDetails'
+        type: array
+      message:
+        type: string
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
   mentor_session_participant.RegistrationResponse:
     properties:
       message:
+        type: string
+    type: object
+  mentor_session_participant.SessionDetails:
+    properties:
+      image_url:
+        type: string
+      mentor_session_id:
+        type: integer
+      mentor_session_title:
+        type: string
+      schedule:
+        type: string
+      short_description:
         type: string
     type: object
   notification.Error:
@@ -899,6 +936,34 @@ paths:
       summary: Get sessions for a user
       tags:
       - Mentor
+  /sessions/enrollments:
+    get:
+      description: Get learner enrollments
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/mentor_session_participant.EnrollmentResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/mentor_session_participant.CustomError'
+      security:
+      - Bearer: []
+      summary: Get learner enrollments
+      tags:
+      - Session
   /sessions/histories:
     get:
       description: Get learner history session

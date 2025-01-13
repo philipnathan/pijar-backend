@@ -501,6 +501,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/sessions/enrollments": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Get learner enrollments",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Session"
+                ],
+                "summary": "Get learner enrollments",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/mentor_session_participant.EnrollmentResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/mentor_session_participant.CustomError"
+                        }
+                    }
+                }
+            }
+        },
         "/sessions/histories": {
             "get": {
                 "security": [
@@ -1393,10 +1438,67 @@ const docTemplate = `{
                 }
             }
         },
+        "mentor_session_participant.EnrollmentDetails": {
+            "type": "object",
+            "properties": {
+                "mentor_session_participant_id": {
+                    "type": "integer"
+                },
+                "session_details": {
+                    "$ref": "#/definitions/mentor_session_participant.SessionDetails"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "mentor_session_participant.EnrollmentResponse": {
+            "type": "object",
+            "properties": {
+                "enrollments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/mentor_session_participant.EnrollmentDetails"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "mentor_session_participant.RegistrationResponse": {
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "mentor_session_participant.SessionDetails": {
+            "type": "object",
+            "properties": {
+                "image_url": {
+                    "type": "string"
+                },
+                "mentor_session_id": {
+                    "type": "integer"
+                },
+                "mentor_session_title": {
+                    "type": "string"
+                },
+                "schedule": {
+                    "type": "string"
+                },
+                "short_description": {
                     "type": "string"
                 }
             }
