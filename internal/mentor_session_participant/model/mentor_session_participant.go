@@ -1,6 +1,10 @@
 package mentor_session_participant
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+
+	model "github.com/philipnathan/pijar-backend/internal/session/model"
+)
 
 type MentorSessionParticipantStatus string
 
@@ -17,4 +21,6 @@ type MentorSessionParticipant struct {
 	UserID          uint                           `gorm:"not null;index" json:"user_id"`
 	MentorSessionID uint                           `gorm:"not null;index" json:"mentor_session_id"`
 	Status          MentorSessionParticipantStatus `gorm:"type:varchar(20);default:'registered';not null" json:"status"`
+
+	MentorSession model.MentorSession `gorm:"foreignKey:MentorSessionID" json:"mentor_session"`
 }
