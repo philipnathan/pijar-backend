@@ -2,6 +2,7 @@ package mentor_session_participant
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	custom_error "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/custom_error"
@@ -19,33 +20,53 @@ func NewMentorSessionParticipantHandler(service service.MentorSessionParticipant
 	}
 }
 
+// @Summary	Create mentor session participant
+// @Schemes
+// @Description	Used for learner to join a mentor session
+// @Tags			Mentor
+// @Produce		json
+// @Security		Bearer
+// @Param			session_id	path		int	true	"Session ID"
+// @Success		200			{object}	RegistrationResponse
+// @Failure		400			{object}	CustomError	"Invalid session ID"
+// @Failure		500			{object}	CustomError	"Internal server error"
+// @Router			/sessions/{session_id}/participants [post]
 func (h *MentorSessionParticipantHandler) CreateMentorSessionParticipantHandler(c *gin.Context) {
 	UserID, exist := c.Get("user_id")
 	if !exist {
 		c.JSON(http.StatusUnauthorized, custom_error.NewCustomError("Unauthorized"))
 	}
 
-	_, ok := UserID.(float64)
+	userIDFloat, ok := UserID.(float64)
 	if !ok {
 		c.JSON(http.StatusUnauthorized, custom_error.NewCustomError("Unauthorized"))
 	}
 
 	// Get all params
-	var input dto.RegistrationRequestDto
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, custom_error.NewCustomError("Invalid request body"))
+	SessionIDStr := c.Param("session_id")
+	if SessionIDStr == "" {
+		c.JSON(http.StatusBadRequest, custom_error.ErrSessionNotFound)
 		return
 	}
 
-	err := h.service.CreateMentorSessionParticipant(
-		UserID.(*uint),
-		input.MentorSessionID,
+	SessionID, err := strconv.ParseUint(SessionIDStr, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, custom_error.ErrSessionNotFound)
+		return
+	}
+
+	uintSessionID := uint(SessionID)
+	uintUserID := uint(userIDFloat)
+
+	err = h.service.CreateMentorSessionParticipant(
+		&uintUserID,
+		&uintSessionID,
 	)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, custom_error.NewCustomError(err.Error()))
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Mentor session participant created successfully"})
+	c.JSON(http.StatusOK, dto.RegistrationResponse{Message: "Successfully registered"})
 }
