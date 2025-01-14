@@ -418,6 +418,23 @@ definitions:
       short_description:
         type: string
     type: object
+  session_review.CustomError:
+    properties:
+      error:
+        type: string
+    type: object
+  session_review.SessionReviewRequest:
+    properties:
+      rating:
+        type: integer
+      review:
+        type: string
+    type: object
+  session_review.SessionReviewResponse:
+    properties:
+      message:
+        type: string
+    type: object
   user.ChangePasswordDto:
     properties:
       new_password:
@@ -818,6 +835,43 @@ paths:
       summary: Get mentor landing page
       tags:
       - Mentor
+  /reviews/{session_id}:
+    post:
+      consumes:
+      - application/json
+      description: Create session review
+      parameters:
+      - description: Session ID
+        in: path
+        name: session_id
+        required: true
+        type: string
+      - description: Session Review
+        in: body
+        name: session_review
+        required: true
+        schema:
+          $ref: '#/definitions/session_review.SessionReviewRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/session_review.SessionReviewResponse'
+        "400":
+          description: User not found
+          schema:
+            $ref: '#/definitions/session_review.CustomError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/session_review.CustomError'
+      security:
+      - Bearer: []
+      summary: Create session review
+      tags:
+      - Session
   /search:
     get:
       description: Search for sessions, mentors, and categories by keyword

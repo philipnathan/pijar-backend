@@ -413,6 +413,64 @@ const docTemplate = `{
                 }
             }
         },
+        "/reviews/{session_id}": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Create session review",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Session"
+                ],
+                "summary": "Create session review",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Session ID",
+                        "name": "session_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Session Review",
+                        "name": "session_review",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/session_review.SessionReviewRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/session_review.SessionReviewResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/session_review.CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/session_review.CustomError"
+                        }
+                    }
+                }
+            }
+        },
         "/search": {
             "get": {
                 "description": "Search for sessions, mentors, and categories by keyword",
@@ -1738,6 +1796,33 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "short_description": {
+                    "type": "string"
+                }
+            }
+        },
+        "session_review.CustomError": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "session_review.SessionReviewRequest": {
+            "type": "object",
+            "properties": {
+                "rating": {
+                    "type": "integer"
+                },
+                "review": {
+                    "type": "string"
+                }
+            }
+        },
+        "session_review.SessionReviewResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
                     "type": "string"
                 }
             }
