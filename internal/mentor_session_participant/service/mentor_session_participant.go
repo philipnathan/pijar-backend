@@ -11,6 +11,7 @@ import (
 type MentorSessionParticipantServiceInterface interface {
 	CreateMentorSessionParticipant(userID, mentorSessionID *uint) error
 	GetLearnerEnrollments(userID *uint, page, pageSize *int) (*[]model.MentorSessionParticipant, int, error)
+	GetLearnerEnrollment(userID, mentorSessionID *uint) (*model.MentorSessionParticipant, error)
 }
 
 type MentorSessionParticipantService struct {
@@ -90,4 +91,25 @@ func (s *MentorSessionParticipantService) GetLearnerEnrollments(userID *uint, pa
 	}
 
 	return data, total, nil
+}
+
+func (s *MentorSessionParticipantService) GetLearnerEnrollment(userID, mentorSessionID *uint) (*model.MentorSessionParticipant, error) {
+	// check if user exist
+	user, err := s.userService.GetUserDetails(*userID)
+	if err != nil {
+		return nil, err
+	}
+	if user == nil {
+		return nil, custom_error.ErrUserNotFound
+	}
+	if user.DeletedAt.Valid {
+		return nil, custom_error.ErrUserNotFound
+	}
+
+	data, err := s.repo.GetLearnerEnrollment(userID, mentorSessionID)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }
