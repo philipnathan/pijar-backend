@@ -9,6 +9,7 @@ import (
 	mentorSessionParticipant "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/model"
 	notification "github.com/philipnathan/pijar-backend/internal/notification/model"
 	session "github.com/philipnathan/pijar-backend/internal/session/model"
+	review "github.com/philipnathan/pijar-backend/internal/session_review/model"
 	user "github.com/philipnathan/pijar-backend/internal/user/model"
 	"gorm.io/gorm"
 )
@@ -27,6 +28,7 @@ func MigrateDatabase(db *gorm.DB) {
 		&notification.NotificationType{},
 		&session.MentorSession{},
 		&mentorSessionParticipant.MentorSessionParticipant{},
+		&review.SessionReview{},
 	)
 
 	if err != nil {
