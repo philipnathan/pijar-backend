@@ -110,7 +110,8 @@ func (r *sessionRepository) GetAllSessionsByCategory(categoryID uint, page, page
 }
 
 func (r *sessionRepository) GetSessionByID(sessionID uint) (*model.MentorSession, error) {
-	err := r.db.Where("id = ?", sessionID).Find(&model.MentorSession{}).Error
+	err := r.db.Where("id = ?", sessionID).First(&model.MentorSession{}).Error
+
 	if err != nil {
 		return nil, err
 	}
