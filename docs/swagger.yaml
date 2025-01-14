@@ -423,6 +423,34 @@ definitions:
       error:
         type: string
     type: object
+  session_review.GetAllReviewsResponse:
+    properties:
+      message:
+        type: string
+      page:
+        type: integer
+      page_size:
+        type: integer
+      reviews:
+        items:
+          $ref: '#/definitions/session_review.ReviewDetail'
+        type: array
+      session_id:
+        type: integer
+      total:
+        type: integer
+    type: object
+  session_review.ReviewDetail:
+    properties:
+      rating:
+        type: integer
+      review:
+        type: string
+      review_id:
+        type: integer
+      user_details:
+        $ref: '#/definitions/session_review.UserDetails'
+    type: object
   session_review.SessionReviewRequest:
     properties:
       rating:
@@ -433,6 +461,13 @@ definitions:
   session_review.SessionReviewResponse:
     properties:
       message:
+        type: string
+    type: object
+  session_review.UserDetails:
+    properties:
+      fullname:
+        type: string
+      image_url:
         type: string
     type: object
   user.ChangePasswordDto:
@@ -836,6 +871,39 @@ paths:
       tags:
       - Mentor
   /reviews/{session_id}:
+    get:
+      description: Get session reviews
+      parameters:
+      - description: Session ID
+        in: path
+        name: session_id
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: pagesize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/session_review.GetAllReviewsResponse'
+        "400":
+          description: Session not found
+          schema:
+            $ref: '#/definitions/session_review.CustomError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/session_review.CustomError'
+      tags:
+      - Session
     post:
       consumes:
       - application/json
