@@ -10,6 +10,7 @@ type MentorSessionParticipantRepositoryInterface interface {
 	CreateMentorSessionParticipant(userID, mentorSessionID *uint) error
 	GetMentorSessionParticipant(userID, mentorSessionID *uint) (*model.MentorSessionParticipant, error)
 	GetLearnerEnrollments(userID *uint, page, pageSize *int) (*[]model.MentorSessionParticipant, int, error)
+	GetLearnerEnrollment(userID, mentorSessionID *uint) (*model.MentorSessionParticipant, error)
 }
 
 type MentorSessionParticipantRepository struct {
@@ -61,4 +62,15 @@ func (r *MentorSessionParticipantRepository) GetLearnerEnrollments(userID *uint,
 	}
 
 	return &data, int(total), nil
+}
+
+func (r *MentorSessionParticipantRepository) GetLearnerEnrollment(userID, mentorSessionID *uint) (*model.MentorSessionParticipant, error) {
+	var participant model.MentorSessionParticipant
+	err := r.db.Where("user_id = ? AND mentor_session_id = ?", *userID, *mentorSessionID).First(&participant).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &participant, nil
 }
