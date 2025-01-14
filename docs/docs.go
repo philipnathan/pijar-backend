@@ -414,6 +414,56 @@ const docTemplate = `{
             }
         },
         "/reviews/{session_id}": {
+            "get": {
+                "description": "Get session reviews",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Session"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Session ID",
+                        "name": "session_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "pagesize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/session_review.GetAllReviewsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Session not found",
+                        "schema": {
+                            "$ref": "#/definitions/session_review.CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/session_review.CustomError"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -1808,6 +1858,49 @@ const docTemplate = `{
                 }
             }
         },
+        "session_review.GetAllReviewsResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "reviews": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/session_review.ReviewDetail"
+                    }
+                },
+                "session_id": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "session_review.ReviewDetail": {
+            "type": "object",
+            "properties": {
+                "rating": {
+                    "type": "integer"
+                },
+                "review": {
+                    "type": "string"
+                },
+                "review_id": {
+                    "type": "integer"
+                },
+                "user_details": {
+                    "$ref": "#/definitions/session_review.UserDetails"
+                }
+            }
+        },
         "session_review.SessionReviewRequest": {
             "type": "object",
             "properties": {
@@ -1823,6 +1916,17 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "session_review.UserDetails": {
+            "type": "object",
+            "properties": {
+                "fullname": {
+                    "type": "string"
+                },
+                "image_url": {
                     "type": "string"
                 }
             }
