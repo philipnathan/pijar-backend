@@ -38,6 +38,11 @@ func SessionReviewRoute(r *gin.Engine, db *gorm.DB) {
 	)
 	hnd := handler.NewSessionReviewHandler(srv)
 
+	nonProtectedRoutes := r.Group(apiV1)
+	{
+		nonProtectedRoutes.GET("/:session_id", hnd.GetSessionReviewsHandler)
+	}
+
 	protectedRoutes := r.Group(apiV1)
 	{
 		protectedRoutes.Use(middleware.AuthMiddleware())

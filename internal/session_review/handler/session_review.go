@@ -26,7 +26,7 @@ func NewSessionReviewHandler(service service.SessionReviewServiceInterface) *Ses
 // @Tags		Session
 // @Accept		json
 // @Produce	json
-// @Security Bearer
+// @Security	Bearer
 // @Param		session_id		path		string					true	"Session ID"
 // @Param		session_review	body		SessionReviewRequest	true	"Session Review"
 // @Success	200				{object}	SessionReviewResponse
@@ -102,4 +102,80 @@ func (h *SessionReviewHandler) CreateSessionReviewHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, dto.SessionReviewResponse{Message: "Review successfully created"})
+}
+
+// @Description	Get session reviews
+// @Schemes
+// @Tags		Session
+// @Produce	json
+// @Param		session_id	path		string	true	"Session ID"
+// @Param		page		query		int		false	"Page number"
+// @Param		pagesize	query		int		false	"Page size"
+// @Success	200			{object}	GetAllReviewsResponse
+// @Failure	400			{object}	CustomError	"Session not found"
+// @Failure	500			{object}	CustomError	"Internal server error"
+// @Router		/reviews/{session_id} [get]
+func (h *SessionReviewHandler) GetSessionReviewsHandler(c *gin.Context) {
+	sessionIDStr := c.Param("session_id")
+	if sessionIDStr == "" {
+		c.JSON(http.StatusBadRequest, custom_error.ErrSessionNotFound)
+		return
+	}
+
+	SessionID, err := strconv.ParseUint(sessionIDStr, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, custom_error.ErrSessionNotFound)
+		return
+	}
+
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	pageSize, _ := strconv.Atoi(c.DefaultQuery("pagesize", "10"))
+	uintSessionID := uint(SessionID)
+
+	revs, total, err := h.service.GetSessionReviews(&uintSessionID, &page, &pageSize)
+	if err != nil {
+		switch err {
+		case custom_error.ErrSessionNotFound:
+			c.JSON(http.StatusBadRequest, custom_error.ErrSessionNotFound)
+			return
+		default:
+			c.JSON(http.StatusInternalServerError, custom_error.NewCustomError(err.Error()))
+			return
+		}
+	}
+
+	var reviewDetails []dto.ReviewDetail
+	var userImage string
+	var comment string
+	for _, rev := range *revs {
+		if rev.User.ImageURL == nil {
+			userImage = ""
+		} else {
+			userImage = *rev.User.ImageURL
+		}
+
+		if rev.Review == nil {
+			comment = ""
+		} else {
+			comment = *rev.Review
+		}
+
+		reviewDetails = append(reviewDetails, dto.ReviewDetail{
+			ReviewID:    rev.ID,
+			UserDetails: dto.UserDetails{Fullname: rev.User.Fullname, ImageURL: userImage},
+			Rating:      rev.Rating,
+			Review:      comment,
+		})
+	}
+
+	response := dto.GetAllReviewsResponse{
+		Message:   "Reviews successfully retrieved",
+		SessionID: uintSessionID,
+		Page:      page,
+		PageSize:  pageSize,
+		Total:     total,
+		Reviews:   reviewDetails,
+	}
+
+	c.JSON(http.StatusOK, response)
 }

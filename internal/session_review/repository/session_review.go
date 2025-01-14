@@ -1,6 +1,8 @@
 package session_review
 
 import (
+	"fmt"
+
 	model "github.com/philipnathan/pijar-backend/internal/session_review/model"
 	"gorm.io/gorm"
 )
@@ -8,6 +10,7 @@ import (
 type SessionReviewRepositoryInterface interface {
 	CreateSessionReview(userID, sessionID, rating *uint, review *string) error
 	GetUserReview(userID, sessionID *uint) (*model.SessionReview, error)
+	GetSessionReviews(sessionID *uint, page, pageSize *int) (*[]model.SessionReview, int, error)
 }
 
 type SessionReviewRepository struct {
@@ -40,4 +43,29 @@ func (r *SessionReviewRepository) GetUserReview(userID, sessionID *uint) (*model
 	}
 
 	return &rev, nil
+}
+
+func (r *SessionReviewRepository) GetSessionReviews(sessionID *uint, page, pageSize *int) (*[]model.SessionReview, int, error) {
+	var revs []model.SessionReview
+	var total int64
+
+	countQuery := r.db.Model(&model.SessionReview{}).Where("session_id = ?", sessionID)
+	if err := countQuery.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	fmt.Println(*page)
+	fmt.Println(*pageSize)
+
+	err := r.db.Where("session_id = ?", sessionID).
+		Preload("User").
+		Offset((*page - 1) * *pageSize).
+		Limit(*pageSize).
+		Find(&revs).Error
+
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return &revs, int(total), nil
 }
