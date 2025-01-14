@@ -13,6 +13,7 @@ import (
 	searchRoute "github.com/philipnathan/pijar-backend/internal/search/route"
 	seed "github.com/philipnathan/pijar-backend/internal/seed"
 	sessionRoute "github.com/philipnathan/pijar-backend/internal/session/route"
+	reviewRoute "github.com/philipnathan/pijar-backend/internal/session_review/route"
 	userRoute "github.com/philipnathan/pijar-backend/internal/user/route"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -73,6 +74,7 @@ func main() {
 	sessionRoute.SessionRoute(r, db)
 	searchRoute.SearchRoute(r, db)
 	mentorSessionParticipant.MentorSessionParticipantRoute(r, db)
+	reviewRoute.SessionReviewRoute(r, db)
 
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server:", err)
