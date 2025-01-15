@@ -98,6 +98,7 @@ func (r *sessionRepository) GetAllSessionsByCategory(categoryID uint, page, page
 
 	err := r.db.Where("category_id = ?", categoryID).
 		Preload("User").
+		Preload("SessionReviews").
 		Order("schedule ASC").
 		Offset((page - 1) * pageSize).
 		Limit(pageSize).
@@ -106,6 +107,7 @@ func (r *sessionRepository) GetAllSessionsByCategory(categoryID uint, page, page
 	if err != nil {
 		return nil, 0, err
 	}
+
 	return &sessions, int(total), nil
 }
 

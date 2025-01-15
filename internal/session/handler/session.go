@@ -300,24 +300,35 @@ func (h *SessionHandler) GetAllSessionsByCategory(c *gin.Context) {
 			mentorImageURL = nil
 		}
 
+		var average_rating float32
+		if len(session.SessionReviews) == 0 {
+			average_rating = 0
+		} else {
+			for _, review := range session.SessionReviews {
+				average_rating += float32(review.Rating)
+			}
+			average_rating /= float32(len(session.SessionReviews))
+		}
+
 		sessionsResponse = append(sessionsResponse, dto.Session{
 			MentorSessionTitle: session.Title,
 			ShortDescription:   session.ShortDescription,
 			ImageURL:           *sessionImageURL,
 			Schedule:           session.Schedule,
+			AverageRating:      average_rating,
 			MentorDetails: dto.MentorDetails{
 				Id:       session.User.ID,
 				Fullname: session.User.Fullname,
 				ImageURL: *mentorImageURL,
 			},
 		})
+	}
 
-		response = dto.GetAllSessionsResponse{
-			Sessions: sessionsResponse,
-			Total:    total,
-			Page:     page,
-			PageSize: pageSize,
-		}
+	response = dto.GetAllSessionsResponse{
+		Sessions: sessionsResponse,
+		Total:    total,
+		Page:     page,
+		PageSize: pageSize,
 	}
 
 	c.JSON(http.StatusOK, response)

@@ -3,6 +3,7 @@ package session
 import (
 	"time"
 
+	review "github.com/philipnathan/pijar-backend/internal/session_review/model"
 	user "github.com/philipnathan/pijar-backend/internal/user/model"
 )
 
@@ -30,6 +31,8 @@ type MentorSession struct {
 	Link             string    `gorm:"type:text;not null" json:"link"`
 	CreatedAt        time.Time `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt        time.Time `gorm:"autoUpdateTime" json:"updated_at"`
+
+	SessionReviews []review.SessionReview `json:"session_reviews" gorm:"foreignKey:SessionID"`
 }
 
 type MentorSessionParticipant struct {

@@ -17,4 +17,5 @@ type Session struct {
 	ImageURL           string        `json:"image_url"`
 	Schedule           time.Time     `json:"schedule"`
 	MentorDetails      MentorDetails `json:"mentor_details"`
+	AverageRating      float32       `json:"average_rating"`
 }
