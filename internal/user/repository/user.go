@@ -29,10 +29,12 @@ func NewUserRepository(db *gorm.DB) UserRepositoryInterface {
 }
 
 func (r *userRepository) CreateUser(userDto *dto.RegisterUserDto) (model.User, error) {
+
 	user := &model.User{
-		Email:    userDto.Email,
-		Password: userDto.Password,
-		Fullname: userDto.Fullname,
+		Email:     userDto.Email,
+		Password:  userDto.Password,
+		Fullname:  userDto.Fullname,
+		IsLearner: true,
 	}
 
 	err := r.db.Create(user).Error
@@ -87,10 +89,10 @@ func (r *userRepository) SaveUser(user *model.User) error {
 }
 
 func (r *userRepository) GetUserByID(userID uint) (*model.User, error) {
-    var user model.User
-    err := r.db.First(&user, userID).Error
-    if err != nil {
-        return nil, err
-    }
-    return &user, nil
+	var user model.User
+	err := r.db.First(&user, userID).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
 }

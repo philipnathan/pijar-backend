@@ -207,15 +207,15 @@ func (s *UserService) UpdateUserDetailsService(userID uint, input interface{}) e
 }
 
 func (s *UserService) GetUserProfile(userID uint) (*dto.UserProfileResponse, error) {
-    user, err := s.repo.GetUserByID(userID)
-    if err != nil {
-        return nil, err
-    }
+	user, err := s.repo.GetUserByID(userID)
+	if err != nil {
+		return nil, err
+	}
 
-    return &dto.UserProfileResponse{
-        ID:       user.ID,
-        Fullname: user.Fullname,
-        Email:    user.Email,
+	return &dto.UserProfileResponse{
+		ID:       user.ID,
+		Fullname: user.Fullname,
+		Email:    user.Email,
 		ImageURL: *user.ImageURL,
-    }, nil
+	}, nil
 }
