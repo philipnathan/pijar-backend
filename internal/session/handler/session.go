@@ -21,56 +21,6 @@ func NewSessionHandler(service service.SessionService) *SessionHandler {
 	return &SessionHandler{service: service}
 }
 
-// @Summary		Get sessions for a user
-// @Description	Get all sessions for a specific user by user ID
-// @Tags			Mentor
-// @Accept			json
-// @Produce		json
-// @Param			user_id	path		int	true	"User ID"
-// @Success		200		{array}		MentorSessionResponse
-// @Failure		400		{object}	Error	"Invalid user ID"
-// @Failure		500		{object}	Error	"Internal server error"
-// @Router			/sessions/{user_id} [get]
-func (h *SessionHandler) GetSessions(c *gin.Context) {
-	userID, err := strconv.Atoi(c.Param("user_id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, custom_error.Error{Error: "Invalid user ID"})
-		return
-	}
-
-	sessions, err := h.service.GetSessions(uint(userID))
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
-		return
-	}
-
-	var response []dto.MentorSessionResponse
-	var mentorImageURL string
-	var registered bool = false
-
-	for _, session := range sessions {
-		if session.User.ImageURL != nil {
-			mentorImageURL = *session.User.ImageURL
-		} else {
-			mentorImageURL = ""
-		}
-
-		response = append(response, dto.MentorSessionResponse{
-			MentorSessionTitle: session.Title,
-			ShortDescription:   session.ShortDescription,
-			Schedule:           session.Schedule,
-			Registered:         registered,
-			MentorDetails: dto.MentorDetails{
-				Id:       session.User.ID,
-				Fullname: session.User.Fullname,
-				ImageURL: mentorImageURL,
-			},
-		})
-	}
-
-	c.JSON(http.StatusOK, response)
-}
-
 // @Summary		Get learner history session
 // @Description	Get learner history session
 // @Tags			Learner
@@ -255,28 +205,24 @@ func (h *SessionHandler) GetUpcommingSessionsLandingPage(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.GetUpcomingSessionResponse{Sessions: sessionDetails, Page: page, PageSize: pageSize, Total: total})
 }
 
-// @Summary		Get all sessions by category
-// @Description	Get all sessions by category
+// @Summary		Get all sessions
+// @Description	Get all sessions and can be filtered by categoryid and mentorid
 // @Tags			Session
 // @Produce		json
-// @Param			categoryid	query		int	true	"Category ID"
+// @Param			categoryid	query		int	false	"Category ID"
+// @Param			mentorid	query		int	false	"Mentor ID"
 // @Param			page		query		int	false	"Page number"
 // @Param			pagesize	query		int	false	"Page size"
 // @Success		200			{object}	GetAllSessionsResponse
 // @Failure		500			{object}	Error
 // @Router			/sessions [get]
-func (h *SessionHandler) GetAllSessionsByCategory(c *gin.Context) {
+func (h *SessionHandler) GetAllSessionsWithFilter(c *gin.Context) {
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	pageSize, _ := strconv.Atoi(c.DefaultQuery("pagesize", "10"))
 	categoryIDint, _ := strconv.Atoi(c.DefaultQuery("categoryid", "0"))
+	mentorIDint, _ := strconv.Atoi(c.DefaultQuery("mentorid", "0"))
 
-	// if category_id is negative (invalid)
-	if categoryIDint <= 0 {
-		c.JSON(http.StatusBadRequest, custom_error.Error{Error: "category_id is invalid"})
-		return
-	}
-
-	sessions, total, err := h.service.GetAllSessionsByCategory(uint(categoryIDint), page, pageSize)
+	sessions, total, err := h.service.GetAllSessionsWithFilter(uint(categoryIDint), uint(mentorIDint), page, pageSize)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})

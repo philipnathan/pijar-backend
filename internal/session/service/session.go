@@ -7,12 +7,11 @@ import (
 )
 
 type SessionService interface {
-	GetSessions(userID uint) ([]model.MentorSession, error)
 	GetUpcomingSessions(page, pageSize int) ([]model.MentorSession, int, error)
 	GetLearnerHistorySession(userID uint) (*[]model.MentorSessionParticipant, error)
 	GetSessionByLearnerInterests(userID uint, page, pageSize int) (*[]model.MentorSession, int, error)
 	GetUpcommingSessionsByCategory(categoryID []uint, page, pageSize int) (*[]model.MentorSession, int, error)
-	GetAllSessionsByCategory(categoryID uint, page, pageSize int) (*[]model.MentorSession, int, error)
+	GetAllSessionsWithFilter(categoryID, mentorID uint, page, pageSize int) (*[]model.MentorSession, int, error)
 	GetSessionByID(sessionID uint) (*model.MentorSession, error)
 	GetDetailSessionByID(sessionID uint) (*model.MentorSession, error)
 }
@@ -24,16 +23,6 @@ type sessionService struct {
 
 func NewSessionService(repo repository.SessionRepository, learnerInterestsRepo learnerRepo.LearnerRepositoryInterface) SessionService {
 	return &sessionService{repo: repo, learnerInterestsRepo: learnerInterestsRepo}
-}
-
-func (s *sessionService) GetSessions(userID uint) ([]model.MentorSession, error) {
-	// Fetch sessions from the repository
-	sessions, err := s.repo.GetSessions(userID)
-	if err != nil {
-		return nil, err
-	}
-
-	return sessions, nil
 }
 
 func (s *sessionService) GetUpcomingSessions(page, pageSize int) ([]model.MentorSession, int, error) {
@@ -89,8 +78,8 @@ func (s *sessionService) GetUpcommingSessionsByCategory(categoryID []uint, page,
 	return sessions, total, nil
 }
 
-func (s *sessionService) GetAllSessionsByCategory(categoryID uint, page, pageSize int) (*[]model.MentorSession, int, error) {
-	sessions, total, err := s.repo.GetAllSessionsByCategory(categoryID, page, pageSize)
+func (s *sessionService) GetAllSessionsWithFilter(categoryID, mentorID uint, page, pageSize int) (*[]model.MentorSession, int, error) {
+	sessions, total, err := s.repo.GetAllSessionsWithFilter(categoryID, mentorID, page, pageSize)
 
 	if err != nil {
 		return nil, 0, err
