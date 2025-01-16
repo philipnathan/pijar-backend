@@ -333,3 +333,72 @@ func (h *SessionHandler) GetAllSessionsByCategory(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+// @Summary		Get session detail by id
+// @Description	Get session detail by session_id
+// @Schemes
+// @Tags		Session
+// @Produce	json
+// @Param		session_id	path		int	true	"Session ID"
+// @Success	200			{object}	GetDetailSessionResponse
+// @Failure	400			{object}	Error
+// @Failure	500			{object}	Error
+// @Router		/sessions/{session_id} [get]
+func (h *SessionHandler) GetSessionDetailById(c *gin.Context) {
+	sessionID, _ := strconv.Atoi(c.Param("session_id"))
+	if sessionID <= 0 {
+		c.JSON(http.StatusBadRequest, custom_error.Error{Error: "session_id is invalid"})
+		return
+	}
+
+	uintSessionID := uint(sessionID)
+
+	session, err := h.service.GetDetailSessionByID(uintSessionID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
+		return
+	}
+
+	fmt.Println(session)
+
+	var sessionImage string
+	var mentorImageURL string
+
+	if session.ImageURL != "" {
+		sessionImage = session.ImageURL
+	} else {
+		sessionImage = ""
+	}
+
+	if session.User.ImageURL != nil {
+		mentorImageURL = *session.User.ImageURL
+	} else {
+		mentorImageURL = ""
+	}
+
+	var average_rating float32
+	if len(session.SessionReviews) == 0 {
+		average_rating = 0
+	} else {
+		for _, review := range session.SessionReviews {
+			average_rating += float32(review.Rating)
+		}
+		average_rating /= float32(len(session.SessionReviews))
+	}
+
+	response := dto.GetDetailSessionResponse{
+		SessionID:          session.ID,
+		MentorSessionTitle: session.Title,
+		ShortDescription:   session.ShortDescription,
+		ImageURL:           sessionImage,
+		Schedule:           session.Schedule,
+		AverageRating:      average_rating,
+		MentorDetails: dto.MentorDetails{
+			Id:       session.User.ID,
+			Fullname: session.User.Fullname,
+			ImageURL: mentorImageURL,
+		},
+	}
+
+	c.JSON(http.StatusOK, response)
+}

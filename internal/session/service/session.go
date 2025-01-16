@@ -14,6 +14,7 @@ type SessionService interface {
 	GetUpcommingSessionsByCategory(categoryID []uint, page, pageSize int) (*[]model.MentorSession, int, error)
 	GetAllSessionsByCategory(categoryID uint, page, pageSize int) (*[]model.MentorSession, int, error)
 	GetSessionByID(sessionID uint) (*model.MentorSession, error)
+	GetDetailSessionByID(sessionID uint) (*model.MentorSession, error)
 }
 
 type sessionService struct {
@@ -100,6 +101,14 @@ func (s *sessionService) GetAllSessionsByCategory(categoryID uint, page, pageSiz
 
 func (s *sessionService) GetSessionByID(sessionID uint) (*model.MentorSession, error) {
 	session, err := s.repo.GetSessionByID(sessionID)
+	if err != nil {
+		return nil, err
+	}
+	return session, nil
+}
+
+func (s *sessionService) GetDetailSessionByID(sessionID uint) (*model.MentorSession, error) {
+	session, err := s.repo.GetSessionDetailByID(sessionID)
 	if err != nil {
 		return nil, err
 	}
