@@ -33,6 +33,7 @@ func (r *sessionRepository) GetUpcomingSessions(page, pageSize int) (*[]model.Me
 
 	var sessions []model.MentorSession
 	err := r.db.Where("schedule > ?", time.Now()).
+		Preload("User").
 		Order("schedule ASC").
 		Offset((page - 1) * pageSize).
 		Limit(pageSize).
@@ -65,6 +66,7 @@ func (r *sessionRepository) GetUpcommingSessionsByCategory(categoryID []uint, pa
 	}
 
 	err := r.db.Where("category_id IN ? AND schedule > ?", categoryID, time.Now()).
+		Preload("User").
 		Order("schedule ASC").
 		Offset((page - 1) * pageSize).
 		Limit(pageSize).

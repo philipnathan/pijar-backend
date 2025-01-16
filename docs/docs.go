@@ -750,7 +750,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/session.MentorSessionResponse"
+                            "$ref": "#/definitions/session.GetAllSessionsResponse"
                         }
                     },
                     "400": {
@@ -791,7 +791,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/session.GetDetailSessionResponse"
+                            "$ref": "#/definitions/session.Session"
                         }
                     },
                     "400": {
@@ -1781,32 +1781,6 @@ const docTemplate = `{
                 }
             }
         },
-        "session.GetDetailSessionResponse": {
-            "type": "object",
-            "properties": {
-                "average_rating": {
-                    "type": "number"
-                },
-                "image_url": {
-                    "type": "string"
-                },
-                "mentor_details": {
-                    "$ref": "#/definitions/session.MentorDetails"
-                },
-                "mentor_session_title": {
-                    "type": "string"
-                },
-                "schedule": {
-                    "type": "string"
-                },
-                "session_id": {
-                    "type": "integer"
-                },
-                "short_description": {
-                    "type": "string"
-                }
-            }
-        },
         "session.GetUserHistorySessionResponseDto": {
             "type": "object",
             "properties": {
@@ -1855,31 +1829,17 @@ const docTemplate = `{
                 }
             }
         },
-        "session.MentorSessionResponse": {
-            "type": "object",
-            "properties": {
-                "mentor_details": {
-                    "$ref": "#/definitions/session.MentorDetails"
-                },
-                "mentor_session_title": {
-                    "type": "string"
-                },
-                "registered": {
-                    "type": "boolean"
-                },
-                "schedule": {
-                    "type": "string"
-                },
-                "short_description": {
-                    "type": "string"
-                }
-            }
-        },
         "session.Session": {
             "type": "object",
             "properties": {
                 "average_rating": {
                     "type": "number"
+                },
+                "day": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "integer"
                 },
                 "image_url": {
                     "type": "string"
@@ -1887,13 +1847,19 @@ const docTemplate = `{
                 "mentor_details": {
                     "$ref": "#/definitions/session.MentorDetails"
                 },
-                "mentor_session_title": {
-                    "type": "string"
-                },
                 "schedule": {
                     "type": "string"
                 },
+                "session_id": {
+                    "type": "integer"
+                },
                 "short_description": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }

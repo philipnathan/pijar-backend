@@ -1,7 +1,6 @@
 package session
 
 import (
-	"fmt"
 	"net/http"
 	"sort"
 	"strconv"
@@ -89,7 +88,7 @@ func (h *SessionHandler) GetLearnerHistorySession(c *gin.Context) {
 // @Param			page		query		int	false	"page"
 // @Param			pagesize	query		int	false	"pagesize"
 // @Param			categoryid	query		int	false	"categoryid"
-// @Success		200			{object}	MentorSessionResponse
+// @Success		200			{object}	GetAllSessionsResponse
 // @Failure		400			{object}	Error	"Invalid user ID"
 // @Failure		500			{object}	Error	"Internal server error"
 // @Router			/sessions/upcoming [get]
@@ -161,22 +160,41 @@ func (h *SessionHandler) GetUpcommingSessionsLandingPage(c *gin.Context) {
 		}
 	}
 
-	var sessionDetails []dto.SessionDetail
+	var sessionDetails []dto.Session
+	var sessionImage string
 
 	for _, session := range *sessions {
-		sessionDetails = append(sessionDetails, dto.SessionDetail{
+		if session.ImageURL == "" {
+			sessionImage = ""
+		} else {
+			sessionImage = session.ImageURL
+		}
+
+		sessionDetails = append(sessionDetails, dto.Session{
+			ID:               session.ID,
 			Day:              session.Schedule.Weekday().String(),
 			Time:             session.Schedule.Format("03:04 PM"),
 			Title:            session.Title,
 			ShortDescription: session.ShortDescription,
 			Schedule:         session.Schedule.Format(time.RFC3339),
-			ImageURL:         session.ImageURL,
-			Registered:       true,
+			ImageURL:         sessionImage,
 			Duration:         session.EstimateDuration,
+			MentorDetails: dto.MentorDetails{
+				Id:       session.User.ID,
+				Fullname: session.User.Fullname,
+				ImageURL: sessionImage,
+			},
 		})
 	}
 
-	c.JSON(http.StatusOK, dto.GetUpcomingSessionResponse{Sessions: sessionDetails, Page: page, PageSize: pageSize, Total: total})
+	response := dto.GetAllSessionsResponse{
+		Sessions: sessionDetails,
+		Total:    total,
+		Page:     page,
+		PageSize: pageSize,
+	}
+
+	c.JSON(http.StatusOK, response)
 }
 
 // @Summary		Get all sessions
@@ -235,11 +253,15 @@ func (h *SessionHandler) GetAllSessionsWithFilter(c *gin.Context) {
 		}
 
 		sessionsResponse = append(sessionsResponse, dto.Session{
-			MentorSessionTitle: session.Title,
-			ShortDescription:   session.ShortDescription,
-			ImageURL:           *sessionImageURL,
-			Schedule:           session.Schedule,
-			AverageRating:      average_rating,
+			ID:               session.ID,
+			Day:              session.Schedule.Weekday().String(),
+			Time:             session.Schedule.Format("03:04 PM"),
+			Title:            session.Title,
+			ShortDescription: session.ShortDescription,
+			ImageURL:         *sessionImageURL,
+			Schedule:         session.Schedule.Format(time.RFC3339),
+			AverageRating:    average_rating,
+			Duration:         session.EstimateDuration,
 			MentorDetails: dto.MentorDetails{
 				Id:       session.User.ID,
 				Fullname: session.User.Fullname,
@@ -274,7 +296,7 @@ func (h *SessionHandler) GetAllSessionsWithFilter(c *gin.Context) {
 // @Tags		Session
 // @Produce	json
 // @Param		session_id	path		int	true	"Session ID"
-// @Success	200			{object}	GetDetailSessionResponse
+// @Success	200			{object}	Session
 // @Failure	400			{object}	Error
 // @Failure	500			{object}	Error
 // @Router		/sessions/{session_id} [get]
@@ -292,8 +314,6 @@ func (h *SessionHandler) GetSessionDetailById(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
 		return
 	}
-
-	fmt.Println(session)
 
 	var sessionImage string
 	var mentorImageURL string
@@ -320,13 +340,16 @@ func (h *SessionHandler) GetSessionDetailById(c *gin.Context) {
 		average_rating /= float32(len(session.SessionReviews))
 	}
 
-	response := dto.GetDetailSessionResponse{
-		SessionID:          session.ID,
-		MentorSessionTitle: session.Title,
-		ShortDescription:   session.ShortDescription,
-		ImageURL:           sessionImage,
-		Schedule:           session.Schedule,
-		AverageRating:      average_rating,
+	response := dto.Session{
+		ID:               session.ID,
+		Day:              session.Schedule.Weekday().String(),
+		Time:             session.Schedule.Format("03:04 PM"),
+		Title:            session.Title,
+		ShortDescription: session.ShortDescription,
+		ImageURL:         sessionImage,
+		Schedule:         session.Schedule.Format(time.RFC3339),
+		AverageRating:    average_rating,
+		Duration:         session.EstimateDuration,
 		MentorDetails: dto.MentorDetails{
 			Id:       session.User.ID,
 			Fullname: session.User.Fullname,
