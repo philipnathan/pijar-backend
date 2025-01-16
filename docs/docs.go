@@ -743,6 +743,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/sessions/{session_id}": {
+            "get": {
+                "description": "Get session detail by session_id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Session"
+                ],
+                "summary": "Get session detail by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Session ID",
+                        "name": "session_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/session.GetDetailSessionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/session.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/session.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/sessions/{session_id}/enroll": {
             "post": {
                 "security": [
@@ -1762,6 +1803,32 @@ const docTemplate = `{
                 }
             }
         },
+        "session.GetDetailSessionResponse": {
+            "type": "object",
+            "properties": {
+                "average_rating": {
+                    "type": "number"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "mentor_details": {
+                    "$ref": "#/definitions/session.MentorDetails"
+                },
+                "mentor_session_title": {
+                    "type": "string"
+                },
+                "schedule": {
+                    "type": "string"
+                },
+                "session_id": {
+                    "type": "integer"
+                },
+                "short_description": {
+                    "type": "string"
+                }
+            }
+        },
         "session.GetUserHistorySessionResponseDto": {
             "type": "object",
             "properties": {
@@ -1833,6 +1900,9 @@ const docTemplate = `{
         "session.Session": {
             "type": "object",
             "properties": {
+                "average_rating": {
+                    "type": "number"
+                },
                 "image_url": {
                     "type": "string"
                 },
