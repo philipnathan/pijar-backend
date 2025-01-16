@@ -16,15 +16,15 @@ func NewSearchHandler(service service.SearchServiceInterface) *SearchHandler {
 	return &SearchHandler{service: service}
 }
 
-// @Summary Search for sessions, mentors, and categories
-// @Description Search for sessions, mentors, and categories by keyword
-// @Tags Search
-// @Produce json
-// @Param keyword query string true "Search Keyword"
-// @Success 200 {object} SearchResponse
-// @Failure 400 {object} Error "Bad Request"
-// @Failure 500 {object} Error "Internal server error"
-// @Router /search [get]
+//	@Summary		Search for sessions, mentors, and categories
+//	@Description	Search for sessions, mentors, and categories by keyword
+//	@Tags			Search
+//	@Produce		json
+//	@Param			keyword	query		string	true	"Search Keyword"
+//	@Success		200		{object}	SearchResponse
+//	@Failure		400		{object}	Error	"Bad Request"
+//	@Failure		500		{object}	Error	"Internal server error"
+//	@Router			/search [get]
 func (h *SearchHandler) Search(c *gin.Context) {
 	keyword := c.Query("keyword")
 	if keyword == "" {

@@ -23,7 +23,7 @@ func NewSessionReviewHandler(service service.SessionReviewServiceInterface) *Ses
 // @Summary		Create session review
 // @Description	Create session review
 // @Schemes
-// @Tags		Session
+// @Tags		Session Review
 // @Accept		json
 // @Produce	json
 // @Security	Bearer
@@ -106,7 +106,7 @@ func (h *SessionReviewHandler) CreateSessionReviewHandler(c *gin.Context) {
 
 // @Description	Get session reviews
 // @Schemes
-// @Tags		Session
+// @Tags		Session Review
 // @Produce	json
 // @Param		session_id	path		string	true	"Session ID"
 // @Param		page		query		int		false	"Page number"

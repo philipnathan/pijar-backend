@@ -20,17 +20,17 @@ func NewMentorSessionParticipantHandler(service service.MentorSessionParticipant
 	}
 }
 
-//	@Summary	Create mentor session participant
-//	@Schemes
-//	@Description	Used for learner to join a mentor session
-//	@Tags			Mentor
-//	@Produce		json
-//	@Security		Bearer
-//	@Param			session_id	path		int	true	"Session ID"
-//	@Success		200			{object}	RegistrationResponse
-//	@Failure		400			{object}	CustomError	"Invalid session ID"
-//	@Failure		500			{object}	CustomError	"Internal server error"
-//	@Router			/sessions/{session_id}/enroll [post]
+// @Summary	Used for learner to join a mentor session
+// @Schemes
+// @Description	Used for learner to join a mentor session
+// @Tags			Session Enrollments
+// @Produce		json
+// @Security		Bearer
+// @Param			session_id	path		int	true	"Session ID"
+// @Success		200			{object}	RegistrationResponse
+// @Failure		400			{object}	CustomError	"Invalid session ID"
+// @Failure		500			{object}	CustomError	"Internal server error"
+// @Router			/sessions/{session_id}/enroll [post]
 func (h *MentorSessionParticipantHandler) CreateMentorSessionParticipantHandler(c *gin.Context) {
 	UserID, exist := c.Get("user_id")
 	if !exist {
@@ -71,17 +71,17 @@ func (h *MentorSessionParticipantHandler) CreateMentorSessionParticipantHandler(
 	c.JSON(http.StatusOK, dto.RegistrationResponse{Message: "Successfully registered"})
 }
 
-//	@Summary	Get learner enrollments
-//	@Schemes
-//	@Description	Get learner enrollments
-//	@Tags			Session
-//	@Produce		json
-//	@Security		Bearer
-//	@Param			page		query		int	false	"Page number"
-//	@Param			page_size	query		int	false	"Page size"
-//	@Success		200			{object}	EnrollmentResponse
-//	@Failure		500			{object}	CustomError	"Internal server error"
-//	@Router			/sessions/enrollments [get]
+// @Summary	Get learner enrollments
+// @Schemes
+// @Description	Get learner enrollments
+// @Tags			Session Enrollments
+// @Produce		json
+// @Security		Bearer
+// @Param			page		query		int	false	"Page number"
+// @Param			page_size	query		int	false	"Page size"
+// @Success		200			{object}	EnrollmentResponse
+// @Failure		500			{object}	CustomError	"Internal server error"
+// @Router			/sessions/enrollments [get]
 func (h *MentorSessionParticipantHandler) GetLearnerEnrollmentsHandler(c *gin.Context) {
 	UserID, exist := c.Get("user_id")
 	if !exist {

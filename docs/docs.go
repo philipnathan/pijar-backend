@@ -420,7 +420,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Session"
+                    "Session Review"
                 ],
                 "parameters": [
                     {
@@ -478,7 +478,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Session"
+                    "Session Review"
                 ],
                 "summary": "Create session review",
                 "parameters": [
@@ -626,7 +626,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Session"
+                    "Session Enrollments"
                 ],
                 "summary": "Get learner enrollments",
                 "parameters": [
@@ -801,9 +801,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Mentor"
+                    "Session Enrollments"
                 ],
-                "summary": "Create mentor session participant",
+                "summary": "Used for learner to join a mentor session",
                 "parameters": [
                     {
                         "type": "integer",

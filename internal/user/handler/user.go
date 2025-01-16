@@ -19,17 +19,17 @@ func NewUserHandler(service service.UserServiceInterface) *UserHandler {
 	}
 }
 
-// @Summary	Register new user
-// @Schemes
-// @Description	Register new user
-// @Tags			User
-// @Accept			json
-// @Produce		json
-// @Param			user	body		RegisterUserDto	true	"User"
-// @Success		200		{object}	RegisterUserResponseDto
-// @Failure		400		{object}	Error	"Invalid request body"
-// @Failure		500		{object}	Error	"Internal server error"
-// @Router			/users/register [post]
+//	@Summary	Register new user
+//	@Schemes
+//	@Description	Register new user
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body		RegisterUserDto	true	"User"
+//	@Success		200		{object}	RegisterUserResponseDto
+//	@Failure		400		{object}	Error	"Invalid request body"
+//	@Failure		500		{object}	Error	"Internal server error"
+//	@Router			/users/register [post]
 func (h *UserHandler) RegisterUser(c *gin.Context) {
 	var user dto.RegisterUserDto
 
@@ -60,17 +60,17 @@ func (h *UserHandler) RegisterUser(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Summary	Login user
-// @Schemes
-// @Description	Login user
-// @Tags			User
-// @Accept			json
-// @Produce		json
-// @Param			user	body		LoginUserDto	true	"Login Information"
-// @Success		200		{object}	LoginUserResponseDto
-// @Failure		400		{object}	Error	"Invalid request body"
-// @Failure		500		{object}	Error	"Internal server error"
-// @Router			/users/login [post]
+//	@Summary	Login user
+//	@Schemes
+//	@Description	Login user
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body		LoginUserDto	true	"Login Information"
+//	@Success		200		{object}	LoginUserResponseDto
+//	@Failure		400		{object}	Error	"Invalid request body"
+//	@Failure		500		{object}	Error	"Internal server error"
+//	@Router			/users/login [post]
 func (h *UserHandler) LoginUser(c *gin.Context) {
 	var input dto.LoginUserDto
 
@@ -99,17 +99,17 @@ func (h *UserHandler) LoginUser(c *gin.Context) {
 		RefreshToken: refresh_token})
 }
 
-// @Summary	Get user details
-// @Schemes
-// @Description	Get user details
-// @Tags			User
-// @Security		Bearer
-// @Accept			json
-// @Produce		json
-// @Success		200	{object}	GetUserResponseDto
-// @Failure		401	{object}	Error	"Unauthorized"
-// @Failure		500	{object}	Error	"Internal server error"
-// @Router			/users/me [get]
+//	@Summary	Get user details
+//	@Schemes
+//	@Description	Get user details
+//	@Tags			User
+//	@Security		Bearer
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	GetUserResponseDto
+//	@Failure		401	{object}	Error	"Unauthorized"
+//	@Failure		500	{object}	Error	"Internal server error"
+//	@Router			/users/me [get]
 func (h *UserHandler) GetUser(c *gin.Context) {
 	userID, exist := c.Get("user_id")
 	if !exist {
@@ -156,16 +156,16 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 	c.JSON(http.StatusOK, userResponse)
 }
 
-// @Summary	Delete user
-// @Schemes
-// @Description	Delete user
-// @Tags			User
-// @Security		Bearer
-// @Produce		json
-// @Success		200	{object}	DeleteUserResponseDto
-// @Failure		401	{object}	Error	"Unauthorized"
-// @Failure		500	{object}	Error	"Internal server error"
-// @Router			/users/me [delete]
+//	@Summary	Delete user
+//	@Schemes
+//	@Description	Delete user
+//	@Tags			User
+//	@Security		Bearer
+//	@Produce		json
+//	@Success		200	{object}	DeleteUserResponseDto
+//	@Failure		401	{object}	Error	"Unauthorized"
+//	@Failure		500	{object}	Error	"Internal server error"
+//	@Router			/users/me [delete]
 func (h *UserHandler) DeleteUserHandler(c *gin.Context) {
 	userID, exist := c.Get("user_id")
 	if !exist {
@@ -188,18 +188,18 @@ func (h *UserHandler) DeleteUserHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.DeleteUserResponseDto{Message: "user deleted successfully"})
 }
 
-// @Summary	Update user password
-// @Schemes
-// @Description	Update user password
-// @Tags			User
-// @Accept			json
-// @Produce		json
-// @Security		Bearer
-// @Param			password	body		ChangePasswordDto	true	"User"
-// @Success		200			{object}	ChangePasswordResponseDto
-// @Failure		400			{object}	Error	"Invalid request body"
-// @Failure		500			{object}	Error	"Internal server error"
-// @Router			/users/me/password [patch]
+//	@Summary	Update user password
+//	@Schemes
+//	@Description	Update user password
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Security		Bearer
+//	@Param			password	body		ChangePasswordDto	true	"User"
+//	@Success		200			{object}	ChangePasswordResponseDto
+//	@Failure		400			{object}	Error	"Invalid request body"
+//	@Failure		500			{object}	Error	"Internal server error"
+//	@Router			/users/me/password [patch]
 func (h *UserHandler) UpdateUserPasswordHandler(c *gin.Context) {
 	userID, exist := c.Get("user_id")
 	if !exist {
@@ -229,18 +229,18 @@ func (h *UserHandler) UpdateUserPasswordHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.ChangePasswordResponseDto{Message: "password changed successfully"})
 }
 
-// @Summary	Update user details
-// @Schemes
-// @Description	Update user details
-// @Tags			User
-// @Accept			json
-// @Produce		json
-// @Security		Bearer
-// @Param			user	body		UpdateUserDetailsDto	true	"User"
-// @Success		200		{object}	UpdateUserDetailsResponseDto
-// @Failure		400		{object}	Error	"Invalid request body"
-// @Failure		500		{object}	Error	"Internal server error"
-// @Router			/users/me/details [patch]
+//	@Summary	Update user details
+//	@Schemes
+//	@Description	Update user details
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Security		Bearer
+//	@Param			user	body		UpdateUserDetailsDto	true	"User"
+//	@Success		200		{object}	UpdateUserDetailsResponseDto
+//	@Failure		400		{object}	Error	"Invalid request body"
+//	@Failure		500		{object}	Error	"Internal server error"
+//	@Router			/users/me/details [patch]
 func (h *UserHandler) UpdateUserDetailsHandler(c *gin.Context) {
 	userID, exist := c.Get("user_id")
 	if !exist {
@@ -270,14 +270,14 @@ func (h *UserHandler) UpdateUserDetailsHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.UpdateUserDetailsResponseDto{Message: "user details updated successfully"})
 }
 
-// @Summary Get user profile
-// @Description Get the profile of the logged-in user
-// @Tags User
-// @Produce json
-// @Success 200 {object} user.UserProfileResponse
-// @Failure 401 {object} Error "Unauthorized"
-// @Failure 500 {object} Error "Internal server error"
-// @Router /user/profile [get]
+//	@Summary		Get user profile
+//	@Description	Get the profile of the logged-in user
+//	@Tags			User
+//	@Produce		json
+//	@Success		200	{object}	user.UserProfileResponse
+//	@Failure		401	{object}	Error	"Unauthorized"
+//	@Failure		500	{object}	Error	"Internal server error"
+//	@Router			/user/profile [get]
 func (h *UserHandler) GetUserProfile(c *gin.Context) {
     userID, exists := c.Get("userID")
     if !exists {

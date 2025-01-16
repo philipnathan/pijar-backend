@@ -922,7 +922,7 @@ paths:
           schema:
             $ref: '#/definitions/session_review.CustomError'
       tags:
-      - Session
+      - Session Review
     post:
       consumes:
       - application/json
@@ -958,7 +958,7 @@ paths:
       - Bearer: []
       summary: Create session review
       tags:
-      - Session
+      - Session Review
   /search:
     get:
       description: Search for sessions, mentors, and categories by keyword
@@ -1073,9 +1073,9 @@ paths:
             $ref: '#/definitions/mentor_session_participant.CustomError'
       security:
       - Bearer: []
-      summary: Create mentor session participant
+      summary: Used for learner to join a mentor session
       tags:
-      - Mentor
+      - Session Enrollments
   /sessions/enrollments:
     get:
       description: Get learner enrollments
@@ -1103,7 +1103,7 @@ paths:
       - Bearer: []
       summary: Get learner enrollments
       tags:
-      - Session
+      - Session Enrollments
   /sessions/histories:
     get:
       description: Get learner history session
