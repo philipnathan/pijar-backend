@@ -536,6 +536,9 @@ definitions:
       image_url:
         example: https://example.com/image.jpg
         type: string
+      is_learner:
+        example: true
+        type: boolean
       is_mentor:
         example: true
         type: boolean
@@ -1006,6 +1009,20 @@ paths:
         in: query
         name: pagesize
         type: integer
+      - description: Rating
+        enum:
+        - highest
+        - lowest
+        in: query
+        name: rating
+        type: string
+      - description: Schedule
+        enum:
+        - newest
+        - oldest
+        in: query
+        name: schedule
+        type: string
       produces:
       - application/json
       responses:

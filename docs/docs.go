@@ -596,6 +596,26 @@ const docTemplate = `{
                         "description": "Page size",
                         "name": "pagesize",
                         "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "highest",
+                            "lowest"
+                        ],
+                        "type": "string",
+                        "description": "Rating",
+                        "name": "rating",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "newest",
+                            "oldest"
+                        ],
+                        "type": "string",
+                        "description": "Schedule",
+                        "name": "schedule",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -2025,6 +2045,10 @@ const docTemplate = `{
                 "image_url": {
                     "type": "string",
                     "example": "https://example.com/image.jpg"
+                },
+                "is_learner": {
+                    "type": "boolean",
+                    "example": true
                 },
                 "is_mentor": {
                     "type": "boolean",
