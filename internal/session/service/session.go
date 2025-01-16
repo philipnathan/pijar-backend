@@ -7,7 +7,7 @@ import (
 )
 
 type SessionService interface {
-	GetUpcomingSessions(page, pageSize int) ([]model.MentorSession, int, error)
+	GetUpcomingSessions(page, pageSize int) (*[]model.MentorSession, int, error)
 	GetLearnerHistorySession(userID uint) (*[]model.MentorSessionParticipant, error)
 	GetSessionByLearnerInterests(userID uint, page, pageSize int) (*[]model.MentorSession, int, error)
 	GetUpcommingSessionsByCategory(categoryID []uint, page, pageSize int) (*[]model.MentorSession, int, error)
@@ -25,8 +25,12 @@ func NewSessionService(repo repository.SessionRepository, learnerInterestsRepo l
 	return &sessionService{repo: repo, learnerInterestsRepo: learnerInterestsRepo}
 }
 
-func (s *sessionService) GetUpcomingSessions(page, pageSize int) ([]model.MentorSession, int, error) {
-	return s.repo.GetUpcomingSessions(page, pageSize)
+func (s *sessionService) GetUpcomingSessions(page, pageSize int) (*[]model.MentorSession, int, error) {
+	sessions, total, err := s.repo.GetUpcomingSessions(page, pageSize)
+	if err != nil {
+		return nil, 0, err
+	}
+	return sessions, total, nil
 }
 
 func (s *sessionService) GetLearnerHistorySession(userID uint) (*[]model.MentorSessionParticipant, error) {
@@ -57,7 +61,7 @@ func (s *sessionService) GetSessionByLearnerInterests(userID uint, page, pageSiz
 		if err != nil {
 			return nil, 0, err
 		}
-		return &sessions, total, nil
+		return sessions, total, nil
 	}
 
 	// if user has interest, return sessions with that interest
