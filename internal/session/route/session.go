@@ -21,9 +21,10 @@ func SessionRoute(r *gin.Engine, db *gorm.DB) {
 
 	nonProtectedRoutes := r.Group(apiV1)
 	{
-		nonProtectedRoutes.GET("/:user_id", hnd.GetSessions)
+		// nonProtectedRoutes.GET("/:user_id", hnd.GetSessions)
 		nonProtectedRoutes.GET("/upcoming", hnd.GetUpcommingSessionsLandingPage)
 		nonProtectedRoutes.GET("", hnd.GetAllSessionsByCategory)
+		nonProtectedRoutes.GET("/:session_id", hnd.GetSessionDetailById)
 	}
 
 	protectedRoutes := r.Group(apiV1)

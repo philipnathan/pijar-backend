@@ -14,6 +14,7 @@ type SessionRepository interface {
 	GetUpcommingSessionsByCategory(categoryID []uint, page, pageSize int) (*[]model.MentorSession, int, error)
 	GetAllSessionsByCategory(categoryID uint, page, pageSize int) (*[]model.MentorSession, int, error)
 	GetSessionByID(sessionID uint) (*model.MentorSession, error)
+	GetSessionDetailByID(sessionID uint) (*model.MentorSession, error)
 }
 
 type sessionRepository struct {
@@ -119,4 +120,19 @@ func (r *sessionRepository) GetSessionByID(sessionID uint) (*model.MentorSession
 	}
 
 	return &model.MentorSession{}, nil
+}
+
+func (r *sessionRepository) GetSessionDetailByID(sessionID uint) (*model.MentorSession, error) {
+	// Difference between GetSessionDetailByID & Get SessionByID is that GetSessionDetailByID will include user info
+	var session model.MentorSession
+	err := r.db.Preload("User").
+		Preload("SessionReviews").
+		Where("id = ?", sessionID).
+		First(&session).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &session, nil
 }
