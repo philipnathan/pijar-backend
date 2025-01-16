@@ -3,6 +3,7 @@ package session
 import (
 	"fmt"
 	"net/http"
+	"sort"
 	"strconv"
 	"time"
 
@@ -209,10 +210,12 @@ func (h *SessionHandler) GetUpcommingSessionsLandingPage(c *gin.Context) {
 // @Description	Get all sessions and can be filtered by categoryid and mentorid
 // @Tags			Session
 // @Produce		json
-// @Param			categoryid	query		int	false	"Category ID"
-// @Param			mentorid	query		int	false	"Mentor ID"
-// @Param			page		query		int	false	"Page number"
-// @Param			pagesize	query		int	false	"Page size"
+// @Param			categoryid	query		int		false	"Category ID"
+// @Param			mentorid	query		int		false	"Mentor ID"
+// @Param			page		query		int		false	"Page number"
+// @Param			pagesize	query		int		false	"Page size"
+// @Param			rating		query		string	false	"Rating"	Enums(highest, lowest)
+// @Param			schedule	query		string	false	"Schedule"	Enums(newest, oldest)
 // @Success		200			{object}	GetAllSessionsResponse
 // @Failure		500			{object}	Error
 // @Router			/sessions [get]
@@ -221,8 +224,10 @@ func (h *SessionHandler) GetAllSessionsWithFilter(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.DefaultQuery("pagesize", "10"))
 	categoryIDint, _ := strconv.Atoi(c.DefaultQuery("categoryid", "0"))
 	mentorIDint, _ := strconv.Atoi(c.DefaultQuery("mentorid", "0"))
+	rating := c.DefaultQuery("rating", "highest")
+	schedule := c.DefaultQuery("schedule", "newest")
 
-	sessions, total, err := h.service.GetAllSessionsWithFilter(uint(categoryIDint), uint(mentorIDint), page, pageSize)
+	sessions, total, err := h.service.GetAllSessionsWithFilter(uint(categoryIDint), uint(mentorIDint), page, pageSize, rating, schedule)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
@@ -267,6 +272,18 @@ func (h *SessionHandler) GetAllSessionsWithFilter(c *gin.Context) {
 				Fullname: session.User.Fullname,
 				ImageURL: *mentorImageURL,
 			},
+		})
+	}
+
+	if rating != "" {
+		sort.Slice(sessionsResponse, func(i, j int) bool {
+			if rating == "highest" {
+				// Mengurutkan dari rating tertinggi ke terendah
+				return sessionsResponse[i].AverageRating > sessionsResponse[j].AverageRating
+			} else {
+				// Mengurutkan dari rating terendah ke tertinggi
+				return sessionsResponse[i].AverageRating < sessionsResponse[j].AverageRating
+			}
 		})
 	}
 
