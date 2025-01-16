@@ -988,12 +988,15 @@ paths:
       - Search
   /sessions:
     get:
-      description: Get all sessions by category
+      description: Get all sessions and can be filtered by categoryid and mentorid
       parameters:
       - description: Category ID
         in: query
         name: categoryid
-        required: true
+        type: integer
+      - description: Mentor ID
+        in: query
+        name: mentorid
         type: integer
       - description: Page number
         in: query
@@ -1014,7 +1017,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/session.Error'
-      summary: Get all sessions by category
+      summary: Get all sessions
       tags:
       - Session
   /sessions/{session_id}:
@@ -1071,37 +1074,6 @@ paths:
       security:
       - Bearer: []
       summary: Create mentor session participant
-      tags:
-      - Mentor
-  /sessions/{user_id}:
-    get:
-      consumes:
-      - application/json
-      description: Get all sessions for a specific user by user ID
-      parameters:
-      - description: User ID
-        in: path
-        name: user_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/session.MentorSessionResponse'
-            type: array
-        "400":
-          description: Invalid user ID
-          schema:
-            $ref: '#/definitions/session.Error'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/session.Error'
-      summary: Get sessions for a user
       tags:
       - Mentor
   /sessions/enrollments:

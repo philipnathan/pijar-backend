@@ -558,21 +558,26 @@
         },
         "/sessions": {
             "get": {
-                "description": "Get all sessions by category",
+                "description": "Get all sessions and can be filtered by categoryid and mentorid",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Session"
                 ],
-                "summary": "Get all sessions by category",
+                "summary": "Get all sessions",
                 "parameters": [
                     {
                         "type": "integer",
                         "description": "Category ID",
                         "name": "categoryid",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Mentor ID",
+                        "name": "mentorid",
+                        "in": "query"
                     },
                     {
                         "type": "integer",
@@ -819,53 +824,6 @@
                         "description": "Internal server error",
                         "schema": {
                             "$ref": "#/definitions/mentor_session_participant.CustomError"
-                        }
-                    }
-                }
-            }
-        },
-        "/sessions/{user_id}": {
-            "get": {
-                "description": "Get all sessions for a specific user by user ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Mentor"
-                ],
-                "summary": "Get sessions for a user",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/session.MentorSessionResponse"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid user ID",
-                        "schema": {
-                            "$ref": "#/definitions/session.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/session.Error"
                         }
                     }
                 }
