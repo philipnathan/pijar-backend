@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	custom_error "github.com/philipnathan/pijar-backend/internal/session/custom_error"
 	dto "github.com/philipnathan/pijar-backend/internal/session/dto"
+	model "github.com/philipnathan/pijar-backend/internal/session/model"
 	service "github.com/philipnathan/pijar-backend/internal/session/service"
 	"github.com/philipnathan/pijar-backend/middleware"
 )
@@ -114,78 +115,50 @@ func (h *SessionHandler) GetUpcommingSessionsLandingPage(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(categoryIDint)
+	var sessions *[]model.MentorSession
+	var total int
+	var err error
 
 	// if category_id is available (categoryID is the priority because it is an input from guest/user)
 	if categoryIDint > 0 {
 		var categoryIDsuint []uint
 		categoryIDsuint = append(categoryIDsuint, uint(categoryIDint))
-		sessions, total, err := h.service.GetUpcommingSessionsByCategory(categoryIDsuint, page, pageSize)
+		sessions, total, err = h.service.GetUpcommingSessionsByCategory(categoryIDsuint, page, pageSize)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
 			return
 		}
-
-		var sessionDetails []dto.SessionDetail
-		for _, session := range *sessions {
-			sessionDetails = append(sessionDetails, dto.SessionDetail{
-				Day:              session.Schedule.Weekday().String(),
-				Time:             session.Schedule.Format("03:04 PM"),
-				Title:            session.Title,
-				ShortDescription: session.ShortDescription,
-				Schedule:         session.Schedule.Format(time.RFC3339),
-				ImageURL:         session.ImageURL,
-				Registered:       true,
-				Duration:         session.EstimateDuration,
-			})
-		}
-		c.JSON(http.StatusOK, dto.GetUpcomingSessionResponse{Sessions: sessionDetails, Page: page, PageSize: pageSize, Total: total})
-		return
 	}
 
 	// if user is not authenticated (without JWT) and category_id is not available
 	if !isAuthenticated && categoryIDint == 0 {
-		sessions, total, err := h.service.GetUpcomingSessions(page, pageSize)
+		sessions, total, err = h.service.GetUpcomingSessions(page, pageSize)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
 			return
 		}
-
-		var sessionDetails []dto.SessionDetail
-		for _, session := range sessions {
-			sessionDetails = append(sessionDetails, dto.SessionDetail{
-				Day:              session.Schedule.Weekday().String(),
-				Time:             session.Schedule.Format("03:04 PM"),
-				Title:            session.Title,
-				ShortDescription: session.ShortDescription,
-				Schedule:         session.Schedule.Format(time.RFC3339),
-				ImageURL:         session.ImageURL,
-				Registered:       true,
-				Duration:         session.EstimateDuration,
-			})
-		}
-		c.JSON(http.StatusOK, dto.GetUpcomingSessionResponse{Sessions: sessionDetails, Page: page, PageSize: pageSize, Total: total})
-		return
 	}
 
 	// if user is authenticated (with JWT) - get user_id from JWT and get mentor by user interests
-	UserID, exist := c.Get("user_id")
-	if !exist {
-		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
-		return
-	}
+	if isAuthenticated && categoryIDint == 0 {
+		UserID, exist := c.Get("user_id")
+		if !exist {
+			c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+			return
+		}
 
-	id, ok := UserID.(float64)
-	if !ok {
-		c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
-		return
-	}
+		id, ok := UserID.(float64)
+		if !ok {
+			c.JSON(http.StatusUnauthorized, custom_error.Error{Error: "Unauthorized"})
+			return
+		}
 
-	sessions, total, err := h.service.GetSessionByLearnerInterests(uint(id), page, pageSize)
+		sessions, total, err = h.service.GetSessionByLearnerInterests(uint(id), page, pageSize)
 
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
-		return
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
+			return
+		}
 	}
 
 	var sessionDetails []dto.SessionDetail
