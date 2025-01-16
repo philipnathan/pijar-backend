@@ -3,6 +3,7 @@ package session
 import (
 	"time"
 
+	category "github.com/philipnathan/pijar-backend/internal/category/model"
 	review "github.com/philipnathan/pijar-backend/internal/session_review/model"
 	user "github.com/philipnathan/pijar-backend/internal/user/model"
 )
@@ -33,6 +34,7 @@ type MentorSession struct {
 	UpdatedAt        time.Time `gorm:"autoUpdateTime" json:"updated_at"`
 
 	SessionReviews []review.SessionReview `json:"session_reviews" gorm:"foreignKey:SessionID"`
+	Category       category.Category      `json:"category" gorm:"foreignKey:CategoryID;references:ID"`
 }
 
 type MentorSessionParticipant struct {
