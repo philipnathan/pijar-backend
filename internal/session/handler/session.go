@@ -278,10 +278,8 @@ func (h *SessionHandler) GetAllSessionsWithFilter(c *gin.Context) {
 	if rating != "" {
 		sort.Slice(sessionsResponse, func(i, j int) bool {
 			if rating == "highest" {
-				// Mengurutkan dari rating tertinggi ke terendah
 				return sessionsResponse[i].AverageRating > sessionsResponse[j].AverageRating
 			} else {
-				// Mengurutkan dari rating terendah ke tertinggi
 				return sessionsResponse[i].AverageRating < sessionsResponse[j].AverageRating
 			}
 		})
