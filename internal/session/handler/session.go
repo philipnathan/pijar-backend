@@ -162,6 +162,7 @@ func (h *SessionHandler) GetUpcommingSessionsLandingPage(c *gin.Context) {
 
 	var sessionDetails []dto.Session
 	var sessionImage string
+	var mentorImage string
 
 	for _, session := range *sessions {
 		if session.ImageURL == "" {
@@ -170,20 +171,26 @@ func (h *SessionHandler) GetUpcommingSessionsLandingPage(c *gin.Context) {
 			sessionImage = session.ImageURL
 		}
 
+		if session.User.ImageURL == nil {
+			mentorImage = ""
+		} else {
+			mentorImage = *session.User.ImageURL
+		}
+
 		sessionDetails = append(sessionDetails, dto.Session{
 			ID:               session.ID,
-			Day:              session.Schedule.Weekday().String(),
-			Time:             session.Schedule.Format("03:04 PM"),
+			MentorDetails:    dto.MentorDetails{Id: session.User.ID, Fullname: session.User.Fullname, ImageURL: mentorImage},
+			Category:         session.Category.Category_name,
 			Title:            session.Title,
 			ShortDescription: session.ShortDescription,
+			Detail:           session.Detail,
 			Schedule:         session.Schedule.Format(time.RFC3339),
-			ImageURL:         sessionImage,
 			Duration:         session.EstimateDuration,
-			MentorDetails: dto.MentorDetails{
-				Id:       session.User.ID,
-				Fullname: session.User.Fullname,
-				ImageURL: sessionImage,
-			},
+			ImageURL:         sessionImage,
+			Link:             session.Link,
+			Day:              session.Schedule.Weekday().String(),
+			Time:             session.Schedule.Format("03:04 PM"),
+			AverageRating:    0,
 		})
 	}
 
@@ -254,19 +261,18 @@ func (h *SessionHandler) GetAllSessionsWithFilter(c *gin.Context) {
 
 		sessionsResponse = append(sessionsResponse, dto.Session{
 			ID:               session.ID,
-			Day:              session.Schedule.Weekday().String(),
-			Time:             session.Schedule.Format("03:04 PM"),
+			MentorDetails:    dto.MentorDetails{Id: session.User.ID, Fullname: session.User.Fullname, ImageURL: *mentorImageURL},
+			Category:         session.Category.Category_name,
 			Title:            session.Title,
 			ShortDescription: session.ShortDescription,
-			ImageURL:         *sessionImageURL,
+			Detail:           session.Detail,
 			Schedule:         session.Schedule.Format(time.RFC3339),
-			AverageRating:    average_rating,
 			Duration:         session.EstimateDuration,
-			MentorDetails: dto.MentorDetails{
-				Id:       session.User.ID,
-				Fullname: session.User.Fullname,
-				ImageURL: *mentorImageURL,
-			},
+			ImageURL:         *sessionImageURL,
+			Link:             session.Link,
+			Day:              session.Schedule.Weekday().String(),
+			Time:             session.Schedule.Format("03:04 PM"),
+			AverageRating:    average_rating,
 		})
 	}
 
@@ -342,19 +348,18 @@ func (h *SessionHandler) GetSessionDetailById(c *gin.Context) {
 
 	response := dto.Session{
 		ID:               session.ID,
-		Day:              session.Schedule.Weekday().String(),
-		Time:             session.Schedule.Format("03:04 PM"),
+		MentorDetails:    dto.MentorDetails{Id: session.User.ID, Fullname: session.User.Fullname, ImageURL: mentorImageURL},
+		Category:         session.Category.Category_name,
 		Title:            session.Title,
 		ShortDescription: session.ShortDescription,
-		ImageURL:         sessionImage,
+		Detail:           session.Detail,
 		Schedule:         session.Schedule.Format(time.RFC3339),
-		AverageRating:    average_rating,
 		Duration:         session.EstimateDuration,
-		MentorDetails: dto.MentorDetails{
-			Id:       session.User.ID,
-			Fullname: session.User.Fullname,
-			ImageURL: mentorImageURL,
-		},
+		ImageURL:         sessionImage,
+		Link:             session.Link,
+		Day:              session.Schedule.Weekday().String(),
+		Time:             session.Schedule.Format("03:04 PM"),
+		AverageRating:    average_rating,
 	}
 
 	c.JSON(http.StatusOK, response)
