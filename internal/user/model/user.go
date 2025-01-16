@@ -21,6 +21,7 @@ type User struct {
 	Fullname    string      `gorm:"type:varchar(100);not null" json:"fullname"`
 	BirthDate   *CustomTime `gorm:"type:DATE" json:"birth_date"`
 	PhoneNumber *string     `gorm:"type:varchar(13);unique" json:"phonenumber"`
+	IsLearner   bool        `gorm:"type:bool;default:false" json:"is_leaner"`
 	IsMentor    *bool       `gorm:"type:bool;default:false" json:"is_mentor"`
 	ImageURL    *string     `gorm:"type:text" json:"image_url"`
 
