@@ -11,7 +11,7 @@ type SessionRepository interface {
 	GetUpcomingSessions(page, pageSize int) ([]model.MentorSession, int, error)
 	GetLearnerHistorySession(userID *uint) (*[]model.MentorSessionParticipant, error)
 	GetUpcommingSessionsByCategory(categoryID []uint, page, pageSize int) (*[]model.MentorSession, int, error)
-	GetAllSessionsWithFilter(categoryID, mentorID uint, page, pageSize int) (*[]model.MentorSession, int, error)
+	GetAllSessionsWithFilter(categoryID, mentorID uint, page, pageSize int, rating, schedule string) (*[]model.MentorSession, int, error)
 	GetSessionByID(sessionID uint) (*model.MentorSession, error)
 	GetSessionDetailByID(sessionID uint) (*model.MentorSession, error)
 }
@@ -76,7 +76,7 @@ func (r *sessionRepository) GetUpcommingSessionsByCategory(categoryID []uint, pa
 	return &sessions, int(total), nil
 }
 
-func (r *sessionRepository) GetAllSessionsWithFilter(categoryID, mentorID uint, page, pageSize int) (*[]model.MentorSession, int, error) {
+func (r *sessionRepository) GetAllSessionsWithFilter(categoryID, mentorID uint, page, pageSize int, rating, schedule string) (*[]model.MentorSession, int, error) {
 	var sessions []model.MentorSession
 	var total int64
 
@@ -92,6 +92,14 @@ func (r *sessionRepository) GetAllSessionsWithFilter(categoryID, mentorID uint, 
 		query = query.Where("category_id = ?", categoryID)
 	}
 
+	if schedule != "" {
+		if schedule == "newest" {
+			query = query.Order("schedule DESC")
+		} else if schedule == "oldest" {
+			query = query.Order("schedule ASC")
+		}
+	}
+
 	if err := countQuery.Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
@@ -99,7 +107,6 @@ func (r *sessionRepository) GetAllSessionsWithFilter(categoryID, mentorID uint, 
 	err := query.
 		Preload("User").
 		Preload("SessionReviews").
-		Order("schedule ASC").
 		Offset((page - 1) * pageSize).
 		Limit(pageSize).
 		Find(&sessions).Error

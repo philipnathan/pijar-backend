@@ -11,7 +11,7 @@ type SessionService interface {
 	GetLearnerHistorySession(userID uint) (*[]model.MentorSessionParticipant, error)
 	GetSessionByLearnerInterests(userID uint, page, pageSize int) (*[]model.MentorSession, int, error)
 	GetUpcommingSessionsByCategory(categoryID []uint, page, pageSize int) (*[]model.MentorSession, int, error)
-	GetAllSessionsWithFilter(categoryID, mentorID uint, page, pageSize int) (*[]model.MentorSession, int, error)
+	GetAllSessionsWithFilter(categoryID, mentorID uint, page, pageSize int, rating, schedule string) (*[]model.MentorSession, int, error)
 	GetSessionByID(sessionID uint) (*model.MentorSession, error)
 	GetDetailSessionByID(sessionID uint) (*model.MentorSession, error)
 }
@@ -78,8 +78,8 @@ func (s *sessionService) GetUpcommingSessionsByCategory(categoryID []uint, page,
 	return sessions, total, nil
 }
 
-func (s *sessionService) GetAllSessionsWithFilter(categoryID, mentorID uint, page, pageSize int) (*[]model.MentorSession, int, error) {
-	sessions, total, err := s.repo.GetAllSessionsWithFilter(categoryID, mentorID, page, pageSize)
+func (s *sessionService) GetAllSessionsWithFilter(categoryID, mentorID uint, page, pageSize int, rating, schedule string) (*[]model.MentorSession, int, error) {
+	sessions, total, err := s.repo.GetAllSessionsWithFilter(categoryID, mentorID, page, pageSize, rating, schedule)
 
 	if err != nil {
 		return nil, 0, err
