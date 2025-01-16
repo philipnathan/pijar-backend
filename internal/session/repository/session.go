@@ -8,7 +8,7 @@ import (
 )
 
 type SessionRepository interface {
-	GetUpcomingSessions(page, pageSize int) ([]model.MentorSession, int, error)
+	GetUpcomingSessions(page, pageSize int) (*[]model.MentorSession, int, error)
 	GetLearnerHistorySession(userID *uint) (*[]model.MentorSessionParticipant, error)
 	GetUpcommingSessionsByCategory(categoryID []uint, page, pageSize int) (*[]model.MentorSession, int, error)
 	GetAllSessionsWithFilter(categoryID, mentorID uint, page, pageSize int, rating, schedule string) (*[]model.MentorSession, int, error)
@@ -24,7 +24,7 @@ func NewSessionRepository(db *gorm.DB) SessionRepository {
 	return &sessionRepository{db: db}
 }
 
-func (r *sessionRepository) GetUpcomingSessions(page, pageSize int) ([]model.MentorSession, int, error) {
+func (r *sessionRepository) GetUpcomingSessions(page, pageSize int) (*[]model.MentorSession, int, error) {
 	var total int64
 	countQuery := r.db.Model(&model.MentorSession{}).Where("schedule > ?", time.Now())
 	if err := countQuery.Count(&total).Error; err != nil {
@@ -40,7 +40,7 @@ func (r *sessionRepository) GetUpcomingSessions(page, pageSize int) ([]model.Men
 	if err != nil {
 		return nil, 0, err
 	}
-	return sessions, int(total), nil
+	return &sessions, int(total), nil
 }
 
 func (r *sessionRepository) GetLearnerHistorySession(userID *uint) (*[]model.MentorSessionParticipant, error) {
