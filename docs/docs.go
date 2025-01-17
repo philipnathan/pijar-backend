@@ -413,6 +413,55 @@ const docTemplate = `{
                 }
             }
         },
+        "/mentors/{mentorid}/follow": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Follow or Unfollow Mentor",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Follow"
+                ],
+                "summary": "Follow or Unfollow Mentor",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Mentor ID",
+                        "name": "mentorid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/follow.FollowUnffolowResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/follow.CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/follow.CustomError"
+                        }
+                    }
+                }
+            }
+        },
         "/reviews/{session_id}": {
             "get": {
                 "description": "Get session reviews",
@@ -1294,6 +1343,22 @@ const docTemplate = `{
                 }
             }
         },
+        "follow.CustomError": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "follow.FollowUnffolowResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "learner.AddLearnerInterestsDto": {
             "type": "object",
             "required": [
@@ -1881,7 +1946,25 @@ const docTemplate = `{
                 "average_rating": {
                     "type": "number"
                 },
+<<<<<<< Updated upstream
+=======
+                "category": {
+                    "type": "string"
+                },
+                "day": {
+                    "type": "string"
+                },
+                "detail": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "integer"
+                },
+>>>>>>> Stashed changes
                 "image_url": {
+                    "type": "string"
+                },
+                "link": {
                     "type": "string"
                 },
                 "mentor_details": {

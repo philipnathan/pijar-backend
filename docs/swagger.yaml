@@ -35,6 +35,16 @@ definitions:
         example: https://example.com/image.png
         type: string
     type: object
+  follow.CustomError:
+    properties:
+      error:
+        type: string
+    type: object
+  follow.FollowUnffolowResponse:
+    properties:
+      message:
+        type: string
+    type: object
   learner.AddLearnerInterestsDto:
     properties:
       category_id:
@@ -426,7 +436,20 @@ definitions:
     properties:
       average_rating:
         type: number
+<<<<<<< Updated upstream
+=======
+      category:
+        type: string
+      day:
+        type: string
+      detail:
+        type: string
+      duration:
+        type: integer
+>>>>>>> Stashed changes
       image_url:
+        type: string
+      link:
         type: string
       mentor_details:
         $ref: '#/definitions/session.MentorDetails'
@@ -862,6 +885,37 @@ paths:
       summary: Get mentor details
       tags:
       - Mentor
+  /mentors/{mentorid}/follow:
+    post:
+      consumes:
+      - application/json
+      description: Follow or Unfollow Mentor
+      parameters:
+      - description: Mentor ID
+        in: path
+        name: mentorid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/follow.FollowUnffolowResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/follow.CustomError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/follow.CustomError'
+      security:
+      - Bearer: []
+      summary: Follow or Unfollow Mentor
+      tags:
+      - Follow
   /mentors/landingpage:
     get:
       description: Get mentor landing page
