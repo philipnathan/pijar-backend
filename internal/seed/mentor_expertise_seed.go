@@ -19,6 +19,10 @@ func SeedMentorExpertise(db *gorm.DB) error {
 		{UserID: 3, Expertise: "Pengolahan Hasil Pertanian", Category_id: 4},
 		{UserID: 5, Expertise: "Kerajinan dari Anyaman Bambu", Category_id: 3},
 		{UserID: 7, Expertise: "Pengolahan Tebu", Category_id: 4},
+		{UserID: 9, Expertise: "JavaScript", Category_id: 7},
+		{UserID: 9, Expertise: "Laravel", Category_id: 7},
+		{UserID: 10, Expertise: "Perdagangan Internasional", Category_id: 8},
+		{UserID: 10, Expertise: "Konsultasi Ekspor-Impor", Category_id: 8},
 	}
 
 	var count int64

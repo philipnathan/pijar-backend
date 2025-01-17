@@ -23,6 +23,8 @@ func SeedUser(db *gorm.DB) error {
 	user06, _ := utils.HashPassword("hashed_password_komang")
 	user07, _ := utils.HashPassword("hashed_password_ari")
 	user08, _ := utils.HashPassword("hashed_password_supriyadi")
+	user09, _ := utils.HashPassword("Password123")
+	user10, _ := utils.HashPassword("Password123")
 
 	users := []userModel.User{
 		{
@@ -112,6 +114,28 @@ func SeedUser(db *gorm.DB) error {
 				Time: time.Date(1997, 7, 12, 0, 0, 0, 0, time.UTC),
 			},
 			ImageURL: &[]string{"https://static.vecteezy.com/system/resources/thumbnails/009/887/693/small_2x/male-man-african-american-black-diversity-person-afro-hair-ethnic-happy-smile-model-close-up-face-enjoyment-hashion-lifestyle-professional-human-father-boy-business-education-young-adult-teenage-photo.jpg"}[0],
+		},
+		{
+			Email:     "sandhika.galih@example.com",
+			Password:  user09,
+			Fullname:  "Sandhika Galih",
+			IsLearner: false,
+			IsMentor:  &[]bool{true}[0],
+			BirthDate: &userModel.CustomTime{
+				Time: time.Date(1982, 3, 21, 0, 0, 0, 0, time.UTC),
+			},
+			ImageURL: &[]string{"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyKzYF_Z55a7kUWIFk5lmK_QJUiMqNANxKUA&s"}[0],
+		},
+		{
+			Email:     "della.wardhini@example.com",
+			Password:  user10,
+			Fullname:  "Della Wardhini",
+			IsLearner: false,
+			IsMentor:  &[]bool{true}[0],
+			BirthDate: &userModel.CustomTime{
+				Time: time.Date(1960, 3, 21, 0, 0, 0, 0, time.UTC),
+			},
+			ImageURL: &[]string{"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-q3W9cs5ucieReoKu7IhRRx0dBzwUHs9gcA&s "}[0],
 		},
 	}
 

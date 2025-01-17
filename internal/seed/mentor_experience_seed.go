@@ -39,6 +39,24 @@ func SeedMentorExperience(db *gorm.DB) error {
 			CompanyName: "UD. Minum Yang Manis",
 			StartDate:   model.CustomTime{Time: time.Date(2000, 5, 1, 0, 0, 0, 0, time.UTC)},
 		},
+		{
+			UserID:      9,
+			Occupation:  "Dosen",
+			CompanyName: "Universitas Pasundan",
+			StartDate:   model.CustomTime{Time: time.Date(2012, 1, 1, 0, 0, 0, 0, time.UTC)},
+		},
+		{
+			UserID:      9,
+			Occupation:  "Konten Kreator",
+			CompanyName: "Youtube",
+			StartDate:   model.CustomTime{Time: time.Date(2012, 1, 1, 0, 0, 0, 0, time.UTC)},
+		},
+		{
+			UserID:      10,
+			Occupation:  "Konsultan Ekspor Impor",
+			CompanyName: "PT. Konsultan Ekspor Impor",
+			StartDate:   model.CustomTime{Time: time.Date(2003, 1, 1, 0, 0, 0, 0, time.UTC)},
+		},
 	}
 
 	var count int64
