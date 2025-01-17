@@ -413,11 +413,17 @@ definitions:
     properties:
       average_rating:
         type: number
+      category:
+        type: string
       day:
+        type: string
+      detail:
         type: string
       duration:
         type: integer
       image_url:
+        type: string
+      link:
         type: string
       mentor_details:
         $ref: '#/definitions/session.MentorDetails'
@@ -949,76 +955,6 @@ paths:
       summary: Get mentor landing page
       tags:
       - Mentor
-  /reviews/{session_id}:
-    get:
-      description: Get session reviews
-      parameters:
-      - description: Session ID
-        in: path
-        name: session_id
-        required: true
-        type: string
-      - description: Page number
-        in: query
-        name: page
-        type: integer
-      - description: Page size
-        in: query
-        name: pagesize
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/session_review.GetAllReviewsResponse'
-        "400":
-          description: Session not found
-          schema:
-            $ref: '#/definitions/session_review.CustomError'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/session_review.CustomError'
-      tags:
-      - Session Review
-    post:
-      consumes:
-      - application/json
-      description: Create session review
-      parameters:
-      - description: Session ID
-        in: path
-        name: session_id
-        required: true
-        type: string
-      - description: Session Review
-        in: body
-        name: session_review
-        required: true
-        schema:
-          $ref: '#/definitions/session_review.SessionReviewRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/session_review.SessionReviewResponse'
-        "400":
-          description: User not found
-          schema:
-            $ref: '#/definitions/session_review.CustomError'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/session_review.CustomError'
-      security:
-      - Bearer: []
-      summary: Create session review
-      tags:
-      - Session Review
   /search:
     get:
       description: Search for sessions, mentors, and categories by keyword
@@ -1150,6 +1086,76 @@ paths:
       summary: Used for learner to join a mentor session
       tags:
       - Session Enrollments
+  /sessions/{session_id}/review:
+    get:
+      description: Get session reviews
+      parameters:
+      - description: Session ID
+        in: path
+        name: session_id
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: pagesize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/session_review.GetAllReviewsResponse'
+        "400":
+          description: Session not found
+          schema:
+            $ref: '#/definitions/session_review.CustomError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/session_review.CustomError'
+      tags:
+      - Session Review
+    post:
+      consumes:
+      - application/json
+      description: Create session review
+      parameters:
+      - description: Session ID
+        in: path
+        name: session_id
+        required: true
+        type: string
+      - description: Session Review
+        in: body
+        name: session_review
+        required: true
+        schema:
+          $ref: '#/definitions/session_review.SessionReviewRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/session_review.SessionReviewResponse'
+        "400":
+          description: User not found
+          schema:
+            $ref: '#/definitions/session_review.CustomError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/session_review.CustomError'
+      security:
+      - Bearer: []
+      summary: Create session review
+      tags:
+      - Session Review
   /sessions/enrollments:
     get:
       description: Get learner enrollments

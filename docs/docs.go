@@ -511,114 +511,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/reviews/{session_id}": {
-            "get": {
-                "description": "Get session reviews",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Session Review"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Session ID",
-                        "name": "session_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Page number",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Page size",
-                        "name": "pagesize",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/session_review.GetAllReviewsResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Session not found",
-                        "schema": {
-                            "$ref": "#/definitions/session_review.CustomError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/session_review.CustomError"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "description": "Create session review",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Session Review"
-                ],
-                "summary": "Create session review",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Session ID",
-                        "name": "session_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Session Review",
-                        "name": "session_review",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/session_review.SessionReviewRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/session_review.SessionReviewResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "User not found",
-                        "schema": {
-                            "$ref": "#/definitions/session_review.CustomError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/session_review.CustomError"
-                        }
-                    }
-                }
-            }
-        },
         "/search": {
             "get": {
                 "description": "Search for sessions, mentors, and categories by keyword",
@@ -948,6 +840,114 @@ const docTemplate = `{
                         "description": "Internal server error",
                         "schema": {
                             "$ref": "#/definitions/mentor_session_participant.CustomError"
+                        }
+                    }
+                }
+            }
+        },
+        "/sessions/{session_id}/review": {
+            "get": {
+                "description": "Get session reviews",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Session Review"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Session ID",
+                        "name": "session_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "pagesize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/session_review.GetAllReviewsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Session not found",
+                        "schema": {
+                            "$ref": "#/definitions/session_review.CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/session_review.CustomError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Create session review",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Session Review"
+                ],
+                "summary": "Create session review",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Session ID",
+                        "name": "session_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Session Review",
+                        "name": "session_review",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/session_review.SessionReviewRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/session_review.SessionReviewResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/session_review.CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/session_review.CustomError"
                         }
                     }
                 }
@@ -1960,13 +1960,22 @@ const docTemplate = `{
                 "average_rating": {
                     "type": "number"
                 },
+                "category": {
+                    "type": "string"
+                },
                 "day": {
+                    "type": "string"
+                },
+                "detail": {
                     "type": "string"
                 },
                 "duration": {
                     "type": "integer"
                 },
                 "image_url": {
+                    "type": "string"
+                },
+                "link": {
                     "type": "string"
                 },
                 "mentor_details": {

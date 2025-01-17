@@ -17,7 +17,7 @@ import (
 )
 
 func SessionReviewRoute(r *gin.Engine, db *gorm.DB) {
-	apiV1 := "/api/v1/reviews"
+	apiV1 := "/api/v1/sessions"
 
 	repo := repo.NewSessionReviewRepository(db)
 	userRepo := userRepo.NewUserRepository(db)
@@ -40,12 +40,12 @@ func SessionReviewRoute(r *gin.Engine, db *gorm.DB) {
 
 	nonProtectedRoutes := r.Group(apiV1)
 	{
-		nonProtectedRoutes.GET("/:session_id", hnd.GetSessionReviewsHandler)
+		nonProtectedRoutes.GET("/:session_id/review", hnd.GetSessionReviewsHandler)
 	}
 
 	protectedRoutes := r.Group(apiV1)
 	{
 		protectedRoutes.Use(middleware.AuthMiddleware())
-		protectedRoutes.POST("/:session_id", hnd.CreateSessionReviewHandler)
+		protectedRoutes.POST("/:session_id/review", hnd.CreateSessionReviewHandler)
 	}
 }

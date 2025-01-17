@@ -32,7 +32,7 @@ func NewSessionReviewHandler(service service.SessionReviewServiceInterface) *Ses
 // @Success	200				{object}	SessionReviewResponse
 // @Failure	400				{object}	CustomError	"User not found"
 // @Failure	500				{object}	CustomError	"Internal server error"
-// @Router		/reviews/{session_id} [post]
+// @Router		/sessions/{session_id}/review [post]
 func (h *SessionReviewHandler) CreateSessionReviewHandler(c *gin.Context) {
 	userID, exist := c.Get("user_id")
 	if !exist {
@@ -114,7 +114,7 @@ func (h *SessionReviewHandler) CreateSessionReviewHandler(c *gin.Context) {
 // @Success	200			{object}	GetAllReviewsResponse
 // @Failure	400			{object}	CustomError	"Session not found"
 // @Failure	500			{object}	CustomError	"Internal server error"
-// @Router		/reviews/{session_id} [get]
+// @Router		/sessions/{session_id}/review [get]
 func (h *SessionReviewHandler) GetSessionReviewsHandler(c *gin.Context) {
 	sessionIDStr := c.Param("session_id")
 	if sessionIDStr == "" {
