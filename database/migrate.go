@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	category "github.com/philipnathan/pijar-backend/internal/category/model"
+	follow "github.com/philipnathan/pijar-backend/internal/follow/model"
 	learner "github.com/philipnathan/pijar-backend/internal/learner/model"
 	mentor "github.com/philipnathan/pijar-backend/internal/mentor/model"
 	mentorSessionParticipant "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/model"
@@ -29,6 +30,7 @@ func MigrateDatabase(db *gorm.DB) {
 		&session.MentorSession{},
 		&mentorSessionParticipant.MentorSessionParticipant{},
 		&review.SessionReview{},
+		&follow.Follow{},
 	)
 
 	if err != nil {

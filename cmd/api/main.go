@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/philipnathan/pijar-backend/database"
 	categoryRoute "github.com/philipnathan/pijar-backend/internal/category/route"
+	followRoute "github.com/philipnathan/pijar-backend/internal/follow/route"
 	learnerRoute "github.com/philipnathan/pijar-backend/internal/learner/route"
 	mentor "github.com/philipnathan/pijar-backend/internal/mentor/route"
 	mentorSessionParticipant "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/route"
@@ -75,6 +76,7 @@ func main() {
 	searchRoute.SearchRoute(r, db)
 	mentorSessionParticipant.MentorSessionParticipantRoute(r, db)
 	reviewRoute.SessionReviewRoute(r, db)
+	followRoute.FollowRoute(r, db)
 
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server:", err)
