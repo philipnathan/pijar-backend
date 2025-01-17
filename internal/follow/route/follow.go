@@ -12,7 +12,7 @@ import (
 )
 
 func FollowRoute(r *gin.Engine, db *gorm.DB) {
-	apiV1 := "/api/v1/mentors"
+	apiV1 := "/api/v1/mentors/"
 
 	repo := repo.NewFollowRepository(db)
 	userRepo := userRepo.NewUserRepository(db)
@@ -27,6 +27,7 @@ func FollowRoute(r *gin.Engine, db *gorm.DB) {
 	{
 		protectedRoutes.Use(middleware.AuthMiddleware())
 
-		protectedRoutes.POST("/:mentorid/follow", hnd.FollowUnfollowHandler)
+		protectedRoutes.POST("/:mentor_id/follow", hnd.FollowUnfollowHandler)
+		protectedRoutes.GET("/:mentor_id/status", hnd.IsFollowingHandler)
 	}
 }

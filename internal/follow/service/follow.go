@@ -8,6 +8,7 @@ import (
 
 type FollowServiceInterface interface {
 	FollowUnfollow(followerID, followingID *uint) error
+	IsFollowing(followerID, followingID *uint) (bool, error)
 }
 
 type FollowService struct {
@@ -50,4 +51,8 @@ func (s *FollowService) FollowUnfollow(followerID, followingID *uint) error {
 	} else {
 		return s.repo.Follow(followerID, followingID)
 	}
+}
+
+func (s *FollowService) IsFollowing(followerID, followingID *uint) (bool, error) {
+	return s.repo.IsFollowing(followerID, followingID)
 }

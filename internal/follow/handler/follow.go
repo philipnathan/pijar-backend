@@ -45,9 +45,9 @@ func (h *FollowHandler) FollowUnfollowHandler(c *gin.Context) {
 		return
 	}
 
-	following, err := strconv.Atoi(c.Param("mentorid"))
+	following, err := strconv.Atoi(c.Param("mentor_id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid following_id"})
+		c.JSON(http.StatusBadRequest, custom_error.NewCustomError("Invalid mentor ID"))
 		return
 	}
 
@@ -80,4 +80,57 @@ func (h *FollowHandler) FollowUnfollowHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, dto.FollowUnffolowResponse{Messsage: "Follow/Unfollow successful"})
+}
+
+// @Summary		Check status of following
+// @Description	Check status of following
+// @Scheme
+// @Tags		Follow
+// @Accept		json
+// @Produce	json
+// @Param		mentorid	path	int	true	"Mentor ID"
+// @Security	Bearer
+// @Success	200	{object}	IsFollowResponse
+// @Failure	400	{object}	CustomError
+// @Failure	500	{object}	CustomError
+// @Router		/mentors/{mentorid}/status [get]
+func (h *FollowHandler) IsFollowingHandler(c *gin.Context) {
+	userID, exist := c.Get("user_id")
+	if !exist {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	id, ok := userID.(float64)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	following, err := strconv.Atoi(c.Param("mentor_id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, custom_error.NewCustomError("Invalid mentor_id"))
+		return
+	}
+
+	if following <= 0 {
+		c.JSON(http.StatusBadRequest, custom_error.ErrInvalidFollowingID)
+		return
+	}
+
+	if int(following) == int(id) {
+		c.JSON(http.StatusBadRequest, custom_error.ErrFollowingSelf)
+		return
+	}
+
+	followerID := uint(id)
+	followingID := uint(following)
+
+	status, err := h.service.IsFollowing(&followerID, &followingID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, custom_error.NewCustomError(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, dto.IsFollowResponse{Message: "Successfully checked", IsFollowing: status})
 }

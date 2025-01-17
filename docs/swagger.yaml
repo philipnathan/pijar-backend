@@ -45,6 +45,13 @@ definitions:
       message:
         type: string
     type: object
+  follow.IsFollowResponse:
+    properties:
+      is_following:
+        type: boolean
+      message:
+        type: string
+    type: object
   learner.AddLearnerInterestsDto:
     properties:
       category_id:
@@ -436,20 +443,7 @@ definitions:
     properties:
       average_rating:
         type: number
-<<<<<<< Updated upstream
-=======
-      category:
-        type: string
-      day:
-        type: string
-      detail:
-        type: string
-      duration:
-        type: integer
->>>>>>> Stashed changes
       image_url:
-        type: string
-      link:
         type: string
       mentor_details:
         $ref: '#/definitions/session.MentorDetails'
@@ -914,6 +908,37 @@ paths:
       security:
       - Bearer: []
       summary: Follow or Unfollow Mentor
+      tags:
+      - Follow
+  /mentors/{mentorid}/status:
+    get:
+      consumes:
+      - application/json
+      description: Check status of following
+      parameters:
+      - description: Mentor ID
+        in: path
+        name: mentorid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/follow.IsFollowResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/follow.CustomError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/follow.CustomError'
+      security:
+      - Bearer: []
+      summary: Check status of following
       tags:
       - Follow
   /mentors/landingpage:
