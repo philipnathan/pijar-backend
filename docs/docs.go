@@ -524,10 +524,22 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Search Keyword",
+                        "description": "Search Keyword min 3 characters long",
                         "name": "keyword",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number for sessions",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size for sessions",
+                        "name": "pagesize",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1854,10 +1866,16 @@ const docTemplate = `{
                 }
             }
         },
-        "search.CategoryDetail": {
+        "search.Category": {
             "type": "object",
             "properties": {
                 "category_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image_url": {
                     "type": "string"
                 }
             }
@@ -1870,53 +1888,121 @@ const docTemplate = `{
                 }
             }
         },
-        "search.MentorDetail": {
+        "search.GetAllSessionsResponse": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
+                "page": {
+                    "type": "integer"
                 },
+                "page_size": {
+                    "type": "integer"
+                },
+                "sessions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/search.Session"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "search.MentorDetailLandingPage": {
+            "type": "object",
+            "properties": {
                 "fullname": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
                 },
                 "image_url": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
+                },
+                "occupation": {
+                    "type": "string",
+                    "example": "Software Engineer"
+                }
+            }
+        },
+        "search.MentorDetails": {
+            "type": "object",
+            "properties": {
+                "fullname": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "image_url": {
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
                 }
             }
         },
         "search.SearchResponse": {
             "type": "object",
             "properties": {
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/search.Category"
+                    }
+                },
                 "mentors": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/search.MentorDetail"
+                        "$ref": "#/definitions/search.MentorDetailLandingPage"
                     }
                 },
                 "sessions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/search.SessionDetail"
-                    }
-                },
-                "topics": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/search.CategoryDetail"
-                    }
+                    "$ref": "#/definitions/search.GetAllSessionsResponse"
                 }
             }
         },
-        "search.SessionDetail": {
+        "search.Session": {
             "type": "object",
             "properties": {
+                "average_rating": {
+                    "type": "number"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "day": {
+                    "type": "string"
+                },
+                "detail": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "integer"
+                },
                 "image_url": {
                     "type": "string"
+                },
+                "link": {
+                    "type": "string"
+                },
+                "mentor_details": {
+                    "$ref": "#/definitions/search.MentorDetails"
                 },
                 "schedule": {
                     "type": "string"
                 },
+                "session_id": {
+                    "type": "integer"
+                },
                 "short_description": {
+                    "type": "string"
+                },
+                "time": {
                     "type": "string"
                 },
                 "title": {
