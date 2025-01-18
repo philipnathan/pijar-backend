@@ -571,6 +571,31 @@ definitions:
         example: eyAsgh435789
         type: string
     type: object
+  user.RegisterMentorDto:
+    properties:
+      email:
+        type: string
+      fullname:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - fullname
+    - password
+    type: object
+  user.RegisterMentorResponse:
+    properties:
+      access_token:
+        example: eyAsgh435789
+        type: string
+      message:
+        example: mentor registered successfully
+        type: string
+      refresh_token:
+        example: eyAsgh435789
+        type: string
+    type: object
   user.RegisterUserDto:
     properties:
       email:
@@ -1483,6 +1508,36 @@ paths:
           schema:
             $ref: '#/definitions/user.Error'
       summary: Register new user
+      tags:
+      - User
+  /users/registermentor:
+    post:
+      consumes:
+      - application/json
+      description: Register mentor
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.RegisterMentorDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.RegisterMentorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/user.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user.Error'
+      summary: Register mentor
       tags:
       - User
 securityDefinitions:

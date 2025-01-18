@@ -67,6 +67,7 @@ func main() {
 	seedDatabase(db)
 
 	userRoute.UserRoute(r, db)
+	userRoute.MentorUserRoute(r, db)
 	categoryRoute.CategoryRoute(r, db)
 	learnerRoute.LearnerRoute(r, db)
 	learnerRoute.LearnerBioRoute(r, db)
