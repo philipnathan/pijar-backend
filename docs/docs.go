@@ -1336,6 +1336,52 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/users/registermentor": {
+            "post": {
+                "description": "Register mentor",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Register mentor",
+                "parameters": [
+                    {
+                        "description": "User",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.RegisterMentorDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.RegisterMentorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/user.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/user.Error"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -2187,6 +2233,42 @@ const docTemplate = `{
                 "message": {
                     "type": "string",
                     "example": "user logged in successfully"
+                },
+                "refresh_token": {
+                    "type": "string",
+                    "example": "eyAsgh435789"
+                }
+            }
+        },
+        "user.RegisterMentorDto": {
+            "type": "object",
+            "required": [
+                "email",
+                "fullname",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "fullname": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.RegisterMentorResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string",
+                    "example": "eyAsgh435789"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "mentor registered successfully"
                 },
                 "refresh_token": {
                     "type": "string",
