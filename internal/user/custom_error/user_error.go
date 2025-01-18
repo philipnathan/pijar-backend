@@ -13,6 +13,8 @@ var (
 	ErrSamePassword                      = errors.New("new password cannot be the same as old password")
 	ErrWrongPasswordAndLearnerRegistered = errors.New("user has been registered as learner, please use that password to register")
 	ErrAlreadyMentor                     = errors.New("user is already a mentor")
+	ErrAlreadyLearner                    = errors.New("user is already a learner")
+	ErrWrongPasswordAndMentorRegistered  = errors.New("user has been registered as mentor, please use that password to register")
 )
 
 type Error struct {
