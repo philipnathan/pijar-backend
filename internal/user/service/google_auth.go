@@ -1,9 +1,11 @@
 package user
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/gin-gonic/gin"
+	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
 	model "github.com/philipnathan/pijar-backend/internal/user/model"
 	repo "github.com/philipnathan/pijar-backend/internal/user/repository"
 	"github.com/philipnathan/pijar-backend/utils"
@@ -28,7 +30,7 @@ func (s *GoogleAuthService) GoogleRegister(c *gin.Context, email, fullname *stri
 	var user *model.User
 	var err error
 
-	defaultPassword := os.Getenv("JWT_SECRET")
+	defaultPassword := os.Getenv("SECRET_PASSWORD")
 	hashedDefaultPassword, err := utils.HashPassword(defaultPassword)
 	if err != nil {
 		return "", "", err
@@ -53,11 +55,19 @@ func (s *GoogleAuthService) GoogleRegister(c *gin.Context, email, fullname *stri
 		}
 	} else {
 		if entity == "learner" {
+			if user.IsLearner {
+				return "", "", custom_error.ErrUserAlreadyLearner
+			}
 			user, err = s.repo.SetIsLearnerToTrue(email)
 		} else if entity == "mentor" {
+			if *user.IsMentor {
+				return "", "", custom_error.ErrUserAlreadyMentor
+			}
 			user, err = s.repo.SetIsMentorToTrue(email)
 		}
 	}
+
+	fmt.Println("from service: ", user)
 
 	if err != nil {
 		return "", "", err
