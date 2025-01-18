@@ -26,8 +26,6 @@ var (
 	ErrAlreadyLearner                    = NewCustomError("user is already a learner")
 	ErrWrongPasswordAndMentorRegistered  = NewCustomError("user has been registered as mentor, please use that password to register")
 	ErrNotUsingGoogle                    = NewCustomError("user is not using google account")
-	ErrUserAlreadyMentor                 = NewCustomError("user is already a mentor")
-	ErrUserAlreadyLearner                = NewCustomError("user is already a learner")
 )
 
 type Error struct {
