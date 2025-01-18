@@ -66,17 +66,25 @@ func main() {
 		"email", "profile",
 	)
 
-	loginProvider := google.New(
+	loginLearnerProvider := google.New(
 		os.Getenv("GOOGLE_CLIENT_ID"),
 		os.Getenv("GOOGLE_CLIENT_SECRET"),
-		"http://localhost:8080/api/v1/auth/google/login/callback",
+		"http://localhost:8080/api/v1/auth/google/learner/login/callback",
+		"email", "profile",
+	)
+
+	loginMentorProvider := google.New(
+		os.Getenv("GOOGLE_CLIENT_ID"),
+		os.Getenv("GOOGLE_CLIENT_SECRET"),
+		"http://localhost:8080/api/v1/auth/google/mentor/login/callback",
 		"email", "profile",
 	)
 
 	learnerProvider.SetName("learner")
 	mentorProvider.SetName("mentor")
-	loginProvider.SetName("login")
-	goth.UseProviders(learnerProvider, mentorProvider, loginProvider)
+	loginLearnerProvider.SetName("login-learner")
+	loginMentorProvider.SetName("login-mentor")
+	goth.UseProviders(learnerProvider, mentorProvider, loginLearnerProvider, loginMentorProvider)
 
 	// docs.SwaggerInfo.Title = "Swagger Example API"
 	// docs.SwaggerInfo.Version = "1.0"
