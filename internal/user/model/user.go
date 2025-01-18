@@ -15,15 +15,16 @@ type CustomTime struct {
 }
 
 type User struct {
-	gorm.Model  `json:"-"`
-	Email       string      `gorm:"type:varchar(50);uniqueIndex;not null" json:"email"`
-	Password    string      `gorm:"type:text;not null" json:"password"`
-	Fullname    string      `gorm:"type:varchar(100);not null" json:"fullname"`
-	BirthDate   *CustomTime `gorm:"type:DATE" json:"birth_date"`
-	PhoneNumber *string     `gorm:"type:varchar(13);unique" json:"phonenumber"`
-	IsLearner   bool        `gorm:"type:bool;default:false" json:"is_leaner"`
-	IsMentor    *bool       `gorm:"type:bool;default:false" json:"is_mentor"`
-	ImageURL    *string     `gorm:"type:text" json:"image_url"`
+	gorm.Model   `json:"-"`
+	Email        string      `gorm:"type:varchar(50);uniqueIndex;not null" json:"email"`
+	Password     string      `gorm:"type:text" json:"password"`
+	Fullname     string      `gorm:"type:varchar(100);not null" json:"fullname"`
+	BirthDate    *CustomTime `gorm:"type:DATE" json:"birth_date"`
+	PhoneNumber  *string     `gorm:"type:varchar(13);unique" json:"phonenumber"`
+	IsLearner    bool        `gorm:"type:bool;default:false" json:"is_leaner"`
+	IsMentor     *bool       `gorm:"type:bool;default:false" json:"is_mentor"`
+	ImageURL     *string     `gorm:"type:text" json:"image_url"`
+	AuthProvider string      `gorm:"type:enum('email','google');not null;default:email" json:"auth_provider"`
 
 	LearnerBio *learner.LearnerBio `gorm:"foreignKey:UserID;references:ID" json:"learner_bio"`
 
