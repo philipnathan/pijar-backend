@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/markbates/goth"
+	"github.com/markbates/goth/providers/google"
 	"github.com/philipnathan/pijar-backend/database"
 	categoryRoute "github.com/philipnathan/pijar-backend/internal/category/route"
 	followRoute "github.com/philipnathan/pijar-backend/internal/follow/route"
@@ -49,6 +52,32 @@ func main() {
 
 	r := gin.Default()
 
+	learnerProvider := google.New(
+		os.Getenv("GOOGLE_CLIENT_ID"),
+		os.Getenv("GOOGLE_CLIENT_SECRET"),
+		"http://localhost:8080/api/v1/auth/google/learner/callback",
+		"email", "profile",
+	)
+
+	mentorProvider := google.New(
+		os.Getenv("GOOGLE_CLIENT_ID"),
+		os.Getenv("GOOGLE_CLIENT_SECRET"),
+		"http://localhost:8080/api/v1/auth/google/mentor/callback",
+		"email", "profile",
+	)
+
+	loginProvider := google.New(
+		os.Getenv("GOOGLE_CLIENT_ID"),
+		os.Getenv("GOOGLE_CLIENT_SECRET"),
+		"http://localhost:8080/api/v1/auth/google/login/callback",
+		"email", "profile",
+	)
+
+	learnerProvider.SetName("learner")
+	mentorProvider.SetName("mentor")
+	loginProvider.SetName("login")
+	goth.UseProviders(learnerProvider, mentorProvider, loginProvider)
+
 	// docs.SwaggerInfo.Title = "Swagger Example API"
 	// docs.SwaggerInfo.Version = "1.0"
 	// docs.SwaggerInfo.Host = "108.136.220.233"
@@ -68,6 +97,7 @@ func main() {
 
 	userRoute.UserRoute(r, db)
 	userRoute.MentorUserRoute(r, db)
+	userRoute.GoogleAuthRoute(r, db)
 	categoryRoute.CategoryRoute(r, db)
 	learnerRoute.LearnerRoute(r, db)
 	learnerRoute.LearnerBioRoute(r, db)
