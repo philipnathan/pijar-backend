@@ -38,7 +38,7 @@ func (h *UserHandler) RegisterUser(c *gin.Context) {
 		return
 	}
 
-	access_token, refresh_token, err := h.service.RegisterUserService(&user)
+	access_token, refresh_token, err := h.service.RegisterUserService(&user.Email, &user.Password, &user.Fullname)
 
 	if err != nil {
 		switch err {

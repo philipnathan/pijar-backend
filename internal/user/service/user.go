@@ -13,7 +13,7 @@ import (
 )
 
 type UserServiceInterface interface {
-	RegisterUserService(user *dto.RegisterUserDto) (string, string, error)
+	RegisterUserService(email, password, fullname *string) (string, string, error)
 	LoginUserService(email, password string) (string, string, error)
 	GetUserDetails(userID uint) (*model.User, error)
 	DeleteUserService(userID uint) error
@@ -32,45 +32,51 @@ func NewUserService(repo repository.UserRepositoryInterface) UserServiceInterfac
 	}
 }
 
-func (s *UserService) RegisterUserService(user *dto.RegisterUserDto) (string, string, error) {
+func (s *UserService) RegisterUserService(email, password, fullname *string) (string, string, error) {
+	var user *model.User
 	var err error
 
-	if exist, err := s.isUserExist(user); err != nil {
-		return "", "", err
-	} else if exist {
-		return "", "", err
-	}
-
-	user.Password, err = utils.HashPassword(user.Password)
-	if err != nil {
+	user, err = s.repo.FindUserByEmail(*email)
+	if err != nil && err != gorm.ErrRecordNotFound {
 		return "", "", err
 	}
 
-	var createdUser model.User
-	createdUser, err = s.repo.CreateUser(user)
-	if err != nil {
-		return "", "", err
+	if user != nil {
+		if user.IsLearner {
+			return "", "", custom_error.ErrAlreadyLearner
+		}
+
+		err = utils.ComparePassword(user.Password, *password)
+		if err != nil {
+			return "", "", custom_error.ErrWrongPasswordAndMentorRegistered
+		}
+
+		user, err = s.repo.SetIsLearnerToTrue(email)
+		if err != nil {
+			return "", "", err
+		}
+	} else {
+		hashedPassword, err := utils.HashPassword(*password)
+		if err != nil {
+			return "", "", err
+		}
+		user, err = s.repo.CreateUser(email, &hashedPassword, fullname)
+		if err != nil {
+			return "", "", err
+		}
 	}
 
 	var access_token string
-	if access_token, err = utils.GenerateJWT(createdUser.ID, createdUser.IsMentor); err != nil {
+	if access_token, err = utils.GenerateJWT(user.ID, user.IsMentor); err != nil {
 		return "", "", err
 	}
 
 	var refresh_token string
-	if refresh_token, err = utils.GenerateRefreshToken(createdUser.ID, createdUser.IsMentor); err != nil {
+	if refresh_token, err = utils.GenerateRefreshToken(user.ID, user.IsMentor); err != nil {
 		return "", "", err
 	}
 
 	return access_token, refresh_token, nil
-}
-
-func (s *UserService) isUserExist(user *dto.RegisterUserDto) (bool, error) {
-	if exist, err := s.repo.FindUserByEmail(user.Email); err == nil || exist != nil {
-		return true, custom_error.ErrEmailExist
-	}
-
-	return false, nil
 }
 
 func (s *UserService) LoginUserService(email, password string) (string, string, error) {
