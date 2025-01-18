@@ -14,6 +14,7 @@ import (
 
 type GoogleAuthServiceInterface interface {
 	GoogleRegister(c *gin.Context, email, fullname *string, entity string) (string, string, error)
+	GoogleLogin(email, entity *string) (string, string, error)
 }
 
 type GoogleAuthService struct {
@@ -56,12 +57,12 @@ func (s *GoogleAuthService) GoogleRegister(c *gin.Context, email, fullname *stri
 	} else {
 		if entity == "learner" {
 			if user.IsLearner {
-				return "", "", custom_error.ErrUserAlreadyLearner
+				return "", "", custom_error.ErrAlreadyLearner
 			}
 			user, err = s.repo.SetIsLearnerToTrue(email)
 		} else if entity == "mentor" {
 			if *user.IsMentor {
-				return "", "", custom_error.ErrUserAlreadyMentor
+				return "", "", custom_error.ErrAlreadyMentor
 			}
 			user, err = s.repo.SetIsMentorToTrue(email)
 		}
@@ -71,6 +72,42 @@ func (s *GoogleAuthService) GoogleRegister(c *gin.Context, email, fullname *stri
 
 	if err != nil {
 		return "", "", err
+	}
+
+	var access_token string
+	access_token, err = utils.GenerateJWT(user.ID, user.IsMentor)
+	if err != nil {
+		return "", "", err
+	}
+
+	var refresh_token string
+	refresh_token, err = utils.GenerateRefreshToken(user.ID, user.IsMentor)
+	if err != nil {
+		return "", "", err
+	}
+
+	return access_token, refresh_token, nil
+}
+
+func (s *GoogleAuthService) GoogleLogin(email, entity *string) (string, string, error) {
+	user, err := s.repo.FindUserByEmail(email)
+
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return "", "", custom_error.ErrUserNotFound
+		}
+
+		return "", "", err
+	}
+
+	if user.AuthProvider != "google" {
+		return "", "", custom_error.ErrNotUsingGoogle
+	}
+
+	if *entity == "learner" && !user.IsLearner {
+		return "", "", custom_error.ErrUserNotFound
+	} else if *entity == "mentor" && !*user.IsMentor {
+		return "", "", custom_error.ErrUserNotFound
 	}
 
 	var access_token string
