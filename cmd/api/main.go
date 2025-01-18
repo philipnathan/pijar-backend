@@ -98,6 +98,7 @@ func seedDatabase(db *gorm.DB) error {
 		seed.LearnerBio,
 		seed.SeedLearnerInterests,
 		seed.MentorSessionParticipant,
+		seed.Review,
 	}
 
 	for _, seed := range seeds {
