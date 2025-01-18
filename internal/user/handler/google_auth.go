@@ -2,10 +2,12 @@ package user
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/markbates/goth/gothic"
+	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
 	service "github.com/philipnathan/pijar-backend/internal/user/service"
 )
 
@@ -30,11 +32,22 @@ func (h *GoogleAuthHandler) GoogleAuthCallback(c *gin.Context) {
 		return
 	}
 
+	fmt.Println("from handler: ", user)
+
 	access_token, refresh_token, err := h.service.GoogleRegister(c, &user.Email, &user.Name, entity)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+		switch err {
+		case custom_error.ErrUserAlreadyLearner:
+			c.JSON(http.StatusConflict, custom_error.ErrUserAlreadyLearner)
+			return
+		case custom_error.ErrUserAlreadyMentor:
+			c.JSON(http.StatusConflict, custom_error.ErrUserAlreadyMentor)
+			return
+		default:
+			c.JSON(http.StatusInternalServerError, custom_error.NewCustomError(err.Error()))
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{"access_token": access_token, "refresh_token": refresh_token})

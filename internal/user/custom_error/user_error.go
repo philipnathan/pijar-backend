@@ -1,20 +1,33 @@
 package user
 
-import "errors"
+type CustomError struct {
+	Message string `json:"error"`
+}
+
+func (e *CustomError) Error() string {
+	return e.Message
+}
+
+func NewCustomError(message string) *CustomError {
+	return &CustomError{Message: message}
+}
 
 var (
-	ErrUserNotFound                      = errors.New("user not found")
-	ErrUserExist                         = errors.New("user already exist")
-	ErrPhoneNumberExist                  = errors.New("phone number already exist")
-	ErrEmailExist                        = errors.New("email already exist")
-	ErrLogin                             = errors.New("invalid email or password")
-	ErrToken                             = errors.New("invalid token")
-	ErrWrongPassword                     = errors.New("wrong password")
-	ErrSamePassword                      = errors.New("new password cannot be the same as old password")
-	ErrWrongPasswordAndLearnerRegistered = errors.New("user has been registered as learner, please use that password to register")
-	ErrAlreadyMentor                     = errors.New("user is already a mentor")
-	ErrAlreadyLearner                    = errors.New("user is already a learner")
-	ErrWrongPasswordAndMentorRegistered  = errors.New("user has been registered as mentor, please use that password to register")
+	ErrUserNotFound                      = NewCustomError("user not found")
+	ErrUserExist                         = NewCustomError("user already exist")
+	ErrPhoneNumberExist                  = NewCustomError("phone number already exist")
+	ErrEmailExist                        = NewCustomError("email already exist")
+	ErrLogin                             = NewCustomError("invalid email or password")
+	ErrToken                             = NewCustomError("invalid token")
+	ErrWrongPassword                     = NewCustomError("wrong password")
+	ErrSamePassword                      = NewCustomError("new password cannot be the same as old password")
+	ErrWrongPasswordAndLearnerRegistered = NewCustomError("user has been registered as learner, please use that password to register")
+	ErrAlreadyMentor                     = NewCustomError("user is already a mentor")
+	ErrAlreadyLearner                    = NewCustomError("user is already a learner")
+	ErrWrongPasswordAndMentorRegistered  = NewCustomError("user has been registered as mentor, please use that password to register")
+	ErrNotUsingGoogle                    = NewCustomError("user is not using google account")
+	ErrUserAlreadyMentor                 = NewCustomError("user is already a mentor")
+	ErrUserAlreadyLearner                = NewCustomError("user is already a learner")
 )
 
 type Error struct {
