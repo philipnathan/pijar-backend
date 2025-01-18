@@ -314,9 +314,13 @@ definitions:
         example: Notification with ID 1 has been read
         type: string
     type: object
-  search.CategoryDetail:
+  search.Category:
     properties:
       category_name:
+        type: string
+      id:
+        type: integer
+      image_url:
         type: string
     type: object
   search.Error:
@@ -324,37 +328,84 @@ definitions:
       message:
         type: string
     type: object
-  search.MentorDetail:
+  search.GetAllSessionsResponse:
     properties:
-      email:
-        type: string
+      page:
+        type: integer
+      page_size:
+        type: integer
+      sessions:
+        items:
+          $ref: '#/definitions/search.Session'
+        type: array
+      total:
+        type: integer
+    type: object
+  search.MentorDetailLandingPage:
+    properties:
       fullname:
+        example: John Doe
         type: string
+      id:
+        example: 1
+        type: integer
       image_url:
+        example: https://example.com/image.jpg
+        type: string
+      occupation:
+        example: Software Engineer
+        type: string
+    type: object
+  search.MentorDetails:
+    properties:
+      fullname:
+        example: John Doe
+        type: string
+      id:
+        example: 1
+        type: integer
+      image_url:
+        example: https://example.com/image.jpg
         type: string
     type: object
   search.SearchResponse:
     properties:
+      categories:
+        items:
+          $ref: '#/definitions/search.Category'
+        type: array
       mentors:
         items:
-          $ref: '#/definitions/search.MentorDetail'
+          $ref: '#/definitions/search.MentorDetailLandingPage'
         type: array
       sessions:
-        items:
-          $ref: '#/definitions/search.SessionDetail'
-        type: array
-      topics:
-        items:
-          $ref: '#/definitions/search.CategoryDetail'
-        type: array
+        $ref: '#/definitions/search.GetAllSessionsResponse'
     type: object
-  search.SessionDetail:
+  search.Session:
     properties:
+      average_rating:
+        type: number
+      category:
+        type: string
+      day:
+        type: string
+      detail:
+        type: string
+      duration:
+        type: integer
       image_url:
         type: string
+      link:
+        type: string
+      mentor_details:
+        $ref: '#/definitions/search.MentorDetails'
       schedule:
         type: string
+      session_id:
+        type: integer
       short_description:
+        type: string
+      time:
         type: string
       title:
         type: string
@@ -984,11 +1035,19 @@ paths:
     get:
       description: Search for sessions, mentors, and categories by keyword
       parameters:
-      - description: Search Keyword
+      - description: Search Keyword min 3 characters long
         in: query
         name: keyword
         required: true
         type: string
+      - description: Page number for sessions
+        in: query
+        name: page
+        type: integer
+      - description: Page size for sessions
+        in: query
+        name: pagesize
+        type: integer
       produces:
       - application/json
       responses:
