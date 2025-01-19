@@ -18,7 +18,7 @@ func GoogleAuthRoute(r *gin.Engine, db *gorm.DB) {
 	nonProtected := r.Group(apiV1)
 	{
 		nonProtected.GET("/auth/google/:entity", handler.GoogleRegister)
-		nonProtected.GET("/auth/google/:entity/callback", handler.GoogleAuthCallback)
+		nonProtected.GET("/auth/google/:entity/callback", handler.GoogleRegisterCallback)
 		nonProtected.GET("/auth/google/:entity/login", handler.GoogleLogin)
 		nonProtected.GET("/auth/google/:entity/login/callback", handler.GoogleLoginCallback)
 	}

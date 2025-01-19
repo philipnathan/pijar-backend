@@ -1,7 +1,6 @@
 package user
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -67,8 +66,6 @@ func (s *GoogleAuthService) GoogleRegister(c *gin.Context, email, fullname *stri
 			user, err = s.repo.SetIsMentorToTrue(email)
 		}
 	}
-
-	fmt.Println("from service: ", user)
 
 	if err != nil {
 		return "", "", err
