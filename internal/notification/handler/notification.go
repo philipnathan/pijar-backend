@@ -27,7 +27,6 @@ func NewNotificationHandler(service service.NotificationServiceInterface) *Notif
 // @Description	Get all user's notifications
 // @Tags			Notification
 // @Produce		json
-// @Security		Bearer
 // @Success		200	{object}	GetAllNotificationsResponseDto
 // @Failure		401	{object}	Error	"Unauthorized"
 // @Failure		500	{object}	Error	"Internal server error"
@@ -90,7 +89,6 @@ func (h *NotificationHandler) GetAllNotificationsHandler(c *gin.Context) {
 // @Description	Change IsRead Field to True
 // @Tags			Notification
 // @Produce		json
-// @Security		Bearer
 // @Param			notificationid	path		string	true	"Notification ID"
 // @Success		200				{object}	ReadNotificationResponseDto
 // @Failure		401				{object}	Error	"Unauthorized"

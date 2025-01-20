@@ -830,8 +830,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/learner.Error'
-      security:
-      - Bearer: []
       summary: Create learner bio
       tags:
       - Learner Bio
@@ -865,8 +863,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/learner.Error'
-      security:
-      - Bearer: []
       summary: Update learner bio
       tags:
       - Learner Bio
@@ -897,8 +893,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/learner.Error'
-      security:
-      - Bearer: []
       summary: Delete learner interests
       tags:
       - Learner
@@ -919,8 +913,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/learner.Error'
-      security:
-      - Bearer: []
       summary: Get learner interests
       tags:
       - Learner
@@ -950,8 +942,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/learner.Error'
-      security:
-      - Bearer: []
       summary: Add learner interests
       tags:
       - Learner
@@ -1540,8 +1530,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/notification.Error'
-      security:
-      - Bearer: []
       summary: Get all user's notifications
       tags:
       - Notification
@@ -1569,8 +1557,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/notification.Error'
-      security:
-      - Bearer: []
       summary: Read notification
       tags:
       - Notification

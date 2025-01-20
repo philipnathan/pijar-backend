@@ -157,11 +157,6 @@ const docTemplate = `{
         },
         "/learners/biographies": {
             "put": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Update learner bio",
                 "consumes": [
                     "application/json"
@@ -212,11 +207,6 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Create learner bio",
                 "consumes": [
                     "application/json"
@@ -269,11 +259,6 @@ const docTemplate = `{
         },
         "/learners/interests": {
             "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Get learner interests",
                 "produces": [
                     "application/json"
@@ -304,11 +289,6 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Add learner interests",
                 "consumes": [
                     "application/json"
@@ -353,11 +333,6 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Delete learner interests",
                 "consumes": [
                     "application/json"
@@ -1274,11 +1249,6 @@ const docTemplate = `{
         },
         "/users/notifications": {
             "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Get all user's notifications",
                 "produces": [
                     "application/json"
@@ -1311,11 +1281,6 @@ const docTemplate = `{
         },
         "/users/notifications/read/{notificationid}": {
             "put": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Change IsRead Field to True",
                 "produces": [
                     "application/json"
