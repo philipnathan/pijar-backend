@@ -7,7 +7,5 @@ type RegisterUserDto struct {
 }
 
 type RegisterUserResponseDto struct {
-	Message      string `json:"message" example:"user registered successfully"`
-	AccessToken  string `json:"access_token" example:"eyAsgh435789"`
-	RefreshToken string `json:"refresh_token" example:"eyAsgh435789"`
+	Message string `json:"message" example:"user registered successfully"`
 }

@@ -9,6 +9,7 @@ import (
 	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
 	dto "github.com/philipnathan/pijar-backend/internal/user/dto"
 	service "github.com/philipnathan/pijar-backend/internal/user/service"
+	"github.com/philipnathan/pijar-backend/utils"
 )
 
 type GoogleAuthHandler struct {
@@ -48,10 +49,10 @@ func (h *GoogleAuthHandler) GoogleRegisterCallback(c *gin.Context) {
 		}
 	}
 
+	utils.SetCookie(c, access_token, refresh_token)
+
 	c.JSON(http.StatusOK, dto.RegisterUserResponseDto{
-		Message:      "user registered successfully",
-		AccessToken:  access_token,
-		RefreshToken: refresh_token,
+		Message: "user registered successfully",
 	})
 }
 
@@ -80,10 +81,10 @@ func (h *GoogleAuthHandler) GoogleLoginCallback(c *gin.Context) {
 		return
 	}
 
+	utils.SetCookie(c, access_token, refresh_token)
+
 	c.JSON(http.StatusOK, dto.LoginUserResponseDto{
-		Message:      "user logged in successfully",
-		AccessToken:  access_token,
-		RefreshToken: refresh_token,
+		Message: "user logged in successfully",
 	})
 }
 

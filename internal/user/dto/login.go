@@ -6,7 +6,5 @@ type LoginUserDto struct {
 }
 
 type LoginUserResponseDto struct {
-	Message      string `json:"message" example:"user logged in successfully"`
-	AccessToken  string `json:"access_token" example:"eyAsgh435789"`
-	RefreshToken string `json:"refresh_token" example:"eyAsgh435789"`
+	Message string `json:"message" example:"user logged in successfully"`
 }

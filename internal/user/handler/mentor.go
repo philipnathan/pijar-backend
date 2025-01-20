@@ -7,6 +7,7 @@ import (
 	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
 	dto "github.com/philipnathan/pijar-backend/internal/user/dto"
 	service "github.com/philipnathan/pijar-backend/internal/user/service"
+	"github.com/philipnathan/pijar-backend/utils"
 )
 
 type MentorUserHandler struct {
@@ -50,9 +51,9 @@ func (s *MentorUserHandler) RegisterMentor(c *gin.Context) {
 		}
 	}
 
+	utils.SetCookie(c, access_token, refresh_token)
+
 	c.JSON(http.StatusOK, dto.RegisterMentorResponse{
-		Message:      "mentor registered successfully",
-		AccessToken:  access_token,
-		RefreshToken: refresh_token,
+		Message: "mentor registered successfully",
 	})
 }

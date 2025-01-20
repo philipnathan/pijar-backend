@@ -7,6 +7,7 @@ import (
 	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
 	dto "github.com/philipnathan/pijar-backend/internal/user/dto"
 	service "github.com/philipnathan/pijar-backend/internal/user/service"
+	"github.com/philipnathan/pijar-backend/utils"
 )
 
 type UserHandler struct {
@@ -51,10 +52,10 @@ func (h *UserHandler) RegisterUser(c *gin.Context) {
 		}
 	}
 
+	utils.SetCookie(c, access_token, refresh_token)
+
 	response := dto.RegisterUserResponseDto{
-		Message:      "user registered successfully",
-		AccessToken:  access_token,
-		RefreshToken: refresh_token,
+		Message: "user registered successfully",
 	}
 
 	c.JSON(http.StatusOK, response)
@@ -93,17 +94,16 @@ func (h *UserHandler) LoginUser(c *gin.Context) {
 		}
 	}
 
+	utils.SetCookie(c, access_token, refresh_token)
+
 	c.JSON(http.StatusOK, dto.LoginUserResponseDto{
-		Message:      "user logged in successfully",
-		AccessToken:  access_token,
-		RefreshToken: refresh_token})
+		Message: "user logged in successfully"})
 }
 
 // @Summary	Get user details
 // @Schemes
 // @Description	Get user details
 // @Tags			User
-// @Security		Bearer
 // @Accept			json
 // @Produce		json
 // @Success		200	{object}	GetUserResponseDto
@@ -161,7 +161,6 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 // @Schemes
 // @Description	Delete user
 // @Tags			User
-// @Security		Bearer
 // @Produce		json
 // @Success		200	{object}	DeleteUserResponseDto
 // @Failure		401	{object}	Error	"Unauthorized"
@@ -195,7 +194,6 @@ func (h *UserHandler) DeleteUserHandler(c *gin.Context) {
 // @Tags			User
 // @Accept			json
 // @Produce		json
-// @Security		Bearer
 // @Param			password	body		ChangePasswordDto	true	"User"
 // @Success		200			{object}	ChangePasswordResponseDto
 // @Failure		400			{object}	Error	"Invalid request body"
@@ -236,7 +234,6 @@ func (h *UserHandler) UpdateUserPasswordHandler(c *gin.Context) {
 // @Tags			User
 // @Accept			json
 // @Produce		json
-// @Security		Bearer
 // @Param			user	body		UpdateUserDetailsDto	true	"User"
 // @Success		200		{object}	UpdateUserDetailsResponseDto
 // @Failure		400		{object}	Error	"Invalid request body"
