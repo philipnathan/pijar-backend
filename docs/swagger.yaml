@@ -707,44 +707,20 @@ info:
   title: Pijar API
   version: "1.0"
 paths:
-  /auth/google/{entity}:
-    get:
-      description: Register using Google Account
-      parameters:
-      - description: learner or mentor
-        in: path
-        name: entity
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/user.RegisterUserResponseDto'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/user.CustomError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/user.CustomError'
-      summary: Register using Google Account
-      tags:
-      - Oauth
   /auth/google/{entity}/login:
     get:
-      description: Login using Google Account
+      description: Login using Google. Need authorization code from google
       parameters:
-      - description: learner or mentor
+      - description: learner/mentor
         in: path
         name: entity
         required: true
         type: string
-      produces:
-      - application/json
+      - description: authorization code from Google
+        in: query
+        name: code
+        required: true
+        type: string
       responses:
         "200":
           description: OK
@@ -758,9 +734,39 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/user.CustomError'
-      summary: Login using Google Account
+      summary: Login using Google
       tags:
-      - Oauth
+      - OAuth
+  /auth/google/{entity}/register:
+    get:
+      description: Register using Google. Need authorization code from google
+      parameters:
+      - description: learner/mentor
+        in: path
+        name: entity
+        required: true
+        type: string
+      - description: authorization code from Google
+        in: query
+        name: code
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.RegisterUserResponseDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/user.CustomError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user.CustomError'
+      summary: Register using Google
+      tags:
+      - OAuth
   /categories:
     get:
       description: Get all categories
