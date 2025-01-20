@@ -2,11 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/markbates/goth"
-	"github.com/markbates/goth/providers/google"
 	"github.com/philipnathan/pijar-backend/database"
 	categoryRoute "github.com/philipnathan/pijar-backend/internal/category/route"
 	followRoute "github.com/philipnathan/pijar-backend/internal/follow/route"
@@ -51,40 +48,6 @@ func main() {
 	database.MigrateDatabase(db)
 
 	r := gin.Default()
-
-	learnerProvider := google.New(
-		os.Getenv("GOOGLE_CLIENT_ID"),
-		os.Getenv("GOOGLE_CLIENT_SECRET"),
-		"http://localhost:8080/api/v1/auth/google/learner/callback",
-		"email", "profile",
-	)
-
-	mentorProvider := google.New(
-		os.Getenv("GOOGLE_CLIENT_ID"),
-		os.Getenv("GOOGLE_CLIENT_SECRET"),
-		"http://localhost:8080/api/v1/auth/google/mentor/callback",
-		"email", "profile",
-	)
-
-	loginLearnerProvider := google.New(
-		os.Getenv("GOOGLE_CLIENT_ID"),
-		os.Getenv("GOOGLE_CLIENT_SECRET"),
-		"http://localhost:8080/api/v1/auth/google/learner/login/callback",
-		"email", "profile",
-	)
-
-	loginMentorProvider := google.New(
-		os.Getenv("GOOGLE_CLIENT_ID"),
-		os.Getenv("GOOGLE_CLIENT_SECRET"),
-		"http://localhost:8080/api/v1/auth/google/mentor/login/callback",
-		"email", "profile",
-	)
-
-	learnerProvider.SetName("learner")
-	mentorProvider.SetName("mentor")
-	loginLearnerProvider.SetName("login-learner")
-	loginMentorProvider.SetName("login-mentor")
-	goth.UseProviders(learnerProvider, mentorProvider, loginLearnerProvider, loginMentorProvider)
 
 	// docs.SwaggerInfo.Title = "Swagger Example API"
 	// docs.SwaggerInfo.Version = "1.0"
