@@ -951,11 +951,6 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Create session review",
                 "consumes": [
                     "application/json"

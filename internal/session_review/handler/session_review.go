@@ -26,7 +26,6 @@ func NewSessionReviewHandler(service service.SessionReviewServiceInterface) *Ses
 // @Tags		Session Review
 // @Accept		json
 // @Produce	json
-// @Security	Bearer
 // @Param		session_id		path		string					true	"Session ID"
 // @Param		session_review	body		SessionReviewRequest	true	"Session Review"
 // @Success	200				{object}	SessionReviewResponse

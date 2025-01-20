@@ -1268,8 +1268,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/session_review.CustomError'
-      security:
-      - Bearer: []
       summary: Create session review
       tags:
       - Session Review
