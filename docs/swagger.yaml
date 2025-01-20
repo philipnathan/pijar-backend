@@ -1319,8 +1319,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/session.Error'
-      security:
-      - Bearer: []
       summary: Get learner history session
       tags:
       - Learner

@@ -730,11 +730,6 @@ const docTemplate = `{
         },
         "/sessions/histories": {
             "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Get learner history session",
                 "produces": [
                     "application/json"

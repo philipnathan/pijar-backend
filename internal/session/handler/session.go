@@ -26,7 +26,6 @@ func NewSessionHandler(service service.SessionService) *SessionHandler {
 // @Description	Get learner history session
 // @Tags			Learner
 // @Produce		json
-// @Security		Bearer
 // @Success		200	{object}	GetUserHistorySessionResponseDto
 // @Failure		401	{object}	Error	"Unauthorized"
 // @Failure		500	{object}	Error	"Internal server error"
@@ -95,7 +94,10 @@ func (h *SessionHandler) GetLearnerHistorySession(c *gin.Context) {
 func (h *SessionHandler) GetUpcommingSessionsLandingPage(c *gin.Context) {
 	// check if user is authenticated
 	var isAuthenticated bool
-	authHeader := c.GetHeader("Authorization")
+	authHeader, err := c.Cookie("access_token")
+	if err != nil {
+		isAuthenticated = false
+	}
 	if authHeader != "" {
 		middleware.AuthMiddleware()(c)
 
@@ -116,7 +118,6 @@ func (h *SessionHandler) GetUpcommingSessionsLandingPage(c *gin.Context) {
 
 	var sessions *[]model.MentorSession
 	var total int
-	var err error
 
 	// if category_id is available (categoryID is the priority because it is an input from guest/user)
 	if categoryIDint > 0 {
