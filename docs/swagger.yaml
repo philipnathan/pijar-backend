@@ -617,14 +617,8 @@ definitions:
     type: object
   user.LoginUserResponseDto:
     properties:
-      access_token:
-        example: eyAsgh435789
-        type: string
       message:
         example: user logged in successfully
-        type: string
-      refresh_token:
-        example: eyAsgh435789
         type: string
     type: object
   user.RegisterMentorDto:
@@ -670,14 +664,8 @@ definitions:
     type: object
   user.RegisterUserResponseDto:
     properties:
-      access_token:
-        example: eyAsgh435789
-        type: string
       message:
         example: user registered successfully
-        type: string
-      refresh_token:
-        example: eyAsgh435789
         type: string
     type: object
   user.UpdateUserDetailsDto:
@@ -1024,8 +1012,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/follow.CustomError'
-      security:
-      - Bearer: []
       summary: Follow or Unfollow Mentor
       tags:
       - Follow
@@ -1055,8 +1041,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/follow.CustomError'
-      security:
-      - Bearer: []
       summary: Check status of following
       tags:
       - Follow
@@ -1453,8 +1437,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/user.Error'
-      security:
-      - Bearer: []
       summary: Delete user
       tags:
       - User
@@ -1477,8 +1459,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/user.Error'
-      security:
-      - Bearer: []
       summary: Get user details
       tags:
       - User
@@ -1509,8 +1489,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/user.Error'
-      security:
-      - Bearer: []
       summary: Update user details
       tags:
       - User
@@ -1541,8 +1519,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/user.Error'
-      security:
-      - Bearer: []
       summary: Update user password
       tags:
       - User

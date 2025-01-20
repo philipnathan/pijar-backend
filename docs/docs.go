@@ -497,11 +497,6 @@ const docTemplate = `{
         },
         "/mentors/{mentorid}/follow": {
             "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Follow or Unfollow Mentor",
                 "consumes": [
                     "application/json"
@@ -546,11 +541,6 @@ const docTemplate = `{
         },
         "/mentors/{mentorid}/status": {
             "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Check status of following",
                 "consumes": [
                     "application/json"
@@ -1127,11 +1117,6 @@ const docTemplate = `{
         },
         "/users/me": {
             "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Get user details",
                 "consumes": [
                     "application/json"
@@ -1165,11 +1150,6 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Delete user",
                 "produces": [
                     "application/json"
@@ -1202,11 +1182,6 @@ const docTemplate = `{
         },
         "/users/me/details": {
             "patch": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Update user details",
                 "consumes": [
                     "application/json"
@@ -1253,11 +1228,6 @@ const docTemplate = `{
         },
         "/users/me/password": {
             "patch": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Update user password",
                 "consumes": [
                     "application/json"
@@ -2402,17 +2372,9 @@ const docTemplate = `{
         "user.LoginUserResponseDto": {
             "type": "object",
             "properties": {
-                "access_token": {
-                    "type": "string",
-                    "example": "eyAsgh435789"
-                },
                 "message": {
                     "type": "string",
                     "example": "user logged in successfully"
-                },
-                "refresh_token": {
-                    "type": "string",
-                    "example": "eyAsgh435789"
                 }
             }
         },
@@ -2477,17 +2439,9 @@ const docTemplate = `{
         "user.RegisterUserResponseDto": {
             "type": "object",
             "properties": {
-                "access_token": {
-                    "type": "string",
-                    "example": "eyAsgh435789"
-                },
                 "message": {
                     "type": "string",
                     "example": "user registered successfully"
-                },
-                "refresh_token": {
-                    "type": "string",
-                    "example": "eyAsgh435789"
                 }
             }
         },

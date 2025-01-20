@@ -27,7 +27,6 @@ func NewFollowHandler(service service.FollowServiceInterface) *FollowHandler {
 // @Accept		json
 // @Produce	json
 // @Param		mentorid	path	int	true	"Mentor ID"
-// @Security	Bearer
 // @Success	200	{object}	FollowUnffolowResponse
 // @Failure	400	{object}	CustomError
 // @Failure	500	{object}	CustomError
@@ -89,7 +88,6 @@ func (h *FollowHandler) FollowUnfollowHandler(c *gin.Context) {
 // @Accept		json
 // @Produce	json
 // @Param		mentorid	path	int	true	"Mentor ID"
-// @Security	Bearer
 // @Success	200	{object}	IsFollowResponse
 // @Failure	400	{object}	CustomError
 // @Failure	500	{object}	CustomError
