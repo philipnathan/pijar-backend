@@ -114,7 +114,10 @@ func (h *MentorHandler) UserGetMentorDetails(c *gin.Context) {
 func (h *MentorHandler) UserGetMentorLandingPage(c *gin.Context) {
 	// check if user is authenticated
 	var isAuthenticated bool
-	authHeader := c.GetHeader("Authorization")
+	authHeader, err := c.Cookie("access_token")
+	if err != nil {
+		isAuthenticated = false
+	}
 	if authHeader != "" {
 		middleware.AuthMiddleware()(c)
 
