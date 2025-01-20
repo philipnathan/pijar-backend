@@ -3,7 +3,6 @@ package middleware
 import (
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -13,25 +12,20 @@ var secretKey = []byte(os.Getenv("JWT_SECRET"))
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// get access_token from header
-		authHeader := c.GetHeader("Authorization")
+		// get access_token from httponlycookie
+		authHeader, err := c.Cookie("access_token")
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Access token not found"})
+			c.Abort()
+			return
+		}
 		if authHeader == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header not found"})
 			c.Abort()
 			return
 		}
 
-		// check token format
-		parts := strings.Split(authHeader, " ")
-		if len(parts) != 2 || parts[0] != "Bearer" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token format"})
-			c.Abort()
-			return
-		}
-
-		// validate token
-		tokenString := parts[1]
-		parsedToken, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		parsedToken, err := jwt.Parse(authHeader, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, jwt.ErrSignatureInvalid
 			}
