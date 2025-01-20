@@ -56,43 +56,65 @@ func (h *MentorHandler) UserGetMentorDetails(c *gin.Context) {
 	}
 
 	var MentorExperiences []*dto.MentorExperiences
-	for _, experience := range mentorDetails.MentorExperiences {
-		occupation := experience.Occupation
-		companyName := experience.CompanyName
-		startDate := experience.StartDate.FormatToString()
+	if mentorDetails.MentorExperiences != nil {
+		for _, experience := range mentorDetails.MentorExperiences {
+			occupation := experience.Occupation
+			companyName := experience.CompanyName
+			startDate := experience.StartDate.FormatToString()
 
-		var endDate string
-		if !experience.EndDate.IsZero() {
-			endDate = experience.EndDate.FormatToString()
-		} else {
-			endDate = ""
+			var endDate string
+			if !experience.EndDate.IsZero() {
+				endDate = experience.EndDate.FormatToString()
+			} else {
+				endDate = ""
+			}
+
+			MentorExperiences = append(MentorExperiences, &dto.MentorExperiences{
+				Ocupation:   occupation,
+				CompanyName: companyName,
+				StartDate:   startDate,
+				EndDate:     endDate,
+			})
 		}
-
-		MentorExperiences = append(MentorExperiences, &dto.MentorExperiences{
-			Ocupation:   occupation,
-			CompanyName: companyName,
-			StartDate:   startDate,
-			EndDate:     endDate,
-		})
+	} else {
+		MentorExperiences = []*dto.MentorExperiences{}
 	}
 
 	var MentorExpertises []*dto.MentorExpertises
-	for _, expertise := range mentorDetails.MentorExpertises {
-		category := expertise.Category.Category_name
-		expertise := expertise.Expertise
+	if mentorDetails.MentorExpertises != nil {
+		for _, expertise := range mentorDetails.MentorExpertises {
+			category := expertise.Category.Category_name
+			expertise := expertise.Expertise
 
-		MentorExpertises = append(MentorExpertises, &dto.MentorExpertises{
-			Expertise: &expertise,
-			Category:  &category,
-		})
+			MentorExpertises = append(MentorExpertises, &dto.MentorExpertises{
+				Expertise: &expertise,
+				Category:  &category,
+			})
+		}
+	} else {
+		MentorExpertises = []*dto.MentorExpertises{}
+	}
+
+	ImageURL := ""
+	MentorBio := ""
+	MentorOcupation := ""
+
+	if mentorDetails.ImageURL != nil {
+		ImageURL = *mentorDetails.ImageURL
+	}
+	if mentorDetails.MentorBio != nil {
+		MentorBio = mentorDetails.MentorBio.Bio
+	}
+	if len(MentorExperiences) > 0 {
+		MentorOcupation = MentorExperiences[0].Ocupation
 	}
 
 	response := &dto.GetMentorDetailsDto{
 		UserID:            mentorDetails.ID,
 		Fullname:          mentorDetails.Fullname,
-		ImageURL:          mentorDetails.ImageURL,
-		MentorBio:         mentorDetails.MentorBio.Bio,
-		Occupation:        MentorExperiences[0].Ocupation,
+		ImageURL:          &ImageURL,
+		MentorBio:         MentorBio,
+		Occupation:        MentorOcupation,
 		MentorExperiences: MentorExperiences,
 		MentorExpertises:  MentorExpertises,
 	}
