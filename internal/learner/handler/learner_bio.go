@@ -25,7 +25,6 @@ func NewLearnerBioHandler(service service.LearnerBioServiceInterface) *LearnerBi
 // @Tags			Learner Bio
 // @Accept			json
 // @Produce		json
-// @Security		Bearer
 // @Param			bio	body		CreateLearnerBioDto	true	"bio"
 // @Success		201	{object}	CreateLearnerBioResponseDto
 // @Failure		400	{object}	Error	"Invalid request body"
@@ -88,7 +87,6 @@ func (h *LearnerBioHandler) GetLearnerBio(c *gin.Context) {
 // @Tags			Learner Bio
 // @Accept			json
 // @Produce		json
-// @Security		Bearer
 // @Param			bio	body		UpdateLearnerBioDto	true	"bio"
 // @Success		200	{object}	UpdateLearnerBioResponseDto
 // @Failure		400	{object}	Error	"Invalid request body"
