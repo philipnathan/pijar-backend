@@ -15,22 +15,26 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/google/{entity}": {
+        "/auth/google/{entity}/login": {
             "get": {
-                "description": "Register using Google Account",
-                "produces": [
-                    "application/json"
-                ],
+                "description": "Login using Google. Need authorization code from google",
                 "tags": [
-                    "Oauth"
+                    "OAuth"
                 ],
-                "summary": "Register using Google Account",
+                "summary": "Login using Google",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "learner or mentor",
+                        "description": "learner/mentor",
                         "name": "entity",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "authorization code from Google",
+                        "name": "code",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -38,7 +42,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.RegisterUserResponseDto"
+                            "$ref": "#/definitions/user.LoginUserResponseDto"
                         }
                     },
                     "400": {
@@ -56,22 +60,26 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/google/{entity}/login": {
+        "/auth/google/{entity}/register": {
             "get": {
-                "description": "Login using Google Account",
-                "produces": [
-                    "application/json"
-                ],
+                "description": "Register using Google. Need authorization code from google",
                 "tags": [
-                    "Oauth"
+                    "OAuth"
                 ],
-                "summary": "Login using Google Account",
+                "summary": "Register using Google",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "learner or mentor",
+                        "description": "learner/mentor",
                         "name": "entity",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "authorization code from Google",
+                        "name": "code",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -79,7 +87,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.LoginUserResponseDto"
+                            "$ref": "#/definitions/user.RegisterUserResponseDto"
                         }
                     },
                     "400": {
