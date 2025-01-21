@@ -35,22 +35,23 @@ type googleInfo struct {
 	Verified    bool
 }
 
-//	@Summary		Register using Google
-//	@Description	Register using Google. Need authorization code from google
-//	@Scheme
-//	@Tags		OAuth
-//	@Param		entity	path		string	true	"learner/mentor"
-//	@Param		code	query		string	true	"authorization code from Google"
-//	@Success	200		{object}	RegisterUserResponseDto
-//	@Failure	400		{object}	CustomError
-//	@Failure	500		{object}	CustomError
-//	@Router		/auth/google/{entity}/register [get]
+// @Summary		Register using Google
+// @Description	Register using Google. Need authorization code from google
+// @Scheme
+// @Tags		OAuth
+// @Param		entity	path		string	true	"learner/mentor"
+// @Param		code	query		string	true	"authorization code from Google"
+// @Success	200		{object}	RegisterUserResponseDto
+// @Failure	400		{object}	CustomError
+// @Failure	500		{object}	CustomError
+// @Router		/auth/google/{entity}/register [get]
 func (h *GoogleAuthHandler) GoogleRegisterCallback(c *gin.Context) {
 	entity := c.Param("entity")
 	code := c.DefaultQuery("code", "")
 
 	if code == "" {
 		c.JSON(http.StatusBadRequest, custom_error.NewCustomError("code not found"))
+		return
 	}
 
 	email, name, err := h.authenticateAndGetUserDetails(c, code)
@@ -82,22 +83,23 @@ func (h *GoogleAuthHandler) GoogleRegisterCallback(c *gin.Context) {
 	})
 }
 
-//	@Summary		Login using Google
-//	@Description	Login using Google. Need authorization code from google
-//	@Scheme
-//	@Tags		OAuth
-//	@Param		entity	path		string	true	"learner/mentor"
-//	@Param		code	query		string	true	"authorization code from Google"
-//	@Success	200		{object}	LoginUserResponseDto
-//	@Failure	400		{object}	CustomError
-//	@Failure	500		{object}	CustomError
-//	@Router		/auth/google/{entity}/login [get]
+// @Summary		Login using Google
+// @Description	Login using Google. Need authorization code from google
+// @Scheme
+// @Tags		OAuth
+// @Param		entity	path		string	true	"learner/mentor"
+// @Param		code	query		string	true	"authorization code from Google"
+// @Success	200		{object}	LoginUserResponseDto
+// @Failure	400		{object}	CustomError
+// @Failure	500		{object}	CustomError
+// @Router		/auth/google/{entity}/login [get]
 func (h *GoogleAuthHandler) GoogleLoginCallback(c *gin.Context) {
 	entity := c.Param("entity")
 	code := c.DefaultQuery("code", "")
 
 	if code == "" {
 		c.JSON(http.StatusBadRequest, custom_error.NewCustomError("code not found"))
+		return
 	}
 
 	email, _, err := h.authenticateAndGetUserDetails(c, code)
