@@ -27,6 +27,7 @@ var (
 	ErrWrongPasswordAndMentorRegistered  = NewCustomError("user has been registered as mentor, please use that password to register")
 	ErrNotUsingGoogle                    = NewCustomError("user is not using google account")
 	ErrStatusCannotBeFalse               = NewCustomError("is_mentor or is_learner cannot be false")
+	ErrChangeDetails                     = NewCustomError("user already exist. please use change details enpoint instead")
 )
 
 type Error struct {

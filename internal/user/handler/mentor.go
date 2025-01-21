@@ -42,7 +42,7 @@ func (s *MentorUserHandler) RegisterMentor(c *gin.Context) {
 
 	if err != nil {
 		switch err {
-		case custom_error.ErrWrongPasswordAndLearnerRegistered, custom_error.ErrAlreadyMentor:
+		case custom_error.ErrAlreadyMentor, custom_error.ErrChangeDetails:
 			c.JSON(http.StatusBadRequest, custom_error.Error{Error: err.Error()})
 			return
 		default:

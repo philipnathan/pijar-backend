@@ -5,6 +5,7 @@ import (
 	model "github.com/philipnathan/pijar-backend/internal/user/model"
 	repository "github.com/philipnathan/pijar-backend/internal/user/repository"
 	utils "github.com/philipnathan/pijar-backend/utils"
+	"gorm.io/gorm"
 )
 
 type MentorUserServiceInterface interface {
@@ -25,39 +26,25 @@ func (s *MentorUserService) RegisterMentor(email, password, fullname *string) (s
 	var mentor *model.User
 	var err error
 
-	isExist, err := s.repo.IsUserExist(email)
-	if err != nil {
+	mentor, err = s.repo.FindUserByEmail(*email)
+	if err != nil && err != gorm.ErrRecordNotFound {
 		return "", "", err
 	}
 
-	if isExist {
-		mentor, err = s.repo.FindUserByEmail(*email)
-		if err != nil {
-			return "", "", err
-		}
-
-		if *mentor.IsMentor {
+	if mentor != nil {
+		if mentor.IsMentor != nil && *mentor.IsMentor {
 			return "", "", custom_error.ErrAlreadyMentor
 		}
+		return "", "", custom_error.ErrChangeDetails
+	}
 
-		err = utils.ComparePassword(mentor.Password, *password)
-		if err != nil {
-			return "", "", custom_error.ErrWrongPasswordAndLearnerRegistered
-		}
-
-		mentor, err = s.repo.SetIsMentorToTrue(email)
-		if err != nil {
-			return "", "", err
-		}
-	} else {
-		hashedPassword, err := utils.HashPassword(*password)
-		if err != nil {
-			return "", "", err
-		}
-		mentor, err = s.repo.CreateNewMentor(email, &hashedPassword, fullname)
-		if err != nil {
-			return "", "", err
-		}
+	hashedPassword, err := utils.HashPassword(*password)
+	if err != nil {
+		return "", "", err
+	}
+	mentor, err = s.repo.CreateNewMentor(email, &hashedPassword, fullname)
+	if err != nil {
+		return "", "", err
 	}
 
 	var access_token string
