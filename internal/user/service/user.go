@@ -44,16 +44,16 @@ func (s *UserService) RegisterUserService(email, password, fullname *string) (st
 		if user.IsLearner {
 			return "", "", custom_error.ErrAlreadyLearner
 		}
+		return "", "", custom_error.ErrChangeDetails
+	}
 
-	} else {
-		hashedPassword, err := utils.HashPassword(*password)
-		if err != nil {
-			return "", "", err
-		}
-		user, err = s.repo.CreateUser(email, &hashedPassword, fullname)
-		if err != nil {
-			return "", "", err
-		}
+	hashedPassword, err := utils.HashPassword(*password)
+	if err != nil {
+		return "", "", err
+	}
+	user, err = s.repo.CreateUser(email, &hashedPassword, fullname)
+	if err != nil {
+		return "", "", err
 	}
 
 	var access_token string
