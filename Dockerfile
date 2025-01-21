@@ -17,7 +17,7 @@ RUN go mod download
 COPY . .
 
 # Build go app
-RUN go build -o main ./cmd/api/main.go
+RUN GOOS=linux GOARCH=amd64 go build -o main ./cmd/api/main.go
 
 # Stage 2
 FROM alpine:3.20

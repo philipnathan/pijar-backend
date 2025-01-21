@@ -1,19 +1,4 @@
 services:
-    db:
-        image: mysql:9.1.0
-        restart: unless-stopped
-        environment:
-            MYSQL_USER: ${DB_USERNAME}
-            MYSQL_DATABASE: ${DB_DATABASE}
-            MYSQL_PASSWORD: ${DB_PASSWORD}
-            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-        ports:
-            - "3308:3306"
-        volumes:
-            - mysql_volume_bp:/var/lib/mysql
-        networks:
-            - docker_network
-
     backend:
         build:
             context: .
@@ -21,15 +6,7 @@ services:
         restart: unless-stopped
         ports:
             - "8080:8080"
-        depends_on:
-            - db
         env_file:
             - .env
-        networks:
-            - docker_network
-
-volumes:
-    mysql_volume_bp:
-networks:
-    docker_network:
-        driver: bridge
+        environment:
+            - GIN_MODE=release

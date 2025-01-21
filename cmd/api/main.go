@@ -18,7 +18,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	_ "github.com/philipnathan/pijar-backend/docs"
+	docs "github.com/philipnathan/pijar-backend/docs"
 
 	"github.com/gin-contrib/cors"
 )
@@ -47,14 +47,14 @@ func main() {
 
 	r := gin.Default()
 
-	// docs.SwaggerInfo.Title = "Swagger Example API"
-	// docs.SwaggerInfo.Version = "1.0"
-	// docs.SwaggerInfo.Host = "108.136.220.233"
-	// docs.SwaggerInfo.BasePath = "/api/v1"
-	// docs.SwaggerInfo.Schemes = []string{"http"}
+	docs.SwaggerInfo.Title = "Swagger Example API"
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = "43.218.229.167"
+	docs.SwaggerInfo.BasePath = "/api/v1"
+	docs.SwaggerInfo.Schemes = []string{"http"}
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000", "http://localhost:8080"},
+		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
 		AllowHeaders:     []string{"Authorization", "Content-Type"},
 		ExposeHeaders:    []string{"Content-Length"},

@@ -9,15 +9,39 @@ import (
 	"gorm.io/gorm"
 )
 
+type DBConfig struct {
+	DB_Username string
+	DB_Password string
+	DB_Host     string
+	DB_Port     string
+	DB_Database string
+}
+
 func ConnectToDatabase() (*gorm.DB, error) {
+	APP_ENV := os.Getenv("APP_ENV")
+	config := DBConfig{}
 
-	dbUser := os.Getenv("DB_USERNAME")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbName := os.Getenv("DB_DATABASE")
+	if APP_ENV == "production" {
+		config = DBConfig{
+			DB_Username: os.Getenv("AWS_RDS_USERNAME"),
+			DB_Password: os.Getenv("AWS_RDS_PASSWORD"),
+			DB_Host:     os.Getenv("AWS_RDS_ENDPOINT"),
+			DB_Port:     os.Getenv("AWS_RDS_PORT"),
+			DB_Database: os.Getenv("AWS_RDS_DBNAME"),
+		}
+	}
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbUser, dbPassword, dbHost, dbPort, dbName)
+	if APP_ENV == "development" {
+		config = DBConfig{
+			DB_Username: os.Getenv("DB_USERNAME"),
+			DB_Password: os.Getenv("DB_PASSWORD"),
+			DB_Host:     os.Getenv("DB_HOST"),
+			DB_Port:     os.Getenv("DB_PORT"),
+			DB_Database: os.Getenv("DB_DATABASE"),
+		}
+	}
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", config.DB_Username, config.DB_Password, config.DB_Host, config.DB_Port, config.DB_Database)
 
 	maxRetries := 10
 	for i := 0; i < maxRetries; i++ {
