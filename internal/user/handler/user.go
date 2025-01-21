@@ -262,11 +262,11 @@ func (h *UserHandler) UpdateUserDetailsHandler(c *gin.Context) {
 	err := h.service.UpdateUserDetailsService(uint(id), input)
 	if err != nil {
 		switch err {
-		case custom_error.ErrUserNotFound:
+		case custom_error.ErrUserNotFound, custom_error.ErrStatusCannotBeFalse:
 			c.JSON(http.StatusNotFound, custom_error.Error{Error: err.Error()})
 			return
-		case custom_error.ErrStatusCannotBeFalse:
-			c.JSON(http.StatusBadRequest, custom_error.Error{Error: err.Error()})
+		default:
+			c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
 			return
 		}
 	}

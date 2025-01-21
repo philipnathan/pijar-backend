@@ -45,15 +45,6 @@ func (s *UserService) RegisterUserService(email, password, fullname *string) (st
 			return "", "", custom_error.ErrAlreadyLearner
 		}
 
-		err = utils.ComparePassword(user.Password, *password)
-		if err != nil {
-			return "", "", custom_error.ErrWrongPasswordAndMentorRegistered
-		}
-
-		user, err = s.repo.SetIsLearnerToTrue(email)
-		if err != nil {
-			return "", "", err
-		}
 	} else {
 		hashedPassword, err := utils.HashPassword(*password)
 		if err != nil {
