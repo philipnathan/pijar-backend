@@ -2417,6 +2417,14 @@
                     "type": "string",
                     "example": "https://example.com/image.jpg"
                 },
+                "is_learner": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "is_mentor": {
+                    "type": "boolean",
+                    "example": true
+                },
                 "phone_number": {
                     "type": "string",
                     "example": "123456789"
