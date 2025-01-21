@@ -679,6 +679,12 @@ definitions:
       image_url:
         example: https://example.com/image.jpg
         type: string
+      is_learner:
+        example: true
+        type: boolean
+      is_mentor:
+        example: true
+        type: boolean
       phone_number:
         example: "123456789"
         type: string

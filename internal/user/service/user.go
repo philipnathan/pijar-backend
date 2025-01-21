@@ -1,8 +1,7 @@
 package user
 
 import (
-	"fmt"
-	"reflect"
+	"time"
 
 	custom_error "github.com/philipnathan/pijar-backend/internal/user/custom_error"
 	dto "github.com/philipnathan/pijar-backend/internal/user/dto"
@@ -18,7 +17,7 @@ type UserServiceInterface interface {
 	GetUserDetails(userID uint) (*model.User, error)
 	DeleteUserService(userID uint) error
 	UpdateUserPasswordService(userID uint, oldPassword, newPassword string) error
-	UpdateUserDetailsService(userID uint, input interface{}) error
+	UpdateUserDetailsService(userID uint, input dto.UpdateUserDetailsDto) error
 	GetUserProfile(userID uint) (*dto.UserProfileResponse, error)
 }
 
@@ -147,7 +146,7 @@ func (s *UserService) UpdateUserPasswordService(userID uint, oldPassword, newPas
 	return nil
 }
 
-func (s *UserService) UpdateUserDetailsService(userID uint, input interface{}) error {
+func (s *UserService) UpdateUserDetailsService(userID uint, input dto.UpdateUserDetailsDto) error {
 	var user, err = s.repo.FindByUserId(userID)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -160,48 +159,41 @@ func (s *UserService) UpdateUserDetailsService(userID uint, input interface{}) e
 		return custom_error.ErrUserNotFound
 	}
 
-	// Pastikan input adalah struct, bukan pointer
-	v := reflect.ValueOf(input)
-	if v.Kind() != reflect.Struct {
-		return fmt.Errorf("input must be a struct")
+	if input.Fullname != "" {
+		user.Fullname = input.Fullname
 	}
 
-	// Loop untuk memeriksa field dalam input
-	for i := 0; i < v.NumField(); i++ {
-		field := v.Field(i)
-
-		// Skip jika field kosong (zero value)
-		if field.IsZero() {
-			continue
+	if input.BirthDate != "" {
+		var customTime model.CustomTime
+		customTime.Time, err = time.Parse("2006-01-02", input.BirthDate)
+		if err != nil {
+			return err
 		}
 
-		// Ambil field pada user berdasarkan nama
-		userField := reflect.ValueOf(user).Elem().FieldByName(v.Type().Field(i).Name)
+		user.BirthDate = &customTime
+	}
 
-		// Jika field valid dan dapat di-set
-		if userField.IsValid() && userField.CanSet() {
+	if input.PhoneNumber != "" {
+		user.PhoneNumber = &input.PhoneNumber
+	}
 
-			// Jika field "BirthDate" maka lakukan unmarshall dahulu
-			if v.Type().Field(i).Name == "BirthDate" {
-				str := field.String()
-				if str != "" {
-					var customTime model.CustomTime
-					err := customTime.UnmarshalJSON([]byte(str))
-					if err != nil {
-						return err
-					}
+	if input.ImageURL != "" {
+		user.ImageURL = &input.ImageURL
+	}
 
-					userField.Set(reflect.ValueOf(&customTime))
-				}
-				continue
-			}
+	if input.IsMentor != nil {
+		if *input.IsMentor {
+			user.IsMentor = input.IsMentor
+		} else {
+			return custom_error.ErrStatusCannotBeFalse
+		}
+	}
 
-			// Set nilai field pada user
-			if userField.Type() == field.Type() {
-				userField.Set(field)
-			} else {
-				fmt.Printf("Type mismatch for field: %s\n", v.Type().Field(i).Name)
-			}
+	if input.IsLearner != nil {
+		if *input.IsLearner {
+			user.IsLearner = *input.IsLearner
+		} else {
+			return custom_error.ErrStatusCannotBeFalse
 		}
 	}
 

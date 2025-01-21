@@ -261,8 +261,14 @@ func (h *UserHandler) UpdateUserDetailsHandler(c *gin.Context) {
 
 	err := h.service.UpdateUserDetailsService(uint(id), input)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
-		return
+		switch err {
+		case custom_error.ErrUserNotFound:
+			c.JSON(http.StatusNotFound, custom_error.Error{Error: err.Error()})
+			return
+		case custom_error.ErrStatusCannotBeFalse:
+			c.JSON(http.StatusBadRequest, custom_error.Error{Error: err.Error()})
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, dto.UpdateUserDetailsResponseDto{Message: "user details updated successfully"})
