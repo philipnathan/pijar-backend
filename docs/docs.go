@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/google/{entity}/login": {
+        "/auth/google/login": {
             "get": {
                 "description": "Login using Google. Need authorization code from google",
                 "tags": [
@@ -27,13 +27,13 @@ const docTemplate = `{
                         "type": "string",
                         "description": "learner/mentor",
                         "name": "entity",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "authorization code from Google",
-                        "name": "code",
+                        "name": "access_token",
                         "in": "query",
                         "required": true
                     }
@@ -60,7 +60,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/google/{entity}/register": {
+        "/auth/google/register": {
             "get": {
                 "description": "Register using Google. Need authorization code from google",
                 "tags": [
@@ -72,13 +72,13 @@ const docTemplate = `{
                         "type": "string",
                         "description": "learner/mentor",
                         "name": "entity",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "authorization code from Google",
-                        "name": "code",
+                        "description": "acess_token from Google",
+                        "name": "access_token",
                         "in": "query",
                         "required": true
                     }

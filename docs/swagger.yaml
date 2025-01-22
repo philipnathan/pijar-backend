@@ -713,18 +713,18 @@ info:
   title: Pijar API
   version: "1.0"
 paths:
-  /auth/google/{entity}/login:
+  /auth/google/login:
     get:
       description: Login using Google. Need authorization code from google
       parameters:
       - description: learner/mentor
-        in: path
+        in: query
         name: entity
         required: true
         type: string
       - description: authorization code from Google
         in: query
-        name: code
+        name: access_token
         required: true
         type: string
       responses:
@@ -743,18 +743,18 @@ paths:
       summary: Login using Google
       tags:
       - OAuth
-  /auth/google/{entity}/register:
+  /auth/google/register:
     get:
       description: Register using Google. Need authorization code from google
       parameters:
       - description: learner/mentor
-        in: path
+        in: query
         name: entity
         required: true
         type: string
-      - description: authorization code from Google
+      - description: acess_token from Google
         in: query
-        name: code
+        name: access_token
         required: true
         type: string
       responses:

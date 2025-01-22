@@ -3,6 +3,7 @@ package user
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,51 +11,53 @@ import (
 	dto "github.com/philipnathan/pijar-backend/internal/user/dto"
 	service "github.com/philipnathan/pijar-backend/internal/user/service"
 	"github.com/philipnathan/pijar-backend/utils"
-	"golang.org/x/oauth2"
 )
 
+type googleBodyResponse struct {
+	FamilyName    string `json:"family_name"`
+	Name          string `json:"name"`
+	Picture       string `json:"picture"`
+	Email         string `json:"email"`
+	GivenName     string `json:"given_name"`
+	ID            string `json:"id"`
+	VerifiedEmail bool   `json:"verified_email"`
+}
+
 type GoogleAuthHandler struct {
-	service     service.GoogleAuthServiceInterface
-	oauthConfig *oauth2.Config
+	service service.GoogleAuthServiceInterface
 }
 
-func NewGoogleAuthHandler(service service.GoogleAuthServiceInterface, oauthConfig *oauth2.Config) *GoogleAuthHandler {
+func NewGoogleAuthHandler(service service.GoogleAuthServiceInterface) *GoogleAuthHandler {
 	return &GoogleAuthHandler{
-		service:     service,
-		oauthConfig: oauthConfig,
+		service: service,
 	}
-}
-
-type googleInfo struct {
-	Family_name string
-	Name        string
-	Picture     string
-	Email       string
-	Given_name  string
-	ID          string
-	Verified    bool
 }
 
 // @Summary		Register using Google
 // @Description	Register using Google. Need authorization code from google
 // @Scheme
 // @Tags		OAuth
-// @Param		entity	path		string	true	"learner/mentor"
-// @Param		code	query		string	true	"authorization code from Google"
-// @Success	200		{object}	RegisterUserResponseDto
-// @Failure	400		{object}	CustomError
-// @Failure	500		{object}	CustomError
-// @Router		/auth/google/{entity}/register [get]
+// @Param		entity			query		string	true	"learner/mentor"
+// @Param		access_token	query		string	true	"acess_token from Google"
+// @Success	200				{object}	RegisterUserResponseDto
+// @Failure	400				{object}	CustomError
+// @Failure	500				{object}	CustomError
+// @Router		/auth/google/register [get]
 func (h *GoogleAuthHandler) GoogleRegisterCallback(c *gin.Context) {
-	entity := c.Param("entity")
-	code := c.DefaultQuery("code", "")
+	entity := c.DefaultQuery("entity", "")
+	access_token := c.DefaultQuery("access_token", "")
 
-	if code == "" {
-		c.JSON(http.StatusBadRequest, custom_error.NewCustomError("code not found"))
+	if access_token == "" {
+		c.JSON(http.StatusBadRequest, custom_error.NewCustomError("access_token not found"))
 		return
 	}
 
-	email, name, err := h.authenticateAndGetUserDetails(c, code)
+	if entity == "" {
+		c.JSON(http.StatusBadRequest, custom_error.NewCustomError("entity not found"))
+		return
+	}
+
+	email, name, err := h.getUserInfo(&access_token)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, custom_error.NewCustomError(err.Error()))
 		return
@@ -87,22 +90,27 @@ func (h *GoogleAuthHandler) GoogleRegisterCallback(c *gin.Context) {
 // @Description	Login using Google. Need authorization code from google
 // @Scheme
 // @Tags		OAuth
-// @Param		entity	path		string	true	"learner/mentor"
-// @Param		code	query		string	true	"authorization code from Google"
-// @Success	200		{object}	LoginUserResponseDto
-// @Failure	400		{object}	CustomError
-// @Failure	500		{object}	CustomError
-// @Router		/auth/google/{entity}/login [get]
+// @Param		entity			query		string	true	"learner/mentor"
+// @Param		access_token	query		string	true	"authorization code from Google"
+// @Success	200				{object}	LoginUserResponseDto
+// @Failure	400				{object}	CustomError
+// @Failure	500				{object}	CustomError
+// @Router		/auth/google/login [get]
 func (h *GoogleAuthHandler) GoogleLoginCallback(c *gin.Context) {
-	entity := c.Param("entity")
-	code := c.DefaultQuery("code", "")
+	entity := c.DefaultQuery("entity", "")
+	access_token := c.DefaultQuery("access_token", "")
 
-	if code == "" {
-		c.JSON(http.StatusBadRequest, custom_error.NewCustomError("code not found"))
+	if access_token == "" {
+		c.JSON(http.StatusBadRequest, custom_error.NewCustomError("access_token not found"))
 		return
 	}
 
-	email, _, err := h.authenticateAndGetUserDetails(c, code)
+	if entity == "" {
+		c.JSON(http.StatusBadRequest, custom_error.NewCustomError("entity not found"))
+		return
+	}
+
+	email, _, err := h.getUserInfo(&access_token)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, custom_error.NewCustomError(err.Error()))
 		return
@@ -121,46 +129,38 @@ func (h *GoogleAuthHandler) GoogleLoginCallback(c *gin.Context) {
 	})
 }
 
-func (h *GoogleAuthHandler) googleExchange(c *gin.Context, code string) (*oauth2.Token, error) {
-	fmt.Println(code)
+func (h *GoogleAuthHandler) getUserInfo(access_token *string) (*string, *string, error) {
+	url := "https://www.googleapis.com/oauth2/v2/userinfo"
 
-	token, err := h.oauthConfig.Exchange(c.Request.Context(), code)
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		return nil, nil, err
 	}
 
-	return token, nil
-}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", *access_token))
 
-func (h *GoogleAuthHandler) getUserInfo(token *oauth2.Token) (*string, *string, error) {
-	resp, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, nil, err
 	}
 	defer resp.Body.Close()
 
-	var userInfo googleInfo
-	err = json.NewDecoder(resp.Body).Decode(&userInfo)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, nil, err
+	}
+
+	var userInfo googleBodyResponse
+	err = json.Unmarshal(body, &userInfo)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if userInfo.Email == "" || userInfo.Name == "" {
+		return nil, nil, custom_error.ErrUserNotFound
 	}
 
 	return &userInfo.Email, &userInfo.Name, nil
-}
 
-func (h *GoogleAuthHandler) authenticateAndGetUserDetails(c *gin.Context, code string) (*string, *string, error) {
-	token, err := h.googleExchange(c, code)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, custom_error.NewCustomError("Failed to exchange token"))
-		return nil, nil, err
-	}
-
-	email, name, err := h.getUserInfo(token)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, custom_error.NewCustomError("Failed to get user info"))
-		return nil, nil, err
-	}
-
-	return email, name, nil
 }
