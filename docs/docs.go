@@ -693,11 +693,6 @@ const docTemplate = `{
         },
         "/sessions/enrollments": {
             "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Get learner enrollments",
                 "produces": [
                     "application/json"
@@ -863,11 +858,6 @@ const docTemplate = `{
         },
         "/sessions/{session_id}/enroll": {
             "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "Used for learner to join a mentor session",
                 "produces": [
                     "application/json"

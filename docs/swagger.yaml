@@ -1210,8 +1210,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/mentor_session_participant.CustomError'
-      security:
-      - Bearer: []
       summary: Used for learner to join a mentor session
       tags:
       - Session Enrollments
@@ -1306,8 +1304,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/mentor_session_participant.CustomError'
-      security:
-      - Bearer: []
       summary: Get learner enrollments
       tags:
       - Session Enrollments
