@@ -25,7 +25,6 @@ func NewMentorSessionParticipantHandler(service service.MentorSessionParticipant
 // @Description	Used for learner to join a mentor session
 // @Tags			Session Enrollments
 // @Produce		json
-// @Security		Bearer
 // @Param			session_id	path		int	true	"Session ID"
 // @Success		200			{object}	RegistrationResponse
 // @Failure		400			{object}	CustomError	"Invalid session ID"
@@ -76,7 +75,6 @@ func (h *MentorSessionParticipantHandler) CreateMentorSessionParticipantHandler(
 // @Description	Get learner enrollments
 // @Tags			Session Enrollments
 // @Produce		json
-// @Security		Bearer
 // @Param			page		query		int	false	"Page number"
 // @Param			page_size	query		int	false	"Page size"
 // @Success		200			{object}	EnrollmentResponse
