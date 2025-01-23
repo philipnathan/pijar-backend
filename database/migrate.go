@@ -19,7 +19,6 @@ func MigrateDatabase(db *gorm.DB) {
 	err := db.AutoMigrate(
 		&user.User{},
 		&category.Category{},
-		&category.SubCategory{},
 		&learner.LearnerBio{},
 		&learner.LearnerInterest{},
 		&mentor.MentorBiographies{},

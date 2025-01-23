@@ -1,8 +1,8 @@
 package category
 
 import (
-	model "github.com/philipnathan/pijar-backend/internal/category/model"
 	dto "github.com/philipnathan/pijar-backend/internal/category/dto"
+	model "github.com/philipnathan/pijar-backend/internal/category/model"
 	"gorm.io/gorm"
 )
 
@@ -24,7 +24,7 @@ func NewCategoryRepository(db *gorm.DB) CategoryRepositoryInterface {
 
 func (r *CategoryRepository) GetAllCategories() ([]model.Category, error) {
 	var categories []model.Category
-	err := r.db.Preload("SubCategories").Find(&categories).Error
+	err := r.db.Find(&categories).Error
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (r *CategoryRepository) SaveCategory(category *model.Category) error {
 }
 
 func (r *CategoryRepository) GetFeaturedCategories() ([]dto.FeaturedCategoryResponseDto, error) {
-    var categories []dto.FeaturedCategoryResponseDto
-    err := r.db.Model(&model.Category{}).Select("category_name, image_url").Scan(&categories).Error
-    return categories, err
+	var categories []dto.FeaturedCategoryResponseDto
+	err := r.db.Model(&model.Category{}).Select("category_name, image_url").Scan(&categories).Error
+	return categories, err
 }
