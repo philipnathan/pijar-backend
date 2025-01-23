@@ -1351,27 +1351,6 @@ paths:
       summary: Get upcoming sessions
       tags:
       - Session
-  /user/profile:
-    get:
-      description: Get the profile of the logged-in user
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/user.UserProfileResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/user.Error'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/user.Error'
-      summary: Get user profile
-      tags:
-      - User
   /users/login:
     post:
       consumes:
@@ -1400,6 +1379,22 @@ paths:
           schema:
             $ref: '#/definitions/user.Error'
       summary: Login user
+      tags:
+      - User
+  /users/logout:
+    post:
+      description: Logout the user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User logged out successfully
+          schema:
+            properties:
+              message:
+                type: string
+            type: object
+      summary: Logout user
       tags:
       - User
   /users/me:
@@ -1503,6 +1498,27 @@ paths:
           schema:
             $ref: '#/definitions/user.Error'
       summary: Update user password
+      tags:
+      - User
+  /users/me/profile:
+    get:
+      description: Get the profile of the logged-in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserProfileResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/user.Error'
+      summary: Get user profile
       tags:
       - User
   /users/notifications:

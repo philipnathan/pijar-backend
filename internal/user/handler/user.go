@@ -281,7 +281,7 @@ func (h *UserHandler) UpdateUserDetailsHandler(c *gin.Context) {
 // @Success		200	{object}	user.UserProfileResponse
 // @Failure		401	{object}	Error	"Unauthorized"
 // @Failure		500	{object}	Error	"Internal server error"
-// @Router			/user/profile [get]
+// @Router			/users/me/profile [get]
 func (h *UserHandler) GetUserProfile(c *gin.Context) {
 	userID, exists := c.Get("userID")
 	if !exists {
@@ -296,4 +296,16 @@ func (h *UserHandler) GetUserProfile(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, profile)
+}
+
+// @Summary		Logout user
+// @Description	Logout the user
+// @Tags			User
+// @Produce		json
+// @Success		200	{object} object{message=string}	"User logged out successfully"
+// @Router			/users/logout [post]
+func (h *UserHandler) UserLogout(c *gin.Context) {
+	utils.DeleteCookie(c)
+
+	c.JSON(http.StatusOK, gin.H{"message": "user logged out successfully"})
 }
