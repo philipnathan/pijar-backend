@@ -6,6 +6,7 @@ import (
 	category "github.com/philipnathan/pijar-backend/internal/category/model"
 	review "github.com/philipnathan/pijar-backend/internal/session_review/model"
 	user "github.com/philipnathan/pijar-backend/internal/user/model"
+	"gorm.io/gorm"
 )
 
 type MentorSessionParticipantStatus string
@@ -19,7 +20,7 @@ const (
 )
 
 type MentorSession struct {
-	ID               uint      `gorm:"primaryKey"`
+	gorm.Model       `json:"-"`
 	UserID           uint      `gorm:"not null;index" json:"user_id"`
 	User             user.User `gorm:"foreignKey:UserID;references:ID"`
 	CategoryID       uint      `gorm:"not null" json:"category_id"`
@@ -30,8 +31,6 @@ type MentorSession struct {
 	EstimateDuration int       `gorm:"not null" json:"estimate_duration"`
 	ImageURL         string    `gorm:"type:text;not null" json:"image_url"`
 	Link             string    `gorm:"type:text;not null" json:"link"`
-	CreatedAt        time.Time `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt        time.Time `gorm:"autoUpdateTime" json:"updated_at"`
 
 	SessionReviews []review.SessionReview `json:"session_reviews" gorm:"foreignKey:SessionID"`
 	Category       category.Category      `json:"category" gorm:"foreignKey:CategoryID;references:ID"`
