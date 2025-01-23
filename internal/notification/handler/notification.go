@@ -1,7 +1,6 @@
 package notification
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -45,8 +44,6 @@ func (h *NotificationHandler) GetAllNotificationsHandler(c *gin.Context) {
 	}
 
 	notifications, err := h.service.GetAllNotifications(uint(id))
-
-	fmt.Println(notifications)
 
 	emptyResponse := dto.GetAllNotificationsResponseDto{
 		Message:       "No notifications found",

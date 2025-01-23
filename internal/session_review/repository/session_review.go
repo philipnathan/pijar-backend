@@ -1,8 +1,6 @@
 package session_review
 
 import (
-	"fmt"
-
 	model "github.com/philipnathan/pijar-backend/internal/session_review/model"
 	"gorm.io/gorm"
 )
@@ -53,9 +51,6 @@ func (r *SessionReviewRepository) GetSessionReviews(sessionID *uint, page, pageS
 	if err := countQuery.Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
-
-	fmt.Println(*page)
-	fmt.Println(*pageSize)
 
 	err := r.db.Where("session_id = ?", sessionID).
 		Preload("User").

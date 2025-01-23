@@ -52,12 +52,6 @@ func (s *MentorSessionParticipantService) CreateMentorSessionParticipant(userID,
 		return custom_error.ErrSessionNotFound
 	}
 
-	// fmt.Printf("Session: %v\n", session.Schedule)
-
-	// if session.Schedule.Before(time.Now().UTC()) {
-	// 	return custom_error.ErrSessionAlreadyFinished
-	// }
-
 	// check if user already registered
 	_, err = s.repo.GetMentorSessionParticipant(userID, mentorSessionID)
 	if err == nil {
