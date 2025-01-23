@@ -54,7 +54,7 @@ func main() {
 	docs.SwaggerInfo.Schemes = []string{"http"}
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000", "https://revou-pijar.vercel.app"},
+		AllowOrigins:     []string{"https://revou-pijar.vercel.app"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
 		AllowHeaders:     []string{"Authorization", "Content-Type"},
 		ExposeHeaders:    []string{"Content-Length"},
