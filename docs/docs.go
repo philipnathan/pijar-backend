@@ -1000,38 +1000,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/profile": {
-            "get": {
-                "description": "Get the profile of the logged-in user",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Get user profile",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/user.UserProfileResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/user.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/user.Error"
-                        }
-                    }
-                }
-            }
-        },
         "/users/login": {
             "post": {
                 "description": "Login user",
@@ -1073,6 +1041,31 @@ const docTemplate = `{
                         "description": "Internal server error",
                         "schema": {
                             "$ref": "#/definitions/user.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/logout": {
+            "post": {
+                "description": "Logout the user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Logout user",
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
                         }
                     }
                 }
@@ -1222,6 +1215,38 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/user.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/user.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/me/profile": {
+            "get": {
+                "description": "Get the profile of the logged-in user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user profile",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.UserProfileResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/user.Error"
                         }

@@ -20,6 +20,7 @@ func UserRoute(r *gin.Engine, db *gorm.DB) {
 	{
 		userRoutes.POST("/register", handler.RegisterUser)
 		userRoutes.POST("/login", handler.LoginUser)
+		userRoutes.POST("/logout", handler.UserLogout)
 	}
 
 	protectedRoutes := r.Group(apiV1)
