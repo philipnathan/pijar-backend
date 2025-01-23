@@ -1413,12 +1413,6 @@ const docTemplate = `{
                 },
                 "image_url": {
                     "type": "string"
-                },
-                "sub_categories": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/category.SubCategory"
-                    }
                 }
             }
         },
@@ -1428,17 +1422,6 @@ const docTemplate = `{
                 "error": {
                     "type": "string",
                     "example": "category not found"
-                }
-            }
-        },
-        "category.SubCategory": {
-            "type": "object",
-            "properties": {
-                "category_id": {
-                    "type": "integer"
-                },
-                "sub_category_name": {
-                    "type": "string"
                 }
             }
         },

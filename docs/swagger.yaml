@@ -8,22 +8,11 @@ definitions:
         type: integer
       image_url:
         type: string
-      sub_categories:
-        items:
-          $ref: '#/definitions/category.SubCategory'
-        type: array
     type: object
   category.Error:
     properties:
       error:
         example: category not found
-        type: string
-    type: object
-  category.SubCategory:
-    properties:
-      category_id:
-        type: integer
-      sub_category_name:
         type: string
     type: object
   dto.FeaturedCategoryResponseDto:
