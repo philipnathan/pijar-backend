@@ -90,6 +90,6 @@ docker-compose up
 
 ## API Documentation
 
-This application has been deployed using an Amazon Web Service EC2 instance. You can visit: [http://108.136.220.233/swagger/index.html](http://108.136.220.233/swagger/index.html).
+This application has been deployed using an Amazon Web Service EC2 instance. You can visit: [http://43.218.229.167/swagger/index.html](http://43.218.229.167/swagger/index.html). (You might encounter a **`WARNING`** about an insecure connection. This happens because HTTPS is not yet configured. To access the API documentation, click **`Continue To Site`**, and you will be redirected.)
 
-You might encounter a **`WARNING`** about an insecure connection. This happens because HTTPS is not yet configured. To access the API documentation, click **`Continue To Site`**, and you will be redirected.
+Or if you already run the Backend locally, you can visit : [http://127.0.0.1:8080/swagger/index.html](http://127.0.0.1:8080/swagger/index.html)
