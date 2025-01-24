@@ -89,8 +89,8 @@ func SeedSession(db *gorm.DB) error {
 			Detail:           "",
 			Schedule:         time.Date(2025, 01, 28, 10, 0, 0, 0, time.UTC),
 			EstimateDuration: 150,
-			ImageURL:         "https://media.licdn.com/dms/image/v2/D5612AQEJ_OtsZe59Cw/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1731693543814?e=2147483647&v=beta&t=TIddd4WBiQHkZKtjLPTgUoXei_Y9wsBo2gBoLpOiCvA",
-			Link:             "https://i.ytimg.com/vi/D7HrMJBaPHw/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLCMW2EyFqw4-BsPU00CHPrRmjvuoA",
+			ImageURL:         "https://i.ytimg.com/vi/D7HrMJBaPHw/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLCMW2EyFqw4-BsPU00CHPrRmjvuoA",
+			Link:             "https://www.youtube.com/embed/D7HrMJBaPHw?si=0Ng2z6vo6x8jAY53",
 		},
 		{
 			UserID:           9,
