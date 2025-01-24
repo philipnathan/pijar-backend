@@ -57,6 +57,18 @@ func SeedMentorExperience(db *gorm.DB) error {
 			CompanyName: "PT. Konsultan Ekspor Impor",
 			StartDate:   model.CustomTime{Time: time.Date(2003, 1, 1, 0, 0, 0, 0, time.UTC)},
 		},
+		{
+			UserID:      11,
+			Occupation:  "Desain Grafis",
+			CompanyName: "PT. Desain Grafis",
+			StartDate:   model.CustomTime{Time: time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC)},
+		},
+		{
+			UserID:      12,
+			Occupation:  "Digital Marketing",
+			CompanyName: "PT. Baju Dua Tiga",
+			StartDate:   model.CustomTime{Time: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)},
+		},
 	}
 
 	var count int64
