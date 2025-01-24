@@ -12,13 +12,11 @@ import (
 	mentorSessionParticipant "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/route"
 	notification "github.com/philipnathan/pijar-backend/internal/notification/route"
 	searchRoute "github.com/philipnathan/pijar-backend/internal/search/route"
-	seed "github.com/philipnathan/pijar-backend/internal/seed"
 	sessionRoute "github.com/philipnathan/pijar-backend/internal/session/route"
 	reviewRoute "github.com/philipnathan/pijar-backend/internal/session_review/route"
 	userRoute "github.com/philipnathan/pijar-backend/internal/user/route"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"gorm.io/gorm"
 
 	_ "github.com/philipnathan/pijar-backend/docs"
 
@@ -64,7 +62,7 @@ func main() {
 	}))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	seedDatabase(db)
+	database.SeedDatabase(db)
 
 	userRoute.UserRoute(r, db)
 	userRoute.MentorUserRoute(r, db)
@@ -83,31 +81,4 @@ func main() {
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("Failed to start server:", err)
 	}
-}
-
-func seedDatabase(db *gorm.DB) error {
-	seeds := []func(db *gorm.DB) error{
-		seed.SeedUser,
-		seed.SeedCategory,
-		seed.SeedMentorBio,
-		seed.SeedMentorExperience,
-		seed.SeedMentorExpertise,
-		seed.SeedNotificationType,
-		seed.SeedNotification,
-		seed.SeedSession,
-		seed.LearnerBio,
-		seed.SeedLearnerInterests,
-		seed.MentorSessionParticipant,
-		seed.Review,
-	}
-
-	for _, seed := range seeds {
-		if err := seed(db); err != nil {
-			fmt.Println("Failed to seed database:", err)
-			return nil
-		}
-	}
-
-	fmt.Println("Database seeded successfully")
-	return nil
 }
