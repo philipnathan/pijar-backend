@@ -39,6 +39,10 @@ func SeedCategory(db *gorm.DB) error {
 			Category_name: "Perdagangan Internasional",
 			Image_url:     "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2OYYe0d2g8APHSMdJVp5qQMtsxmTkQlcSSRcM01_4TNq4bznct_V9SAoGHQ8LM96184DxiVIIk_12dZMDLYXoAurMyEQ8ekwEg_ce0NsxcVNd-F8_i6-zPPAVbj9c5tPkmGlAitOnN14/s1600/Perdagangan+Internasional.jpg",
 		},
+		{
+			Category_name: "Desain",
+			Image_url:     "https://greatmind.id/uploads/article-detail/0589d0c62b4dd8ca5dab7035bed8c9b795c23bd4.jpeg",
+		},
 	}
 
 	var count int64

@@ -25,6 +25,8 @@ func SeedUser(db *gorm.DB) error {
 	user08, _ := utils.HashPassword("hashed_password_supriyadi")
 	user09, _ := utils.HashPassword("Password123")
 	user10, _ := utils.HashPassword("Password123")
+	user11, _ := utils.HashPassword("Password123")
+	user12, _ := utils.HashPassword("Password123")
 
 	users := []userModel.User{
 		{
@@ -136,6 +138,28 @@ func SeedUser(db *gorm.DB) error {
 				Time: time.Date(1960, 3, 21, 0, 0, 0, 0, time.UTC),
 			},
 			ImageURL: &[]string{"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-q3W9cs5ucieReoKu7IhRRx0dBzwUHs9gcA&s "}[0],
+		},
+		{
+			Email:     "nandia.saya@example.com",
+			Password:  user11,
+			Fullname:  "Nandia Saya",
+			IsLearner: false,
+			IsMentor:  &[]bool{true}[0],
+			BirthDate: &userModel.CustomTime{
+				Time: time.Date(1999, 3, 21, 0, 0, 0, 0, time.UTC),
+			},
+			ImageURL: &[]string{"https://pngimg.com/d/thinking_woman_PNG11633.png"}[0],
+		},
+		{
+			Email:     "budiyanto.jilal@example.com",
+			Password:  user12,
+			Fullname:  "Budiyanto Jilal",
+			IsLearner: false,
+			IsMentor:  &[]bool{true}[0],
+			BirthDate: &userModel.CustomTime{
+				Time: time.Date(1990, 3, 21, 0, 0, 0, 0, time.UTC),
+			},
+			ImageURL: &[]string{"https://png.pngtree.com/png-vector/20240611/ourmid/pngtree-male-teacher-holding-a-book-wearing-eye-glasses-png-image_12705620.png"}[0],
 		},
 	}
 

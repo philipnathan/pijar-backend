@@ -56,13 +56,13 @@ func Review(db *gorm.DB) error {
 		},
 		{
 			UserID:    2,
-			SessionID: 9,
+			SessionID: 1,
 			Review:    StrPtr("Kelasnya bagus & materi yang diberikan detail. Saya senang sekali belajar dari mentor ini. Terima kasih"),
 			Rating:    5,
 		},
 		{
 			UserID:    2,
-			SessionID: 10,
+			SessionID: 1,
 			Review:    StrPtr("Kelasnya bagus & materi yang diberikan detail. Saya senang sekali belajar dari mentor ini. Terima kasih"),
 			Rating:    5,
 		},
