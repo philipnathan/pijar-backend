@@ -9,11 +9,10 @@ import (
 )
 
 type CategoryHandler struct {
-	service service.CategoryServiceInterface
-	
+	service *service.CategoryService
 }
 
-func NewCategoryHandler(service service.CategoryServiceInterface) *CategoryHandler {
+func NewCategoryHandler(service *service.CategoryService) *CategoryHandler {
 	return &CategoryHandler{
 		service: service,
 	}
@@ -45,10 +44,10 @@ func (h *CategoryHandler) GetAllCategoriesHandler(c *gin.Context) {
 // @Failure		500	{object}	Error	"Internal server error"
 // @Router			/categories/featured [get]
 func (h *CategoryHandler) GetFeaturedCategoriesHandler(c *gin.Context) {
-    categories, err := h.service.GetFeaturedCategoriesService()
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
-        return
-    }
-    c.JSON(http.StatusOK, categories)
+	categories, err := h.service.GetFeaturedCategoriesService()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, custom_error.Error{Error: err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, categories)
 }
