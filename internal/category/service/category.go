@@ -1,9 +1,9 @@
 package category
 
 import (
+	dto "github.com/philipnathan/pijar-backend/internal/category/dto"
 	model "github.com/philipnathan/pijar-backend/internal/category/model"
 	repository "github.com/philipnathan/pijar-backend/internal/category/repository"
-	dto "github.com/philipnathan/pijar-backend/internal/category/dto"
 )
 
 type CategoryServiceInterface interface {
@@ -12,10 +12,10 @@ type CategoryServiceInterface interface {
 }
 
 type CategoryService struct {
-	repo repository.CategoryRepositoryInterface
+	repo *repository.CategoryRepository
 }
 
-func NewCategoryService(repo repository.CategoryRepositoryInterface) CategoryServiceInterface {
+func NewCategoryService(repo *repository.CategoryRepository) *CategoryService {
 	return &CategoryService{
 		repo: repo,
 	}
@@ -26,5 +26,5 @@ func (s *CategoryService) GetAllCategoriesService() ([]model.Category, error) {
 }
 
 func (s *CategoryService) GetFeaturedCategoriesService() ([]dto.FeaturedCategoryResponseDto, error) {
-    return s.repo.GetFeaturedCategories()
+	return s.repo.GetFeaturedCategories()
 }
