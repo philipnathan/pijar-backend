@@ -10,7 +10,7 @@ import (
 	"github.com/philipnathan/pijar-backend/utils"
 )
 
-type MentorUserHanderInterface interface {
+type MentorUserHandlerInterface interface {
 	RegisterMentor(c *gin.Context)
 }
 
@@ -18,7 +18,7 @@ type MentorUserHandler struct {
 	service service.MentorUserServiceInterface
 }
 
-func NewMentorUserHandler(service service.MentorUserServiceInterface) MentorUserHanderInterface {
+func NewMentorUserHandler(service service.MentorUserServiceInterface) MentorUserHandlerInterface {
 	return &MentorUserHandler{
 		service: service,
 	}
