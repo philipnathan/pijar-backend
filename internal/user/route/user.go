@@ -2,9 +2,7 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
-	handler "github.com/philipnathan/pijar-backend/internal/user/handler"
-	repository "github.com/philipnathan/pijar-backend/internal/user/repository"
-	service "github.com/philipnathan/pijar-backend/internal/user/service"
+	userInit "github.com/philipnathan/pijar-backend/internal/user"
 	"github.com/philipnathan/pijar-backend/middleware"
 	"gorm.io/gorm"
 )
@@ -12,9 +10,10 @@ import (
 func UserRoute(r *gin.Engine, db *gorm.DB) {
 	apiV1 := "/api/v1/users"
 
-	repo := repository.NewUserRepository(db)
-	services := service.NewUserService(repo)
-	handler := handler.NewUserHandler(services)
+	handler, err := userInit.InitializedUser(db)
+	if err != nil {
+		panic(err)
+	}
 
 	userRoutes := r.Group(apiV1)
 	{
