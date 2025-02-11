@@ -10,11 +10,16 @@ import (
 	service "github.com/philipnathan/pijar-backend/internal/follow/service"
 )
 
+type FollowHandlerInterface interface {
+	FollowUnfollowHandler(c *gin.Context)
+	IsFollowingHandler(c *gin.Context)
+}
+
 type FollowHandler struct {
 	service service.FollowServiceInterface
 }
 
-func NewFollowHandler(service service.FollowServiceInterface) *FollowHandler {
+func NewFollowHandler(service service.FollowServiceInterface) FollowHandlerInterface {
 	return &FollowHandler{
 		service: service,
 	}
