@@ -18,7 +18,7 @@ var ProviderSet = wire.NewSet(
 	handler.NewCategoryHandler,
 )
 
-func InitializedCategory(db *gorm.DB) (*handler.CategoryHandler, error) {
+func InitializedCategory(db *gorm.DB) (handler.CategoryHandlerInterface, error) {
 	wire.Build(ProviderSet)
 
 	return nil, nil

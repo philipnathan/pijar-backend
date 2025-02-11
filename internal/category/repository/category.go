@@ -16,7 +16,7 @@ type CategoryRepository struct {
 	db *gorm.DB
 }
 
-func NewCategoryRepository(db *gorm.DB) *CategoryRepository {
+func NewCategoryRepository(db *gorm.DB) CategoryRepositoryInterface {
 	return &CategoryRepository{
 		db: db,
 	}
