@@ -14,6 +14,15 @@ import (
 	"gorm.io/gorm"
 )
 
+// Injectors from mentor_wire.go:
+
+func InitializedMentor(db *gorm.DB) (user.MentorUserHandlerInterface, error) {
+	mentorUserRepositoryInterface := user2.NewMentorUserRepository(db)
+	mentorUserServiceInterface := user3.NewMentorUserService(mentorUserRepositoryInterface)
+	mentorUserHandlerInterface := user.NewMentorUserHandler(mentorUserServiceInterface)
+	return mentorUserHandlerInterface, nil
+}
+
 // Injectors from user_wire.go:
 
 func InitializedUser(db *gorm.DB) (user.UserHandlerInterface, error) {
@@ -22,6 +31,10 @@ func InitializedUser(db *gorm.DB) (user.UserHandlerInterface, error) {
 	userHandlerInterface := user.NewUserHandler(userServiceInterface)
 	return userHandlerInterface, nil
 }
+
+// mentor_wire.go:
+
+var MentorProviderSet = wire.NewSet(user2.NewMentorUserRepository, user3.NewMentorUserService, user.NewMentorUserHandler)
 
 // user_wire.go:
 
