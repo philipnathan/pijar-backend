@@ -2,18 +2,17 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
-	handler "github.com/philipnathan/pijar-backend/internal/user/handler"
-	repo "github.com/philipnathan/pijar-backend/internal/user/repository"
-	service "github.com/philipnathan/pijar-backend/internal/user/service"
+	initGoogle "github.com/philipnathan/pijar-backend/internal/user"
 	"gorm.io/gorm"
 )
 
 func GoogleAuthRoute(r *gin.Engine, db *gorm.DB) {
 	apiV1 := "/api/v1/"
 
-	repo := repo.NewGoogleAuthRepo(db)
-	services := service.NewGoogleAuthService(repo)
-	handler := handler.NewGoogleAuthHandler(services)
+	handler, err := initGoogle.InitializedGoogleAuth(db)
+	if err != nil {
+		panic(err)
+	}
 
 	nonProtected := r.Group(apiV1)
 	{
