@@ -14,6 +14,15 @@ import (
 	"gorm.io/gorm"
 )
 
+// Injectors from google_wire.go:
+
+func InitializedGoogleAuth(db *gorm.DB) (user.GoogleAuthHandlerInterface, error) {
+	googleAuthRepoInterface := user2.NewGoogleAuthRepo(db)
+	googleAuthServiceInterface := user3.NewGoogleAuthService(googleAuthRepoInterface)
+	googleAuthHandlerInterface := user.NewGoogleAuthHandler(googleAuthServiceInterface)
+	return googleAuthHandlerInterface, nil
+}
+
 // Injectors from mentor_wire.go:
 
 func InitializedMentor(db *gorm.DB) (user.MentorUserHandlerInterface, error) {
@@ -31,6 +40,10 @@ func InitializedUser(db *gorm.DB) (user.UserHandlerInterface, error) {
 	userHandlerInterface := user.NewUserHandler(userServiceInterface)
 	return userHandlerInterface, nil
 }
+
+// google_wire.go:
+
+var GoogleProviderSet = wire.NewSet(user2.NewGoogleAuthRepo, user3.NewGoogleAuthService, user.NewGoogleAuthHandler)
 
 // mentor_wire.go:
 
