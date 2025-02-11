@@ -8,11 +8,16 @@ import (
 	service "github.com/philipnathan/pijar-backend/internal/category/service"
 )
 
-type CategoryHandler struct {
-	service *service.CategoryService
+type CategoryHandlerInterface interface {
+	GetAllCategoriesHandler(c *gin.Context)
+	GetFeaturedCategoriesHandler(c *gin.Context)
 }
 
-func NewCategoryHandler(service *service.CategoryService) *CategoryHandler {
+type CategoryHandler struct {
+	service service.CategoryServiceInterface
+}
+
+func NewCategoryHandler(service service.CategoryServiceInterface) CategoryHandlerInterface {
 	return &CategoryHandler{
 		service: service,
 	}

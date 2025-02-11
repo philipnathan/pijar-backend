@@ -16,11 +16,11 @@ import (
 
 // Injectors from wire.go:
 
-func InitializedCategory(db *gorm.DB) (*category.CategoryHandler, error) {
-	categoryRepository := category2.NewCategoryRepository(db)
-	categoryService := category3.NewCategoryService(categoryRepository)
-	categoryHandler := category.NewCategoryHandler(categoryService)
-	return categoryHandler, nil
+func InitializedCategory(db *gorm.DB) (category.CategoryHandlerInterface, error) {
+	categoryRepositoryInterface := category2.NewCategoryRepository(db)
+	categoryServiceInterface := category3.NewCategoryService(categoryRepositoryInterface)
+	categoryHandlerInterface := category.NewCategoryHandler(categoryServiceInterface)
+	return categoryHandlerInterface, nil
 }
 
 // wire.go:
