@@ -17,7 +17,7 @@ type GoogleAuthRepo struct {
 	db *gorm.DB
 }
 
-func NewGoogleAuthRepo(db *gorm.DB) *GoogleAuthRepo {
+func NewGoogleAuthRepo(db *gorm.DB) GoogleAuthRepoInterface {
 	return &GoogleAuthRepo{
 		db: db,
 	}
