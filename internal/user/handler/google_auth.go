@@ -13,6 +13,11 @@ import (
 	"github.com/philipnathan/pijar-backend/utils"
 )
 
+type GoogleAuthHandlerInterface interface {
+	GoogleRegisterCallback(c *gin.Context)
+	GoogleLoginCallback(c *gin.Context)
+}
+
 type googleBodyResponse struct {
 	FamilyName    string `json:"family_name"`
 	Name          string `json:"name"`
@@ -27,7 +32,7 @@ type GoogleAuthHandler struct {
 	service service.GoogleAuthServiceInterface
 }
 
-func NewGoogleAuthHandler(service service.GoogleAuthServiceInterface) *GoogleAuthHandler {
+func NewGoogleAuthHandler(service service.GoogleAuthServiceInterface) GoogleAuthHandlerInterface {
 	return &GoogleAuthHandler{
 		service: service,
 	}
