@@ -17,7 +17,7 @@ var UserProviderSet = wire.NewSet(
 	hndl.NewUserHandler,
 )
 
-func InitializedUser(db *gorm.DB) (*hndl.UserHandler, error) {
+func InitializedUser(db *gorm.DB) (hndl.UserHandlerInterface, error) {
 	wire.Build(UserProviderSet)
 
 	return nil, nil
