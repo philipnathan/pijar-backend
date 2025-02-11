@@ -10,11 +10,22 @@ import (
 	"github.com/philipnathan/pijar-backend/utils"
 )
 
+type UserHandlerInterface interface {
+	RegisterUser(c *gin.Context)
+	LoginUser(c *gin.Context)
+	GetUser(c *gin.Context)
+	DeleteUserHandler(c *gin.Context)
+	UpdateUserPasswordHandler(c *gin.Context)
+	UpdateUserDetailsHandler(c *gin.Context)
+	GetUserProfile(c *gin.Context)
+	UserLogout(c *gin.Context)
+}
+
 type UserHandler struct {
 	service service.UserServiceInterface
 }
 
-func NewUserHandler(service service.UserServiceInterface) *UserHandler {
+func NewUserHandler(service service.UserServiceInterface) UserHandlerInterface {
 	return &UserHandler{
 		service: service,
 	}

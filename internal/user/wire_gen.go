@@ -16,11 +16,11 @@ import (
 
 // Injectors from user_wire.go:
 
-func InitializedUser(db *gorm.DB) (*user.UserHandler, error) {
+func InitializedUser(db *gorm.DB) (user.UserHandlerInterface, error) {
 	userRepositoryInterface := user2.NewUserRepository(db)
 	userServiceInterface := user3.NewUserService(userRepositoryInterface)
-	userHandler := user.NewUserHandler(userServiceInterface)
-	return userHandler, nil
+	userHandlerInterface := user.NewUserHandler(userServiceInterface)
+	return userHandlerInterface, nil
 }
 
 // user_wire.go:
