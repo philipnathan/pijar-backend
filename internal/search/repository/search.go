@@ -1,4 +1,4 @@
-package repository
+package search
 
 import (
 	categoryModel "github.com/philipnathan/pijar-backend/internal/category/model"
