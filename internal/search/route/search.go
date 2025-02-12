@@ -1,4 +1,4 @@
-package route
+package search
 
 import (
 	"github.com/gin-gonic/gin"
@@ -9,9 +9,9 @@ import (
 )
 
 func SearchRoute(r *gin.Engine, db *gorm.DB) {
-    repo := repository.NewSearchRepository(db)
-    srv := service.NewSearchService(repo)
-    hnd := handler.NewSearchHandler(srv)
+	repo := repository.NewSearchRepository(db)
+	srv := service.NewSearchService(repo)
+	hnd := handler.NewSearchHandler(srv)
 
-    r.GET("/api/v1/search", hnd.Search)
+	r.GET("/api/v1/search", hnd.Search)
 }
