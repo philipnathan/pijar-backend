@@ -14,11 +14,18 @@ import (
 	"github.com/philipnathan/pijar-backend/middleware"
 )
 
+type SessionHandlerInterface interface {
+	GetLearnerHistorySession(c *gin.Context)
+	GetUpcommingSessionsLandingPage(c *gin.Context)
+	GetAllSessionsWithFilter(c *gin.Context)
+	GetSessionDetailById(c *gin.Context)
+}
+
 type SessionHandler struct {
 	service service.SessionService
 }
 
-func NewSessionHandler(service service.SessionService) *SessionHandler {
+func NewSessionHandler(service service.SessionService) SessionHandlerInterface {
 	return &SessionHandler{service: service}
 }
 
