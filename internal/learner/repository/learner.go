@@ -15,7 +15,7 @@ type LearnerRepository struct {
 	db *gorm.DB
 }
 
-func NewLearnerRepository(db *gorm.DB) *LearnerRepository {
+func NewLearnerRepository(db *gorm.DB) LearnerRepositoryInterface {
 	return &LearnerRepository{
 		db: db,
 	}
