@@ -11,11 +11,16 @@ import (
 	"gorm.io/gorm"
 )
 
+type NotificationHandlerInterface interface {
+	GetAllNotificationsHandler(c *gin.Context)
+	ReadNotificationHandler(c *gin.Context)
+}
+
 type NotificationHandler struct {
 	service service.NotificationServiceInterface
 }
 
-func NewNotificationHandler(service service.NotificationServiceInterface) *NotificationHandler {
+func NewNotificationHandler(service service.NotificationServiceInterface) NotificationHandlerInterface {
 	return &NotificationHandler{
 		service: service,
 	}
