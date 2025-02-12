@@ -2,27 +2,24 @@ package mentor
 
 import (
 	"github.com/gin-gonic/gin"
-	learnerInterestsRepo "github.com/philipnathan/pijar-backend/internal/learner/repository"
-	repository "github.com/philipnathan/pijar-backend/internal/mentor/repository"
-	service "github.com/philipnathan/pijar-backend/internal/mentor/service"
 	middleware "github.com/philipnathan/pijar-backend/middleware"
 	"gorm.io/gorm"
 
-	mentor "github.com/philipnathan/pijar-backend/internal/mentor/handler"
+	initMentor "github.com/philipnathan/pijar-backend/internal/mentor"
 )
 
 func MentorBioRoute(r *gin.Engine, db *gorm.DB) {
 	apiV1 := "/api/v1/mentors"
 
-	repo := repository.NewMentorBioRepository(db)
-	services := service.NewMentorBioService(repo)
-	handler := mentor.NewMentorBioHandler(services)
+	handler, err := initMentor.InitializedMentorBio(db)
+	if err != nil {
+		panic(err)
+	}
 
-	learnerInterestsRepo := learnerInterestsRepo.NewLearnerRepository(db)
-
-	mentorRepo := repository.NewMentorRepository(db)
-	mentorServices := service.NewMentorService(mentorRepo, learnerInterestsRepo)
-	mentorHandler := mentor.NewMentorHandler(mentorServices)
+	mentorHandler, err := initMentor.InitializedMentor(db)
+	if err != nil {
+		panic(err)
+	}
 
 	nonProtectedRoutes := r.Group(apiV1)
 	{
