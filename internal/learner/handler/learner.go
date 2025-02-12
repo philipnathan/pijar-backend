@@ -9,11 +9,17 @@ import (
 	service "github.com/philipnathan/pijar-backend/internal/learner/service"
 )
 
+type LearnerHandlerInterface interface {
+	GetLearnerInterests(c *gin.Context)
+	AddLearnerInterests(c *gin.Context)
+	DeleteLearnerInterests(c *gin.Context)
+}
+
 type LearnerHandler struct {
 	service service.LearnerServiceInterface
 }
 
-func NewLearnerHandler(service service.LearnerServiceInterface) *LearnerHandler {
+func NewLearnerHandler(service service.LearnerServiceInterface) LearnerHandlerInterface {
 	return &LearnerHandler{
 		service: service,
 	}
