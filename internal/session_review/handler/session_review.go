@@ -10,11 +10,16 @@ import (
 	service "github.com/philipnathan/pijar-backend/internal/session_review/service"
 )
 
+type SessionReviewHandlerInterface interface {
+	CreateSessionReviewHandler(c *gin.Context)
+	GetSessionReviewsHandler(c *gin.Context)
+}
+
 type SessionReviewHandler struct {
 	service service.SessionReviewServiceInterface
 }
 
-func NewSessionReviewHandler(service service.SessionReviewServiceInterface) *SessionReviewHandler {
+func NewSessionReviewHandler(service service.SessionReviewServiceInterface) SessionReviewHandlerInterface {
 	return &SessionReviewHandler{
 		service: service,
 	}
