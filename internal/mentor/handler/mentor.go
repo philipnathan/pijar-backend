@@ -11,11 +11,16 @@ import (
 	middleware "github.com/philipnathan/pijar-backend/middleware"
 )
 
+type MentorHandlerInterface interface {
+	UserGetMentorDetails(c *gin.Context)
+	UserGetMentorLandingPage(c *gin.Context)
+}
+
 type MentorHandler struct {
 	service service.MentorServiceInterface
 }
 
-func NewMentorHandler(service service.MentorServiceInterface) *MentorHandler {
+func NewMentorHandler(service service.MentorServiceInterface) MentorHandlerInterface {
 	return &MentorHandler{
 		service: service,
 	}

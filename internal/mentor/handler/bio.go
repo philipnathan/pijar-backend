@@ -10,11 +10,16 @@ import (
 	service "github.com/philipnathan/pijar-backend/internal/mentor/service"
 )
 
+type MentorBioHandlerInterface interface {
+	MentorGetBio(c *gin.Context)
+	UserGetBio(c *gin.Context)
+}
+
 type MentorBioHandler struct {
 	service service.MentorBioServiceInterface
 }
 
-func NewMentorBioHandler(service service.MentorBioServiceInterface) *MentorBioHandler {
+func NewMentorBioHandler(service service.MentorBioServiceInterface) MentorBioHandlerInterface {
 	return &MentorBioHandler{
 		service: service,
 	}

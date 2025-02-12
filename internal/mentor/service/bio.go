@@ -16,7 +16,7 @@ type MentorBioService struct {
 	repo repository.MentorBioRepositoryInterface
 }
 
-func NewMentorBioService(repo repository.MentorBioRepositoryInterface) *MentorBioService {
+func NewMentorBioService(repo repository.MentorBioRepositoryInterface) MentorBioServiceInterface {
 	return &MentorBioService{
 		repo: repo,
 	}

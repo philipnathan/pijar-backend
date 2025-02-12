@@ -15,7 +15,7 @@ type MentorRepository struct {
 	db *gorm.DB
 }
 
-func NewMentorRepository(db *gorm.DB) *MentorRepository {
+func NewMentorRepository(db *gorm.DB) MentorRepositoryInterface {
 	return &MentorRepository{
 		db: db,
 	}

@@ -19,7 +19,7 @@ type MentorService struct {
 	learnerInterestsRepo learnerRepo.LearnerRepositoryInterface
 }
 
-func NewMentorService(repo repo.MentorRepositoryInterface, learnerInterestsRepo learnerRepo.LearnerRepositoryInterface) *MentorService {
+func NewMentorService(repo repo.MentorRepositoryInterface, learnerInterestsRepo learnerRepo.LearnerRepositoryInterface) MentorServiceInterface {
 	return &MentorService{
 		repo:                 repo,
 		learnerInterestsRepo: learnerInterestsRepo,
