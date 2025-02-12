@@ -10,11 +10,16 @@ import (
 	service "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/service"
 )
 
+type MentorSessionParticipantHandlerInterface interface {
+	CreateMentorSessionParticipantHandler(c *gin.Context)
+	GetLearnerEnrollmentsHandler(c *gin.Context)
+}
+
 type MentorSessionParticipantHandler struct {
 	service service.MentorSessionParticipantServiceInterface
 }
 
-func NewMentorSessionParticipantHandler(service service.MentorSessionParticipantServiceInterface) *MentorSessionParticipantHandler {
+func NewMentorSessionParticipantHandler(service service.MentorSessionParticipantServiceInterface) MentorSessionParticipantHandlerInterface {
 	return &MentorSessionParticipantHandler{
 		service: service,
 	}
