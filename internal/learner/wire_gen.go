@@ -14,6 +14,15 @@ import (
 	"gorm.io/gorm"
 )
 
+// Injectors from learner_bio_wire.go:
+
+func InitializedLearnerBio(db *gorm.DB) (learner.LearnerBioHandlerInterface, error) {
+	learnerBioRepositoryInterface := learner2.NewLearnerBioRepository(db)
+	learnerBioServiceInterface := learner3.NewLearnerBioService(learnerBioRepositoryInterface)
+	learnerBioHandlerInterface := learner.NewLearnerBioHandler(learnerBioServiceInterface)
+	return learnerBioHandlerInterface, nil
+}
+
 // Injectors from learner_wire.go:
 
 func InitializedLearner(db *gorm.DB) (learner.LearnerHandlerInterface, error) {
@@ -22,6 +31,10 @@ func InitializedLearner(db *gorm.DB) (learner.LearnerHandlerInterface, error) {
 	learnerHandlerInterface := learner.NewLearnerHandler(learnerServiceInterface)
 	return learnerHandlerInterface, nil
 }
+
+// learner_bio_wire.go:
+
+var LearnerBioProviderSet = wire.NewSet(learner2.NewLearnerBioRepository, learner3.NewLearnerBioService, learner.NewLearnerBioHandler)
 
 // learner_wire.go:
 

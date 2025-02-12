@@ -2,9 +2,7 @@ package learner
 
 import (
 	"github.com/gin-gonic/gin"
-	handler "github.com/philipnathan/pijar-backend/internal/learner/handler"
-	repository "github.com/philipnathan/pijar-backend/internal/learner/repository"
-	service "github.com/philipnathan/pijar-backend/internal/learner/service"
+	initLearnerBio "github.com/philipnathan/pijar-backend/internal/learner"
 	middleware "github.com/philipnathan/pijar-backend/middleware"
 	"gorm.io/gorm"
 )
@@ -12,9 +10,10 @@ import (
 func LearnerBioRoute(r *gin.Engine, db *gorm.DB) {
 	apiV1 := "/api/v1/learners/biographies"
 
-	repo := repository.NewLearnerBioRepository(db)
-	services := service.NewLearnerBioService(repo)
-	handler := handler.NewLearnerBioHandler(services)
+	handler, err := initLearnerBio.InitializedLearnerBio(db)
+	if err != nil {
+		panic(err)
+	}
 
 	protectedRoutes := r.Group(apiV1)
 	{
