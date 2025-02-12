@@ -2,10 +2,7 @@ package session
 
 import (
 	"github.com/gin-gonic/gin"
-	learnerInterestsRepo "github.com/philipnathan/pijar-backend/internal/learner/repository"
-	handler "github.com/philipnathan/pijar-backend/internal/session/handler"
-	repository "github.com/philipnathan/pijar-backend/internal/session/repository"
-	service "github.com/philipnathan/pijar-backend/internal/session/service"
+	initSession "github.com/philipnathan/pijar-backend/internal/session"
 	middleware "github.com/philipnathan/pijar-backend/middleware"
 	"gorm.io/gorm"
 )
@@ -13,11 +10,10 @@ import (
 func SessionRoute(r *gin.Engine, db *gorm.DB) {
 	apiV1 := "/api/v1/sessions"
 
-	learnerInterestsRepo := learnerInterestsRepo.NewLearnerRepository(db)
-
-	repo := repository.NewSessionRepository(db)
-	srv := service.NewSessionService(repo, learnerInterestsRepo)
-	hnd := handler.NewSessionHandler(srv)
+	hnd, err := initSession.InitializedSession(db)
+	if err != nil {
+		panic(err)
+	}
 
 	nonProtectedRoutes := r.Group(apiV1)
 	{
