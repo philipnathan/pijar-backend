@@ -9,11 +9,17 @@ import (
 	service "github.com/philipnathan/pijar-backend/internal/learner/service"
 )
 
+type LearnerBioHandlerInterface interface {
+	CreateLearnerBio(c *gin.Context)
+	GetLearnerBio(c *gin.Context)
+	UpdateLearnerBio(c *gin.Context)
+}
+
 type LearnerBioHandler struct {
 	service service.LearnerBioServiceInterface
 }
 
-func NewLearnerBioHandler(service service.LearnerBioServiceInterface) *LearnerBioHandler {
+func NewLearnerBioHandler(service service.LearnerBioServiceInterface) LearnerBioHandlerInterface {
 	return &LearnerBioHandler{
 		service: service,
 	}
