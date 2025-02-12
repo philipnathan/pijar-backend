@@ -11,11 +11,15 @@ import (
 	service "github.com/philipnathan/pijar-backend/internal/search/service"
 )
 
+type SearchHandlerInterface interface {
+	Search(c *gin.Context)
+}
+
 type SearchHandler struct {
 	service service.SearchServiceInterface
 }
 
-func NewSearchHandler(service service.SearchServiceInterface) *SearchHandler {
+func NewSearchHandler(service service.SearchServiceInterface) SearchHandlerInterface {
 	return &SearchHandler{service: service}
 }
 
