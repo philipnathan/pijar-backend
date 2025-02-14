@@ -82,8 +82,9 @@ func (h *SessionReviewHandler) CreateSessionReviewHandler(c *gin.Context) {
 
 	userIDuint := uint(userIDFloat)
 	sessionIDuint := uint(SessionID)
+	ctx := c.Request.Context()
 
-	err = h.service.CreateSessionReview(&userIDuint, &sessionIDuint, &request.Rating, request.Review)
+	err = h.service.CreateSessionReview(ctx, &userIDuint, &sessionIDuint, &request.Rating, request.Review)
 
 	if err != nil {
 		switch err {

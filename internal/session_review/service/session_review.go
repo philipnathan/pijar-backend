@@ -1,17 +1,20 @@
 package session_review
 
 import (
+	"context"
+
 	participantService "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/service"
 	sessionService "github.com/philipnathan/pijar-backend/internal/session/service"
 	custom_error "github.com/philipnathan/pijar-backend/internal/session_review/custom_error"
 	model "github.com/philipnathan/pijar-backend/internal/session_review/model"
 	repo "github.com/philipnathan/pijar-backend/internal/session_review/repository"
 	userService "github.com/philipnathan/pijar-backend/internal/user/service"
+	"golang.org/x/sync/errgroup"
 	"gorm.io/gorm"
 )
 
 type SessionReviewServiceInterface interface {
-	CreateSessionReview(userID, sessionID, rating *uint, review *string) error
+	CreateSessionReview(ctx context.Context, userID, sessionID, rating *uint, review *string) error
 	GetSessionReviews(sessionID *uint, page, pageSize *int) (*[]model.SessionReview, int, error)
 }
 
@@ -35,30 +38,32 @@ func NewSessionReviewService(
 	}
 }
 
-func (s *SessionReviewService) CreateSessionReview(userID, sessionID, rating *uint, review *string) error {
+func (s *SessionReviewService) CreateSessionReview(ctx context.Context, userID, sessionID, rating *uint, review *string) error {
+	g, _ := errgroup.WithContext(ctx)
 	// check if user exist
-	user, err := s.userService.GetUserDetails(*userID)
-	if err != nil {
-		return err
-	}
-	if user == nil {
-		return custom_error.ErrUserNotFound
-	}
-	if user.DeletedAt.Valid {
-		return custom_error.ErrUserNotFound
-	}
+	g.Go(func() error {
+		_, err := s.userService.GetUserDetails(*userID)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
 
 	// check if session exist
-	session, err := s.sessionService.GetSessionByID(*sessionID)
-	if session == nil {
-		return custom_error.ErrSessionNotFound
-	}
-	if err != nil {
+	g.Go(func() error {
+		_, err := s.sessionService.GetSessionByID(*sessionID)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+
+	if err := g.Wait(); err != nil {
 		return err
 	}
 
 	// check if learner is part of session
-	_, err = s.participantService.GetLearnerEnrollment(userID, sessionID)
+	_, err := s.participantService.GetLearnerEnrollment(userID, sessionID)
 	if err != nil && err == gorm.ErrRecordNotFound {
 		return custom_error.ErrLearnerNotEnrolled
 	}
