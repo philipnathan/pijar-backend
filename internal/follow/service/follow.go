@@ -1,13 +1,15 @@
 package follow
 
 import (
-	custom_error "github.com/philipnathan/pijar-backend/internal/follow/custom_error"
+	"context"
+
 	repo "github.com/philipnathan/pijar-backend/internal/follow/repository"
 	userService "github.com/philipnathan/pijar-backend/internal/user/service"
+	"golang.org/x/sync/errgroup"
 )
 
 type FollowServiceInterface interface {
-	FollowUnfollow(followerID, followingID *uint) error
+	FollowUnfollow(ctx context.Context, followerID, followingID *uint) error
 	IsFollowing(followerID, followingID *uint) (bool, error)
 }
 
@@ -23,22 +25,29 @@ func NewFollowService(repo repo.FollowRepositoryInterface, userService userServi
 	}
 }
 
-func (s *FollowService) FollowUnfollow(followerID, followingID *uint) error {
-	// check if both user are exist
-	learner, err := s.userService.GetUserDetails(*followerID)
-	if err != nil {
-		return err
-	}
-	if !learner.IsLearner {
-		return custom_error.ErrNotLearner
-	}
+func (s *FollowService) FollowUnfollow(ctx context.Context, followerID, followingID *uint) error {
+	g, _ := errgroup.WithContext(ctx)
 
-	mentor, err := s.userService.GetUserDetails(*followingID)
-	if err != nil {
+	g.Go(func() error {
+		_, err := s.userService.GetUserDetails(*followerID)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	g.Go(func() error {
+		_, err := s.userService.GetUserDetails(*followingID)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err := g.Wait(); err != nil {
 		return err
-	}
-	if mentor.IsMentor == nil || !*mentor.IsMentor {
-		return custom_error.ErrNotMentor
 	}
 
 	status, err := s.repo.IsFollowing(followerID, followingID)

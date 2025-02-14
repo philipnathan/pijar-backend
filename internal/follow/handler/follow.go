@@ -67,8 +67,9 @@ func (h *FollowHandler) FollowUnfollowHandler(c *gin.Context) {
 
 	followerID := uint(id)
 	followingID := uint(following)
+	ctx := c.Request.Context()
 
-	err = h.service.FollowUnfollow(&followerID, &followingID)
+	err = h.service.FollowUnfollow(ctx, &followerID, &followingID)
 	if err != nil {
 		switch err {
 		case custom_error.ErrNotLearner:
