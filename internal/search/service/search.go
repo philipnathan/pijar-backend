@@ -1,7 +1,10 @@
 package search
 
 import (
+	"context"
+
 	repository "github.com/philipnathan/pijar-backend/internal/search/repository"
+	"golang.org/x/sync/errgroup"
 
 	categoryModel "github.com/philipnathan/pijar-backend/internal/category/model"
 	sessionModel "github.com/philipnathan/pijar-backend/internal/session/model"
@@ -9,7 +12,7 @@ import (
 )
 
 type SearchServiceInterface interface {
-	Search(keyword *string, page, pageSize *int) (*[]sessionModel.MentorSession, *[]userModel.User, *[]categoryModel.Category, int, error)
+	Search(ctx context.Context, keyword *string, page, pageSize *int) (*[]sessionModel.MentorSession, *[]userModel.User, *[]categoryModel.Category, int, error)
 }
 
 type SearchService struct {
@@ -22,21 +25,50 @@ func NewSearchService(repo repository.SearchRepositoryInterface) SearchServiceIn
 	}
 }
 
-func (s *SearchService) Search(keyword *string, page, pageSize *int) (*[]sessionModel.MentorSession, *[]userModel.User, *[]categoryModel.Category, int, error) {
-	sessions, total, err := s.repo.SearchSessions(keyword, page, pageSize)
-	if err != nil {
+func (s *SearchService) Search(ctx context.Context, keyword *string, page, pageSize *int) (*[]sessionModel.MentorSession, *[]userModel.User, *[]categoryModel.Category, int, error) {
+	var se []sessionModel.MentorSession
+	var t int
+	var m []userModel.User
+	var c []categoryModel.Category
+	g, _ := errgroup.WithContext(ctx)
+
+	g.Go(func() error {
+		sessions, total, err := s.repo.SearchSessions(keyword, page, pageSize)
+		if err != nil {
+			return err
+		}
+
+		se = *sessions
+		t = total
+
+		return nil
+	})
+
+	g.Go(func() error {
+		mentors, err := s.repo.SearchMentors(keyword)
+		if err != nil {
+			return err
+		}
+
+		m = *mentors
+
+		return nil
+	})
+
+	g.Go(func() error {
+		categories, err := s.repo.SearchCategories(keyword)
+		if err != nil {
+			return err
+		}
+
+		c = *categories
+
+		return nil
+	})
+
+	if err := g.Wait(); err != nil {
 		return nil, nil, nil, 0, err
 	}
 
-	mentors, err := s.repo.SearchMentors(keyword)
-	if err != nil {
-		return nil, nil, nil, 0, err
-	}
-
-	categories, err := s.repo.SearchCategories(keyword)
-	if err != nil {
-		return nil, nil, nil, 0, err
-	}
-
-	return sessions, mentors, categories, total, nil
+	return &se, &m, &c, t, nil
 }

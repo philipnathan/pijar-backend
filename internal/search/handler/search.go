@@ -48,8 +48,9 @@ func (h *SearchHandler) Search(c *gin.Context) {
 
 	sessionPage, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	sessionPageSize, _ := strconv.Atoi(c.DefaultQuery("pagesize", "10"))
+	ctx := c.Request.Context()
 
-	sessions, mentors, categories, total, err := h.service.Search(&keyword, &sessionPage, &sessionPageSize)
+	sessions, mentors, categories, total, err := h.service.Search(ctx, &keyword, &sessionPage, &sessionPageSize)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, custom_error.Error{Message: err.Error()})
 		return
