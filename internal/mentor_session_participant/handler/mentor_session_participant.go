@@ -61,8 +61,10 @@ func (h *MentorSessionParticipantHandler) CreateMentorSessionParticipantHandler(
 
 	uintSessionID := uint(SessionID)
 	uintUserID := uint(userIDFloat)
+	ctx := c.Request.Context()
 
 	err = h.service.CreateMentorSessionParticipant(
+		ctx,
 		&uintUserID,
 		&uintSessionID,
 	)

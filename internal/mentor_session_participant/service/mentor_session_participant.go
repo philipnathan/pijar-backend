@@ -1,15 +1,18 @@
 package mentor_session_participant
 
 import (
+	"context"
+
 	custom_error "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/custom_error"
 	model "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/model"
 	repo "github.com/philipnathan/pijar-backend/internal/mentor_session_participant/repository"
 	session "github.com/philipnathan/pijar-backend/internal/session/service"
 	userService "github.com/philipnathan/pijar-backend/internal/user/service"
+	"golang.org/x/sync/errgroup"
 )
 
 type MentorSessionParticipantServiceInterface interface {
-	CreateMentorSessionParticipant(userID, mentorSessionID *uint) error
+	CreateMentorSessionParticipant(ctx context.Context, userID, mentorSessionID *uint) error
 	GetLearnerEnrollments(userID *uint, page, pageSize *int) (*[]model.MentorSessionParticipant, int, error)
 	GetLearnerEnrollment(userID, mentorSessionID *uint) (*model.MentorSessionParticipant, error)
 }
@@ -30,35 +33,43 @@ func NewMentorSessionParticipantService(
 	}
 }
 
-func (s *MentorSessionParticipantService) CreateMentorSessionParticipant(userID, mentorSessionID *uint) error {
-	// check if user exist
-	user, err := s.userService.GetUserDetails(*userID)
-	if err != nil {
+func (s *MentorSessionParticipantService) CreateMentorSessionParticipant(ctx context.Context, userID, mentorSessionID *uint) error {
+
+	g, ctx := errgroup.WithContext(ctx)
+	g.Go(func() error {
+		// check if user exist
+		_, err := s.userService.GetUserDetails(*userID)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	g.Go(func() error {
+		// check if session exist
+		_, err := s.sessionService.GetSessionByID(*mentorSessionID)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	g.Go(func() error {
+		// check if user already registered
+		_, err := s.repo.GetMentorSessionParticipant(userID, mentorSessionID)
+		if err == nil {
+			return custom_error.ErrUserAlreadyRegistered
+		}
+		return nil
+	})
+
+	if err := g.Wait(); err != nil {
 		return err
 	}
-	if user == nil {
-		return custom_error.ErrUserNotFound
-	}
-	if user.DeletedAt.Valid {
-		return custom_error.ErrUserNotFound
-	}
 
-	// check if session exist
-	session, err := s.sessionService.GetSessionByID(*mentorSessionID)
-	if err != nil {
-		return err
-	}
-	if session == nil {
-		return custom_error.ErrSessionNotFound
-	}
-
-	// check if user already registered
-	_, err = s.repo.GetMentorSessionParticipant(userID, mentorSessionID)
-	if err == nil {
-		return custom_error.ErrUserAlreadyRegistered
-	}
-
-	err = s.repo.CreateMentorSessionParticipant(userID, mentorSessionID)
+	err := s.repo.CreateMentorSessionParticipant(userID, mentorSessionID)
 	if err != nil {
 		return err
 	}
